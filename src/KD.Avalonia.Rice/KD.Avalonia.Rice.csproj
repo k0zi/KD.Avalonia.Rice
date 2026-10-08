@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>KD.Avalonia.Rice</RootNamespace>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <Description>Frameless Avalonia window with a custom title bar and Linux distro inspired themes.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>KD.Avalonia.Rice</PackageId>
+    <Authors>k0zi</Authors>
+    <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\packages</PackageOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="Assets\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="3.0.2" />
+  </ItemGroup>
+</Project>

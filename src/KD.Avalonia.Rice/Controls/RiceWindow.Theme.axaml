@@ -1,0 +1,56 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceWindow}" TargetType="rice:RiceWindow">
+    <Setter Property="WindowDecorations" Value="None" />
+    <Setter Property="Background" Value="{DynamicResource RiceBackgroundBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_Frame"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
+            <VisualLayerManager>
+              <DockPanel>
+                <rice:RiceTitleBar Name="PART_TitleBar" DockPanel.Dock="Top" />
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Margin="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </DockPanel>
+            </VisualLayerManager>
+          </Border>
+
+          <Panel Name="PART_ResizeGrips">
+            <Border Name="PART_ResizeN" Height="5" VerticalAlignment="Top" Margin="10,0" Background="Transparent" Cursor="TopSide" />
+            <Border Name="PART_ResizeS" Height="5" VerticalAlignment="Bottom" Margin="10,0" Background="Transparent" Cursor="BottomSide" />
+            <Border Name="PART_ResizeW" Width="5" HorizontalAlignment="Left" Margin="0,10" Background="Transparent" Cursor="LeftSide" />
+            <Border Name="PART_ResizeE" Width="5" HorizontalAlignment="Right" Margin="0,10" Background="Transparent" Cursor="RightSide" />
+            <Border Name="PART_ResizeNW" Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Cursor="TopLeftCorner" />
+            <Border Name="PART_ResizeNE" Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Cursor="TopRightCorner" />
+            <Border Name="PART_ResizeSW" Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomLeftCorner" />
+            <Border Name="PART_ResizeSE" Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomRightCorner" />
+          </Panel>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^[WindowState=Maximized]">
+      <Setter Property="BorderThickness" Value="0" />
+      <Style Selector="^ /template/ Panel#PART_ResizeGrips">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+    </Style>
+    <Style Selector="^[CanResize=False] /template/ Panel#PART_ResizeGrips">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

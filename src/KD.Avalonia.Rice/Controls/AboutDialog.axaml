@@ -1,0 +1,24 @@
+<rice:RiceWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                 x:Class="KD.Avalonia.Rice.Controls.AboutDialog"
+                 Width="360" SizeToContent="Height"
+                 CanResize="False" CanMinimize="False" CanMaximize="False"
+                 ShowThemeToggle="False" ShowInTaskbar="False"
+                 WindowStartupLocation="CenterOwner">
+  <StackPanel Margin="24,20,24,20" Spacing="6">
+    <Image Name="IconImage" Width="64" Height="64" Margin="0,0,0,8" HorizontalAlignment="Center" />
+    <TextBlock Name="NameText" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center"
+               TextAlignment="Center" TextWrapping="Wrap" />
+    <TextBlock Name="DescriptionText" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"
+               Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+    <Grid ColumnDefinitions="Auto,12,*" RowDefinitions="Auto,4,Auto" Margin="0,12,0,0" HorizontalAlignment="Center">
+      <TextBlock Name="AuthorLabel" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+      <TextBlock Name="AuthorText" Grid.Column="2" />
+      <TextBlock Name="VersionLabel" Grid.Row="2" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+      <TextBlock Name="VersionText" Grid.Row="2" Grid.Column="2" />
+    </Grid>
+    <Button Name="OkButton" Classes="accent" MinWidth="96" Margin="0,16,0,0"
+            HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsDefault="True" />
+  </StackPanel>
+</rice:RiceWindow>

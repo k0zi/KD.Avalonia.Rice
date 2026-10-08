@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Controls.RiceTitleBar"
+             Height="34">
+  <DockPanel Name="DragArea" Background="Transparent">
+    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+      <Button Name="ThemeToggleButton" Classes="rice-titlebar"
+              IsVisible="{Binding $parent[rice:RiceWindow].ShowThemeToggle}">
+        <mi:MaterialIcon Name="ThemeToggleIcon" Kind="WeatherNight" />
+      </Button>
+      <Button Name="SettingsButton" Classes="rice-titlebar"
+              IsVisible="{Binding $parent[rice:RiceWindow].ShowSettingsButton}">
+        <mi:MaterialIcon Kind="CogOutline" />
+      </Button>
+      <Button Name="AboutButton" Classes="rice-titlebar"
+              IsVisible="{Binding $parent[rice:RiceWindow].ShowAboutButton}">
+        <mi:MaterialIcon Kind="InformationOutline" />
+      </Button>
+      <Border Width="1" Margin="6,9" Background="{DynamicResource RiceBorderBrush}" />
+      <Button Name="MinimizeButton" Classes="rice-titlebar"
+              IsVisible="{Binding $parent[rice:RiceWindow].CanMinimize}">
+        <mi:MaterialIcon Kind="WindowMinimize" />
+      </Button>
+      <Button Name="MaximizeButton" Classes="rice-titlebar"
+              IsVisible="{Binding $parent[rice:RiceWindow].CanMaximize}">
+        <mi:MaterialIcon Name="MaximizeIcon" Kind="WindowMaximize" />
+      </Button>
+      <Button Name="CloseButton" Classes="rice-titlebar close">
+        <mi:MaterialIcon Kind="WindowClose" />
+      </Button>
+    </StackPanel>
+
+    <Image DockPanel.Dock="Left" Width="18" Height="18" Margin="10,0,8,0"
+           Source="{Binding $parent[rice:RiceWindow].AppInfo.Icon}"
+           IsVisible="{Binding $parent[rice:RiceWindow].AppInfo.Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+    <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" FontWeight="SemiBold"
+               Margin="2,0,12,0" TextTrimming="CharacterEllipsis"
+               Text="{Binding $parent[rice:RiceWindow].Title}" />
+    <ContentPresenter VerticalAlignment="Center"
+                      Content="{Binding $parent[rice:RiceWindow].TitleBarContent}" />
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,37 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+        xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+  <Style Selector="rice|RiceTitleBar">
+    <Setter Property="Background" Value="{DynamicResource RiceTitleBarBackgroundBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
+  </Style>
+
+  <Style Selector="Button.rice-titlebar">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="34" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Focusable" Value="False" />
+  </Style>
+  <Style Selector="Button.rice-titlebar mi|MaterialIcon">
+    <Setter Property="Width" Value="18" />
+    <Setter Property="Height" Value="18" />
+  </Style>
+  <Style Selector="Button.rice-titlebar:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource RiceTitleBarHoverBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
+  </Style>
+  <Style Selector="Button.rice-titlebar:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceAltBrush}" />
+  </Style>
+  <Style Selector="Button.rice-titlebar.close:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource RiceDangerBrush}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+</Styles>

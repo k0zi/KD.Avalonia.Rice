@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:theming="clr-namespace:KD.Avalonia.Rice.Theming"
+             xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
+             x:Class="KD.Avalonia.Rice.Controls.ThemeSelector">
+  <UserControl.Resources>
+    <DataTemplate x:Key="SwatchStrip" x:DataType="theming:RicePalette">
+      <Border CornerRadius="4" ClipToBounds="True" BorderThickness="1"
+              BorderBrush="{DynamicResource RiceBorderBrush}">
+        <ItemsControl ItemsSource="{Binding Swatches}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="media:IBrush">
+              <Border Width="18" Height="18" Background="{Binding}" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="ListBox#ThemeList ListBoxItem">
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Margin" Value="0,1" />
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    </Style>
+    <Style Selector="ListBox#ThemeList ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource RiceSurfaceAltBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+      <Setter Property="BorderThickness" Value="3,0,0,0" />
+    </Style>
+  </UserControl.Styles>
+
+  <ListBox Name="ThemeList" Background="Transparent">
+    <ListBox.ItemTemplate>
+      <DataTemplate x:DataType="theming:RiceTheme">
+        <Grid ColumnDefinitions="*,Auto,8,Auto" Margin="2,4">
+          <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+          <ContentControl Grid.Column="1" Content="{Binding Light}"
+                          ContentTemplate="{StaticResource SwatchStrip}" />
+          <ContentControl Grid.Column="3" Content="{Binding Dark}"
+                          ContentTemplate="{StaticResource SwatchStrip}" />
+        </Grid>
+      </DataTemplate>
+    </ListBox.ItemTemplate>
+  </ListBox>
+</UserControl>

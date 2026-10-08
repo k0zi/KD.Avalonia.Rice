@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/KD.Avalonia.Rice.Demo/KD.Avalonia.Rice.Demo.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/KD.Avalonia.Rice/KD.Avalonia.Rice.csproj" />
+  </Folder>
+</Solution>

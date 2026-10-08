@@ -1,0 +1,12 @@
+<rice:RiceWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+                 x:Class="KD.Avalonia.Rice.Demo.SettingsWindow"
+                 Title="Settings" Width="420" Height="520"
+                 CanMinimize="False" CanMaximize="False" ShowInTaskbar="False"
+                 WindowStartupLocation="CenterOwner">
+  <DockPanel Margin="16">
+    <TextBlock DockPanel.Dock="Top" Margin="4,0,0,8" FontSize="16" FontWeight="SemiBold" Text="Theme" />
+    <rice:ThemeSelector />
+  </DockPanel>
+</rice:RiceWindow>
