@@ -1,6 +1,10 @@
 # KD.Avalonia.Rice
 
-<img src="src/KD.Avalonia.Rice/Assets/icon.png" alt="KD.Avalonia.Rice icon" width="96" />
+[![Build](https://github.com/k0zi/KD.Avalonia.Rice/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/k0zi/KD.Avalonia.Rice/actions/workflows/build.yml)
+[![NuGet](https://img.shields.io/nuget/v/KD.Avalonia.Rice.svg)](https://www.nuget.org/packages/KD.Avalonia.Rice)
+[![NuGet downloads](https://img.shields.io/nuget/dt/KD.Avalonia.Rice.svg)](https://www.nuget.org/packages/KD.Avalonia.Rice)
+
+<img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/src/KD.Avalonia.Rice/Assets/icon.png" alt="KD.Avalonia.Rice icon" width="96" />
 
 Avalonia 12 library: frameless `RiceWindow` with a custom title bar and Linux distro inspired themes
 (Ubuntu, Fedora, Manjaro, openSUSE, Nord, Solarized, Dracula, Gruvbox, Catppuccin – each with light and dark variants).
