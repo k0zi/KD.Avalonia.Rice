@@ -80,7 +80,7 @@ public partial class RiceTitleBar : UserControl
     private void UpdateThemeIcon()
     {
         var isDark = ActualThemeVariant == ThemeVariant.Dark;
-        ThemeToggleIcon.Kind = isDark ? MaterialIconKind.WeatherSunny : MaterialIconKind.WeatherNight;
+        ThemeToggleIcon.Kind = isDark ? MaterialIconKind.LightbulbOn : MaterialIconKind.LightbulbOutline;
     }
 
     private void UpdateMaximizeIcon()

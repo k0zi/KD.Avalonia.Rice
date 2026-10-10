@@ -23,7 +23,7 @@
       <rice:RiceSideMenuItem Icon="🍚" Content="Emoji icon" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
-          <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.CogOutline}" Content="Settings"
+          <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Content="Settings"
                                  Click="OnSettingsRequested" />
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.InformationOutline}" Content="About"
                                  Click="OnAboutClicked" />

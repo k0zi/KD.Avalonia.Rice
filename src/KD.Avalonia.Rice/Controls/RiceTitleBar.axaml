@@ -8,11 +8,11 @@
     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
       <Button Name="ThemeToggleButton" Classes="rice-titlebar"
               IsVisible="{Binding $parent[rice:RiceWindow].ShowThemeToggle}">
-        <mi:MaterialIcon Name="ThemeToggleIcon" Kind="WeatherNight" />
+        <mi:MaterialIcon Name="ThemeToggleIcon" Kind="LightbulbOutline" />
       </Button>
       <Button Name="SettingsButton" Classes="rice-titlebar"
               IsVisible="{Binding $parent[rice:RiceWindow].ShowSettingsButton}">
-        <mi:MaterialIcon Kind="CogOutline" />
+        <mi:MaterialIcon Kind="Cog" />
       </Button>
       <Button Name="AboutButton" Classes="rice-titlebar"
               IsVisible="{Binding $parent[rice:RiceWindow].ShowAboutButton}">
