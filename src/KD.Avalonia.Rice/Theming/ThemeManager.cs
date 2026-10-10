@@ -132,6 +132,14 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceTitleBarForegroundBrush"] = new SolidColorBrush(p.TitleBarForeground);
         target["RiceTitleBarHoverBrush"] = new SolidColorBrush(ColorMath.Blend(p.TitleBarBackground, p.TitleBarForeground, 0.12));
         target["RiceDangerBrush"] = new SolidColorBrush(p.Danger);
+        // Side menu states are accent tints of the title bar color. The idle brush is the same color fully
+        // transparent, so the background transition does not fade through white (Transparent is #00FFFFFF).
+        Color MenuTint(double amount) => ColorMath.Blend(p.TitleBarBackground, p.Accent, amount);
+        target["RiceSideMenuItemBackgroundBrush"] = new SolidColorBrush(Color.FromArgb(0, p.TitleBarBackground.R, p.TitleBarBackground.G, p.TitleBarBackground.B));
+        target["RiceSideMenuItemHoverBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.10 : 0.07));
+        target["RiceSideMenuItemPressedBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.16 : 0.11));
+        target["RiceSideMenuItemSelectedBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.22 : 0.15));
+        target["RiceSideMenuItemSelectedHoverBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.27 : 0.19));
 
         // Fluent control brushes that are not derived from ColorPaletteResources.
         var onAccent = new SolidColorBrush(p.AccentForeground);

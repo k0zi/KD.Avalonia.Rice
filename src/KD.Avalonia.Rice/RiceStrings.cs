@@ -15,4 +15,6 @@ public static class RiceStrings
     public static string Ok { get; set; } = "OK";
     public static string LightVariant { get; set; } = "Light";
     public static string DarkVariant { get; set; } = "Dark";
+    public static string CollapseMenu { get; set; } = "Collapse menu";
+    public static string ExpandMenu { get; set; } = "Expand menu";
 }

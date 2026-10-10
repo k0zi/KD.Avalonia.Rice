@@ -34,4 +34,28 @@
     <Setter Property="Background" Value="{DynamicResource RiceDangerBrush}" />
     <Setter Property="Foreground" Value="White" />
   </Style>
+
+  <Style Selector="Button.rice-sidemenu-toggle">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Margin" Value="8,0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.rice-sidemenu-toggle mi|MaterialIcon">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+  </Style>
+  <Style Selector="Button.rice-sidemenu-toggle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemHoverBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
+  </Style>
+  <Style Selector="Button.rice-sidemenu-toggle:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemPressedBrush}" />
+  </Style>
 </Styles>

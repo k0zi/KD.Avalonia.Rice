@@ -1,0 +1,153 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                    xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons">
+  <ControlTheme x:Key="{x:Type rice:RiceSideMenu}" TargetType="rice:RiceSideMenu">
+    <Setter Property="Background" Value="{DynamicResource RiceTitleBarBackgroundBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,1,0" />
+    <Setter Property="Width" Value="{Binding $self.ExpandedWidth}" />
+    <Setter Property="ClipToBounds" Value="True" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Width" Duration="0:0:0.2">
+          <DoubleTransition.Easing>
+            <CubicEaseOut />
+          </DoubleTransition.Easing>
+        </DoubleTransition>
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}">
+          <DockPanel>
+            <DockPanel DockPanel.Dock="Top" Margin="0,8,0,4">
+              <Button Name="PART_CollapseButton" DockPanel.Dock="Left" Classes="rice-sidemenu-toggle"
+                      IsVisible="{TemplateBinding ShowCollapseButton}">
+                <mi:MaterialIcon Kind="Menu" />
+              </Button>
+              <ContentPresenter Name="PART_HeaderPresenter" VerticalAlignment="Center"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </DockPanel>
+
+            <ContentPresenter Name="PART_FooterPresenter" DockPanel.Dock="Bottom" Padding="0,4"
+                              BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="0,1,0,0"
+                              Content="{TemplateBinding Footer}"
+                              ContentTemplate="{TemplateBinding FooterTemplate}"
+                              IsVisible="{TemplateBinding Footer, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+            <ScrollViewer Name="PART_ScrollViewer"
+                          HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                          VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+              <ItemsPresenter Name="PART_ItemsPresenter" Margin="0,4"
+                              ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </ScrollViewer>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:collapsed">
+      <Setter Property="Width" Value="{Binding $self.CollapsedWidth}" />
+      <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+        <Setter Property="Opacity" Value="0" />
+      </Style>
+    </Style>
+    <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+        </Transitions>
+      </Setter>
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceSideMenuItem}" TargetType="rice:RiceSideMenuItem">
+    <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemBackgroundBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
+    <Setter Property="Margin" Value="8,2" />
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="Padding" Value="0,0,12,0" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Background"
+                Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}">
+          <Border.Transitions>
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.1" />
+            </Transitions>
+          </Border.Transitions>
+          <Grid ColumnDefinitions="40,*">
+            <Border Name="PART_Indicator" Width="3" Height="18" CornerRadius="2"
+                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                    Background="{DynamicResource RiceAccentBrush}" IsVisible="False" />
+            <ContentPresenter Name="PART_IconPresenter" Width="20" Height="20"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                              Content="{TemplateBinding Icon}">
+              <ContentPresenter.DataTemplates>
+                <DataTemplate DataType="media:IImage">
+                  <Image Source="{Binding}" Stretch="Uniform" />
+                </DataTemplate>
+                <DataTemplate DataType="icons:MaterialIconKind">
+                  <mi:MaterialIcon Kind="{Binding}" Width="20" Height="20" />
+                </DataTemplate>
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+            <ContentPresenter Name="PART_ContentPresenter" Grid.Column="1" Margin="4,0,0,0"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}">
+              <ContentPresenter.Transitions>
+                <Transitions>
+                  <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                </Transitions>
+              </ContentPresenter.Transitions>
+            </ContentPresenter>
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:pointerover">
+      <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemHoverBrush}" />
+    </Style>
+    <Style Selector="^:pressed">
+      <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemPressedBrush}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemSelectedBrush}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Style Selector="^:pointerover">
+        <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemSelectedHoverBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_Indicator">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+      <Setter Property="Opacity" Value="0.6" />
+    </Style>
+    <Style Selector="^:collapsed /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

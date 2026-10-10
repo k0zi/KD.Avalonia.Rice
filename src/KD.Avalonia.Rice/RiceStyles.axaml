@@ -9,7 +9,10 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceWindow.Theme.axaml" />
+        <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceSideMenu.Theme.axaml" />
       </ResourceDictionary.MergedDictionaries>
+      <!-- Fluent's corner radius for buttons, text boxes, combo boxes, ... -->
+      <CornerRadius x:Key="ControlCornerRadius">6</CornerRadius>
     </ResourceDictionary>
   </Styles.Resources>
 

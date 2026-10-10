@@ -45,6 +45,33 @@ AppBuilder.Configure<App>()
 - Custom themes: `new RiceTheme("id", "Name", Light: new RicePalette(accent, bg, surface, fg), Dark: ...)`.
 - Texts can be localized via `RiceStrings`.
 
+### Side menu
+
+```xml
+<!-- xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons" -->
+<rice:RiceSideMenu DockPanel.Dock="Left" SelectedIndex="0" IsCollapsed="{Binding MenuCollapsed}">
+  <rice:RiceSideMenu.Header>
+    <TextBlock FontWeight="SemiBold" Text="My App" />
+  </rice:RiceSideMenu.Header>
+  <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.HomeOutline}" Content="Home" />
+  <rice:RiceSideMenuItem Content="Photos">
+    <rice:RiceSideMenuItem.Icon><Image Source="/Assets/photos.png" /></rice:RiceSideMenuItem.Icon>
+  </rice:RiceSideMenuItem>
+  <rice:RiceSideMenu.Footer>
+    <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.CogOutline}" Content="Settings"
+                           Command="{Binding OpenSettingsCommand}" />
+  </rice:RiceSideMenu.Footer>
+</rice:RiceSideMenu>
+```
+
+- `RiceSideMenu` is a `ListBox`: use `SelectedItem` / `SelectedIndex` / `SelectionChanged`, or `ItemsSource` with a
+  `RiceSideMenuItem` style that binds `Icon` and `Content`.
+- `Icon` takes an `IImage` (bitmap), a `MaterialIconKind`, a string (e.g. emoji) or any control.
+- The hamburger button (`ShowCollapseButton`) toggles `IsCollapsed`: only the icons stay visible (width animates from
+  `ExpandedWidth` to `CollapsedWidth`), the items keep working and show their text as tool tip.
+- `Header` and `Footer` are optional. Items in the footer are not selectable; they raise `Click` / run `Command`.
+- `IsCollapsed` is inherited, so custom header/footer content can react to it as well.
+
 ## Demo
 
 ```sh
