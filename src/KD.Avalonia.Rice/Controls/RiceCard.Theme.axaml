@@ -1,0 +1,94 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                    xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons">
+  <ControlTheme x:Key="{x:Type rice:RiceCard}" TargetType="rice:RiceCard">
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="16" />
+    <!-- Templated controls clip by default, which would cut the shadow off at the card's edge. -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Root"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}">
+          <DockPanel>
+            <Grid Name="PART_Header" DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto" Margin="16,14,16,0"
+                  IsVisible="False">
+              <ContentPresenter Name="PART_IconPresenter" Width="24" Height="24" Margin="0,0,12,0"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                Foreground="{DynamicResource RiceAccentBrush}"
+                                Content="{TemplateBinding Icon}"
+                                IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <ContentPresenter.DataTemplates>
+                  <DataTemplate DataType="media:IImage">
+                    <Image Source="{Binding}" Stretch="Uniform" />
+                  </DataTemplate>
+                  <DataTemplate DataType="icons:MaterialIconKind">
+                    <mi:MaterialIcon Kind="{Binding}" Width="24" Height="24" />
+                  </DataTemplate>
+                </ContentPresenter.DataTemplates>
+              </ContentPresenter>
+              <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                <ContentPresenter Name="PART_HeaderPresenter" FontSize="16" FontWeight="SemiBold"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                  IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <ContentPresenter Name="PART_SubtitlePresenter" FontSize="12"
+                                  Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                  Content="{TemplateBinding Subtitle}"
+                                  IsVisible="{TemplateBinding Subtitle, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              </StackPanel>
+              <ContentPresenter Name="PART_HeaderActionsPresenter" Grid.Column="2" Margin="8,0,0,0"
+                                VerticalAlignment="Top"
+                                Content="{TemplateBinding HeaderActions}"
+                                IsVisible="{TemplateBinding HeaderActions, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </Grid>
+
+            <ContentPresenter Name="PART_FooterPresenter" DockPanel.Dock="Bottom" Padding="12,8"
+                              BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1,0,0"
+                              HorizontalContentAlignment="Right"
+                              Content="{TemplateBinding Footer}"
+                              ContentTemplate="{TemplateBinding FooterTemplate}"
+                              IsVisible="False" />
+
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Padding="{TemplateBinding Padding}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:has-header /template/ Grid#PART_Header">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:has-footer /template/ ContentPresenter#PART_FooterPresenter">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:elevation1 /template/ Border#PART_Root">
+      <Setter Property="BoxShadow" Value="{DynamicResource RiceCardShadow1}" />
+    </Style>
+    <Style Selector="^:elevation2 /template/ Border#PART_Root">
+      <Setter Property="BoxShadow" Value="{DynamicResource RiceCardShadow2}" />
+    </Style>
+    <Style Selector="^:elevation3 /template/ Border#PART_Root">
+      <Setter Property="BoxShadow" Value="{DynamicResource RiceCardShadow3}" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.6" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

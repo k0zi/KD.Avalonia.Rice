@@ -146,6 +146,11 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceChatOwnBubbleBrush"] = new SolidColorBrush(p.Accent);
         target["RiceChatOwnSelectionBrush"] = new SolidColorBrush(Color.FromArgb(0x60, p.AccentForeground.R, p.AccentForeground.G, p.AccentForeground.B));
 
+        // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
+        target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);
+        target["RiceCardShadow2"] = Shadow(3, 10, p.IsDark ? 0.45 : 0.12);
+        target["RiceCardShadow3"] = Shadow(8, 24, p.IsDark ? 0.50 : 0.16);
+
         // Fluent control brushes that are not derived from ColorPaletteResources.
         var onAccent = new SolidColorBrush(p.AccentForeground);
         foreach (var key in AccentForegroundKeys)
@@ -162,6 +167,9 @@ public sealed class ThemeManager : INotifyPropertyChanged
         SetBrushes(target, ColorMath.Blend(p.Surface, p.Foreground, 0.16), "ButtonBackgroundPointerOver");
         SetBrushes(target, ColorMath.Blend(p.Surface, p.Foreground, 0.06), "ButtonBackgroundPressed");
     }
+
+    private static BoxShadows Shadow(double offsetY, double blur, double opacity) =>
+        new(new BoxShadow { OffsetY = offsetY, Blur = blur, Color = Color.FromArgb((byte)(opacity * 255), 0, 0, 0) });
 
     private static void SetBrushes(ResourceDictionary target, Color color, params string[] keys)
     {
