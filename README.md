@@ -79,6 +79,23 @@ AppBuilder.Configure<App>()
 - `Header` and `Footer` are optional. Items in the footer are not selectable; they raise `Click` / run `Command`.
 - `IsCollapsed` is inherited, so custom header/footer content can react to it as well.
 
+### Group box
+
+```xml
+<rice:RiceGroupBox Header="Network" Icon="{x:Static icons:MaterialIconKind.Tune}">
+  <StackPanel Spacing="8">
+    <CheckBox Content="Use DHCP" />
+    <TextBox Text="192.168.1.10" />
+  </StackPanel>
+</rice:RiceGroupBox>
+```
+
+- Like the WinForms GroupBox: the title (`Header` + optional `Icon`) sits on the top line and cuts it.
+  The line is drawn with a gap, so it works on any background (no need to paint the title background).
+- `Icon` takes the same kinds as the side menu (`IImage`, `MaterialIconKind`, string, control). Without `Header`
+  and `Icon` the frame is closed.
+- `BorderBrush` (default `RiceBorderBrush`), `BorderThickness`, `CornerRadius` (default 8), `Background`, `Padding`.
+
 ### Chat
 
 ```xml
