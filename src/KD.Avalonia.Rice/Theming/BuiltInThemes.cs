@@ -2,7 +2,7 @@ using Avalonia.Media;
 
 namespace KD.Avalonia.Rice.Theming;
 
-/// <summary>Themes inspired by Linux distributions and popular color schemes.</summary>
+/// <summary>Themes inspired by Linux distributions, Windows 11 and popular color schemes.</summary>
 public static class BuiltInThemes
 {
     public static RiceTheme Ubuntu { get; } = new("ubuntu", "Ubuntu",
@@ -107,8 +107,23 @@ public static class BuiltInThemes
             Danger = C("#F38BA8"),
         });
 
+    // Fluent 2 colors: default accent, Mica window background, card surface.
+    public static RiceTheme Windows11 { get; } = new("windows11", "Windows 11",
+        Light: new(C("#005FB8"), C("#F3F3F3"), C("#FBFBFB"), C("#1A1A1A"))
+        {
+            TitleBarBackground = C("#F3F3F3"),
+            Border = C("#E5E5E5"),
+            Danger = C("#C42B1C"),
+        },
+        Dark: new(C("#60CDFF"), C("#202020"), C("#2B2B2B"), C("#FFFFFF"))
+        {
+            TitleBarBackground = C("#202020"),
+            Border = C("#3A3A3A"),
+            Danger = C("#C42B1C"),
+        });
+
     public static IReadOnlyList<RiceTheme> All { get; } =
-        [Ubuntu, Fedora, Manjaro, OpenSuse, Nord, Solarized, Dracula, Gruvbox, Catppuccin];
+        [Ubuntu, Fedora, Manjaro, OpenSuse, Nord, Solarized, Dracula, Gruvbox, Catppuccin, Windows11];
 
     private static Color C(string hex) => Color.Parse(hex);
 }

@@ -7,7 +7,8 @@
 <img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/src/KD.Avalonia.Rice/Assets/icon.png" alt="KD.Avalonia.Rice icon" width="96" />
 
 Avalonia 12 library: frameless `RiceWindow` with a custom title bar and Linux distro inspired themes
-(Ubuntu, Fedora, Manjaro, openSUSE, Nord, Solarized, Dracula, Gruvbox, Catppuccin – each with light and dark variants).
+(Ubuntu, Fedora, Manjaro, openSUSE, Nord, Solarized, Dracula, Gruvbox, Catppuccin) plus a Windows 11 theme – each with
+light and dark variants.
 
 ## Usage
 
@@ -77,6 +78,28 @@ AppBuilder.Configure<App>()
   `ExpandedWidth` to `CollapsedWidth`), the items keep working and show their text as tool tip.
 - `Header` and `Footer` are optional. Items in the footer are not selectable; they raise `Click` / run `Command`.
 - `IsCollapsed` is inherited, so custom header/footer content can react to it as well.
+
+### Chat
+
+```xml
+<rice:RiceChat ItemsSource="{Binding Messages}" ChatStyle="Bubbles" MessageSent="OnMessageSent" />
+```
+
+```csharp
+public ObservableCollection<RiceChatMessage> Messages { get; } = [];
+
+private void OnMessageSent(object? sender, RiceChatMessageSentEventArgs e) =>
+    Messages.Add(new RiceChatMessage { Author = "me", Text = e.Text, IsOwn = true });
+```
+
+- Messages on top, input box at the bottom: Enter sends, Shift+Enter starts a new line, empty text is not sent.
+- `ChatStyle="Bubbles"` (default): modern bubbles, own messages (`IsOwn`) on the right in accent color.
+  `ChatStyle="Classic"`: IRC like log, `[12:34] <author> text` in a monospace font.
+- The control does not add the sent message: handle `MessageSent` or bind `SendCommand` (gets the text as parameter)
+  and add it to your collection. `Text` holds the draft (two-way), `Send()` sends it from code.
+- `TimestampFormat` (default `HH:mm`, local time), `PlaceholderText`, `ShowInput="False"` for a read-only log,
+  `AutoScroll` (follows new messages while scrolled to the bottom).
+- Brushes: `RiceChatBubbleBrush`, `RiceChatOwnBubbleBrush`; texts: `RiceStrings.ChatPlaceholder`, `RiceStrings.Send`.
 
 ## Demo
 

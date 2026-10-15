@@ -1,0 +1,155 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+  <!-- Classic (IRC): [time] <author> text, the author column is shared so the texts line up. -->
+  <DataTemplate x:Key="RiceChatClassicTemplate" x:DataType="rice:RiceChatMessage">
+    <Grid Classes="rice-chat-line" Classes.own="{Binding IsOwn}">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" SharedSizeGroup="RiceChatAuthor" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <TextBlock Classes="rice-chat-time">
+        <TextBlock.Text>
+          <MultiBinding Converter="{x:Static rice:RiceChatConverters.Timestamp}" ConverterParameter="[{0}]">
+            <Binding Path="Timestamp" />
+            <Binding Path="$parent[rice:RiceChat].TimestampFormat" />
+          </MultiBinding>
+        </TextBlock.Text>
+      </TextBlock>
+      <TextBlock Grid.Column="1" Classes="rice-chat-author" Text="{Binding Author, StringFormat='&lt;{0}&gt;'}" />
+      <SelectableTextBlock Grid.Column="2" Classes="rice-chat-text" Text="{Binding Text}" />
+    </Grid>
+  </DataTemplate>
+
+  <!-- Bubbles: others on the left with their name, own messages on the right in accent color. -->
+  <DataTemplate x:Key="RiceChatBubbleTemplate" x:DataType="rice:RiceChatMessage">
+    <StackPanel Classes="rice-chat-bubble-row" Classes.own="{Binding IsOwn}">
+      <TextBlock Classes="rice-chat-author" Text="{Binding Author}" IsVisible="{Binding !IsOwn}" />
+      <Border Classes="rice-chat-bubble">
+        <SelectableTextBlock Classes="rice-chat-text" Text="{Binding Text}" />
+      </Border>
+      <TextBlock Classes="rice-chat-time">
+        <TextBlock.Text>
+          <MultiBinding Converter="{x:Static rice:RiceChatConverters.Timestamp}">
+            <Binding Path="Timestamp" />
+            <Binding Path="$parent[rice:RiceChat].TimestampFormat" />
+          </MultiBinding>
+        </TextBlock.Text>
+      </TextBlock>
+    </StackPanel>
+  </DataTemplate>
+
+  <ControlTheme x:Key="{x:Type rice:RiceChat}" TargetType="rice:RiceChat">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <!-- Styles of the generated message items (both looks; the classes do not overlap). -->
+          <Border.Styles>
+            <Style Selector="Grid.rice-chat-line">
+              <Setter Property="Margin" Value="0,1" />
+              <Setter Property="TextElement.FontFamily" Value="Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Noto Sans Mono, monospace" />
+            </Style>
+            <Style Selector="Grid.rice-chat-line TextBlock.rice-chat-time">
+              <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+              <Setter Property="Margin" Value="0,0,8,0" />
+            </Style>
+            <Style Selector="Grid.rice-chat-line TextBlock.rice-chat-author">
+              <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
+              <Setter Property="FontWeight" Value="SemiBold" />
+              <Setter Property="HorizontalAlignment" Value="Right" />
+              <Setter Property="Margin" Value="0,0,8,0" />
+            </Style>
+            <Style Selector="Grid.rice-chat-line.own TextBlock.rice-chat-author">
+              <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+              <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+            <Style Selector="Grid.rice-chat-line SelectableTextBlock.rice-chat-text">
+              <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
+            <Style Selector="StackPanel.rice-chat-bubble-row">
+              <Setter Property="Spacing" Value="2" />
+              <Setter Property="Margin" Value="0,4" />
+              <Setter Property="MaxWidth" Value="480" />
+              <Setter Property="HorizontalAlignment" Value="Left" />
+            </Style>
+            <Style Selector="StackPanel.rice-chat-bubble-row.own">
+              <Setter Property="HorizontalAlignment" Value="Right" />
+            </Style>
+            <Style Selector="StackPanel.rice-chat-bubble-row > TextBlock">
+              <Setter Property="FontSize" Value="12" />
+              <Setter Property="Margin" Value="6,0" />
+              <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+            </Style>
+            <Style Selector="StackPanel.rice-chat-bubble-row > TextBlock.rice-chat-author">
+              <Setter Property="FontWeight" Value="SemiBold" />
+            </Style>
+            <Style Selector="StackPanel.rice-chat-bubble-row.own > TextBlock.rice-chat-time">
+              <Setter Property="HorizontalAlignment" Value="Right" />
+            </Style>
+            <Style Selector="Border.rice-chat-bubble">
+              <Setter Property="Background" Value="{DynamicResource RiceChatBubbleBrush}" />
+              <Setter Property="CornerRadius" Value="12" />
+              <Setter Property="Padding" Value="12,8" />
+              <Setter Property="HorizontalAlignment" Value="Left" />
+            </Style>
+            <Style Selector="StackPanel.rice-chat-bubble-row.own > Border.rice-chat-bubble">
+              <Setter Property="Background" Value="{DynamicResource RiceChatOwnBubbleBrush}" />
+              <Setter Property="HorizontalAlignment" Value="Right" />
+            </Style>
+            <Style Selector="Border.rice-chat-bubble SelectableTextBlock.rice-chat-text">
+              <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+            <Style Selector="StackPanel.rice-chat-bubble-row.own SelectableTextBlock.rice-chat-text">
+              <Setter Property="Foreground" Value="{DynamicResource RiceAccentForegroundBrush}" />
+              <Setter Property="SelectionBrush" Value="{DynamicResource RiceChatOwnSelectionBrush}" />
+            </Style>
+          </Border.Styles>
+
+          <DockPanel>
+            <Border Name="PART_InputBar" DockPanel.Dock="Bottom" Padding="{TemplateBinding Padding}"
+                    Background="{DynamicResource RiceSurfaceBrush}"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1,0,0"
+                    IsVisible="{TemplateBinding ShowInput}">
+              <DockPanel>
+                <Button Name="PART_SendButton" DockPanel.Dock="Right" Classes="accent" Margin="8,0,0,0"
+                        VerticalAlignment="Bottom" MinHeight="32" Padding="10,0"
+                        IsEnabled="{TemplateBinding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <mi:MaterialIcon Kind="Send" Width="18" Height="18" />
+                </Button>
+                <TextBox Name="PART_TextBox" AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="120"
+                         VerticalContentAlignment="Center"
+                         PlaceholderText="{TemplateBinding PlaceholderText}"
+                         Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+              </DockPanel>
+            </Border>
+
+            <ScrollViewer Name="PART_ScrollViewer" HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+              <ItemsControl Name="PART_ItemsControl" Padding="{TemplateBinding Padding}"
+                            Grid.IsSharedSizeScope="True"
+                            ItemsSource="{TemplateBinding ItemsSource}" />
+            </ScrollViewer>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ ItemsControl#PART_ItemsControl">
+      <Setter Property="ItemTemplate" Value="{StaticResource RiceChatBubbleTemplate}" />
+    </Style>
+    <Style Selector="^:classic /template/ ItemsControl#PART_ItemsControl">
+      <Setter Property="ItemTemplate" Value="{StaticResource RiceChatClassicTemplate}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

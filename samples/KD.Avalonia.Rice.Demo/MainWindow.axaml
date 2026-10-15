@@ -13,6 +13,7 @@
         <TextBlock FontWeight="SemiBold" Text="Rice Demo" TextTrimming="CharacterEllipsis" />
       </rice:RiceSideMenu.Header>
       <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.HomeOutline}" Content="Home" />
+      <rice:RiceSideMenuItem Name="ChatItem" Icon="{x:Static icons:MaterialIconKind.ChatOutline}" Content="Chat" />
       <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Bookshelf}" Content="Library" />
       <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.DownloadOutline}" Content="Downloads" />
       <rice:RiceSideMenuItem Content="Linux">
@@ -33,6 +34,14 @@
 
     <Panel>
       <local:SettingsPage Name="SettingsPage" IsVisible="False" />
+      <DockPanel Name="ChatPage" IsVisible="False">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="16" Margin="24,16">
+          <TextBlock FontSize="24" FontWeight="SemiBold" Text="Chat" VerticalAlignment="Center" />
+          <RadioButton Content="Bubbles" GroupName="chatStyle" IsChecked="True" Click="OnBubblesClicked" />
+          <RadioButton Content="Classic (IRC)" GroupName="chatStyle" Click="OnClassicClicked" />
+        </StackPanel>
+        <rice:RiceChat Name="Chat" BorderThickness="0,1,0,0" MessageSent="OnMessageSent" />
+      </DockPanel>
       <ScrollViewer Name="HomePage">
         <StackPanel Margin="24" Spacing="16" MaxWidth="560" HorizontalAlignment="Left">
           <TextBlock Name="PageTitle" FontSize="24" FontWeight="SemiBold" Text="Hello, Rice!" />
