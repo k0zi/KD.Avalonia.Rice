@@ -1,0 +1,13 @@
+<rice:RiceWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                 x:Class="KD.Avalonia.Rice.Controls.ThemeDialog"
+                 Width="420" Height="520"
+                 CanMinimize="False" CanMaximize="False" ShowInTaskbar="False"
+                 WindowStartupLocation="CenterOwner">
+  <DockPanel Margin="16">
+    <Button Name="CloseButton" DockPanel.Dock="Bottom" Classes="accent" MinWidth="96" Margin="0,12,0,0"
+            HorizontalAlignment="Right" HorizontalContentAlignment="Center" IsDefault="True" IsCancel="True" />
+    <rice:ThemeSelector />
+  </DockPanel>
+</rice:RiceWindow>

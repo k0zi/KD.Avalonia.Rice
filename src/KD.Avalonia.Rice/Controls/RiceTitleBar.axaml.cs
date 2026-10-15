@@ -19,14 +19,14 @@ public partial class RiceTitleBar : UserControl
 
         DragArea.PointerPressed += OnDragAreaPointerPressed;
         ThemeToggleButton.Click += (_, _) => ThemeManager.Instance.ToggleVariant();
-        SettingsButton.Click += (_, _) => _window?.RequestSettings();
+        ThemeSettingsButton.Click += (_, _) => _window?.ShowThemeDialog();
         AboutButton.Click += (_, _) => _window?.RequestAbout();
         MinimizeButton.Click += (_, _) => _window?.WindowState = WindowState.Minimized;
         MaximizeButton.Click += (_, _) => _window?.ToggleMaximized();
         CloseButton.Click += (_, _) => _window?.Close();
 
         ToolTip.SetTip(ThemeToggleButton, RiceStrings.ToggleTheme);
-        ToolTip.SetTip(SettingsButton, RiceStrings.Settings);
+        ToolTip.SetTip(ThemeSettingsButton, RiceStrings.ThemeSettings);
         ToolTip.SetTip(AboutButton, RiceStrings.About);
         ToolTip.SetTip(MinimizeButton, RiceStrings.Minimize);
         ToolTip.SetTip(CloseButton, RiceStrings.Close);

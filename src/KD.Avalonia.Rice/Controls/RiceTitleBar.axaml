@@ -10,8 +10,8 @@
               IsVisible="{Binding $parent[rice:RiceWindow].ShowThemeToggle}">
         <mi:MaterialIcon Name="ThemeToggleIcon" Kind="LightbulbOutline" />
       </Button>
-      <Button Name="SettingsButton" Classes="rice-titlebar"
-              IsVisible="{Binding $parent[rice:RiceWindow].ShowSettingsButton}">
+      <Button Name="ThemeSettingsButton" Classes="rice-titlebar"
+              IsVisible="{Binding $parent[rice:RiceWindow].ShowThemeSettingsButton}">
         <mi:MaterialIcon Kind="Cog" />
       </Button>
       <Button Name="AboutButton" Classes="rice-titlebar"
