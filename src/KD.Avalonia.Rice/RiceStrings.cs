@@ -4,7 +4,8 @@ namespace KD.Avalonia.Rice;
 public static class RiceStrings
 {
     public static string ToggleTheme { get; set; } = "Light / Dark";
-    public static string Settings { get; set; } = "Settings";
+    public static string ThemeSettings { get; set; } = "Theme settings";
+    public static string Theme { get; set; } = "Theme";
     public static string About { get; set; } = "About";
     public static string Minimize { get; set; } = "Minimize";
     public static string Maximize { get; set; } = "Maximize";

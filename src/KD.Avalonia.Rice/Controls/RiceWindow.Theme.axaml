@@ -7,16 +7,19 @@
     <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
     <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource RiceWindowCornerRadius}" />
     <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
     <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
     <Setter Property="Template">
       <ControlTemplate>
         <Panel>
+          <!-- The content is clipped to the rounded frame; the outline is drawn on top of it,
+               so the title bar and the side menu cannot cover the rounded border. -->
           <Border Name="PART_Frame"
                   Background="{TemplateBinding Background}"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}">
-            <VisualLayerManager>
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  ClipToBounds="True">
+            <VisualLayerManager Margin="{TemplateBinding BorderThickness}">
               <DockPanel>
                 <rice:RiceTitleBar Name="PART_TitleBar" DockPanel.Dock="Top" />
                 <ContentPresenter Name="PART_ContentPresenter"
@@ -28,6 +31,11 @@
               </DockPanel>
             </VisualLayerManager>
           </Border>
+          <Border Name="PART_FrameOutline"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  IsHitTestVisible="False" />
 
           <Panel Name="PART_ResizeGrips">
             <Border Name="PART_ResizeN" Height="5" VerticalAlignment="Top" Margin="10,0" Background="Transparent" Cursor="TopSide" />
@@ -44,6 +52,19 @@
     </Setter>
 
     <Style Selector="^[WindowState=Maximized]">
+      <Setter Property="BorderThickness" Value="0" />
+      <Style Selector="^ /template/ Panel#PART_ResizeGrips">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+    </Style>
+    <!-- Square corners when maximized / full screen, or when the platform cannot draw a transparent window. -->
+    <Style Selector="^[WindowState=Maximized] /template/ Border#PART_Frame, ^[WindowState=FullScreen] /template/ Border#PART_Frame, ^:not(:rounded) /template/ Border#PART_Frame">
+      <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="^[WindowState=Maximized] /template/ Border#PART_FrameOutline, ^[WindowState=FullScreen] /template/ Border#PART_FrameOutline, ^:not(:rounded) /template/ Border#PART_FrameOutline">
+      <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="^[WindowState=FullScreen]">
       <Setter Property="BorderThickness" Value="0" />
       <Style Selector="^ /template/ Panel#PART_ResizeGrips">
         <Setter Property="IsVisible" Value="False" />

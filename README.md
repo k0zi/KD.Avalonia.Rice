@@ -30,16 +30,22 @@ AppBuilder.Configure<App>()
 </Application.Styles>
 
 <!-- MainWindow.axaml -->
-<rice:RiceWindow ShowSettingsButton="True" ShowAboutButton="True" SettingsRequested="OnSettings">
+<rice:RiceWindow ShowThemeSettingsButton="True" ShowAboutButton="True">
   ...
 </rice:RiceWindow>
 
-<!-- inside your settings view -->
+<!-- or embed the selector in your own settings view -->
 <rice:ThemeSelector />
 ```
 
 - **Light/Dark** follows the system on startup; the title bar button switches it for the session only (not saved).
 - **Theme** (`ThemeManager.Instance.CurrentTheme`) is saved to `~/.config/<AppId>/rice.json` when the app supports more than one theme.
+- Window corners are rounded (8 px) by default: set `RiceOptions.WindowCornerRadius` for every window
+  (`new CornerRadius(0)` = square), or `CornerRadius` on a single `RiceWindow`. Corners are square when maximized
+  and when the platform cannot draw transparent windows (e.g. X11 without a compositor).
+- The theme settings button (`ShowThemeSettingsButton`) handles the theme only: it opens the built-in `ThemeDialog`.
+  Your app's own settings belong elsewhere (e.g. a settings page); open the same dialog from there with
+  `window.ShowThemeDialog()`.
 - The about button opens a built-in dialog (name, author, version); handle `AboutRequested` to replace it.
 - Brushes for your own controls: `RiceAccentBrush`, `RiceBackgroundBrush`, `RiceSurfaceBrush`, `RiceForegroundBrush`, `RiceForegroundMutedBrush`, `RiceBorderBrush`, … (use `DynamicResource`).
 - Custom themes: `new RiceTheme("id", "Name", Light: new RicePalette(accent, bg, surface, fg), Dark: ...)`.

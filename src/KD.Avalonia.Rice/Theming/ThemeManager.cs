@@ -112,6 +112,7 @@ public sealed class ThemeManager : INotifyPropertyChanged
 
     private void Apply()
     {
+        _brushes["RiceWindowCornerRadius"] = Options.WindowCornerRadius;
         ApplyBrushes((ResourceDictionary)_brushes.ThemeDictionaries[ThemeVariant.Light], _currentTheme.Light);
         ApplyBrushes((ResourceDictionary)_brushes.ThemeDictionaries[ThemeVariant.Dark], _currentTheme.Dark);
         ApplyFluentPalette(_lightPalette, _currentTheme.Light, isDark: false);
