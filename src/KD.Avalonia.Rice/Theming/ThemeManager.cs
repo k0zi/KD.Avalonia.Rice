@@ -142,6 +142,10 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceSideMenuItemSelectedBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.22 : 0.15));
         target["RiceSideMenuItemSelectedHoverBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.27 : 0.19));
 
+        target["RiceChatBubbleBrush"] = new SolidColorBrush(ColorMath.Blend(p.Surface, p.Foreground, p.IsDark ? 0.10 : 0.06));
+        target["RiceChatOwnBubbleBrush"] = new SolidColorBrush(p.Accent);
+        target["RiceChatOwnSelectionBrush"] = new SolidColorBrush(Color.FromArgb(0x60, p.AccentForeground.R, p.AccentForeground.G, p.AccentForeground.B));
+
         // Fluent control brushes that are not derived from ColorPaletteResources.
         var onAccent = new SolidColorBrush(p.AccentForeground);
         foreach (var key in AccentForegroundKeys)

@@ -18,4 +18,6 @@ public static class RiceStrings
     public static string DarkVariant { get; set; } = "Dark";
     public static string CollapseMenu { get; set; } = "Collapse menu";
     public static string ExpandMenu { get; set; } = "Expand menu";
+    public static string ChatPlaceholder { get; set; } = "Type a message…";
+    public static string Send { get; set; } = "Send";
 }
