@@ -79,6 +79,29 @@ AppBuilder.Configure<App>()
 - `Header` and `Footer` are optional. Items in the footer are not selectable; they raise `Click` / run `Command`.
 - `IsCollapsed` is inherited, so custom header/footer content can react to it as well.
 
+### Card
+
+```xml
+<rice:RiceCard Header="Downloads" Subtitle="3 files" Icon="{x:Static icons:MaterialIconKind.DownloadOutline}">
+  <rice:RiceCard.HeaderActions>
+    <Button Content="⋮" />
+  </rice:RiceCard.HeaderActions>
+  <TextBlock TextWrapping="Wrap" Text="The ISO image is ready." />
+  <rice:RiceCard.Footer>
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <Button Content="Cancel" />
+      <Button Classes="accent" Content="Save" />
+    </StackPanel>
+  </rice:RiceCard.Footer>
+</rice:RiceCard>
+```
+
+- Every part is optional: the header (`Header` as title, `Subtitle`, `Icon`, `HeaderActions` on the right) shows when
+  any of them is set; the `Footer` bar (right aligned, separated by a line) when it is set.
+- `Elevation` 0–3 (default 1) sets the shadow depth, 0 is flat. The shadows are the `RiceCardShadow1..3` resources
+  (stronger in dark variants). Leave some space around the card (margin/spacing), a clipping parent cuts the shadow.
+- `Background` (default `RiceSurfaceBrush`), `BorderBrush`, `CornerRadius` (default 12), `Padding` (default 16).
+
 ### Group box
 
 ```xml
