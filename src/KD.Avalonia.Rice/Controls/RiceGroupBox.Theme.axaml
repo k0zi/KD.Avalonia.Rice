@@ -1,9 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
-                    xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
-                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-                    xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons">
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
   <ControlTheme x:Key="{x:Type rice:RiceGroupBox}" TargetType="rice:RiceGroupBox">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
@@ -21,20 +18,10 @@
                                   CornerRadius="{TemplateBinding CornerRadius}" />
           <StackPanel Name="PART_Header" Orientation="Horizontal" Spacing="6" Margin="14,0"
                       HorizontalAlignment="Left">
-            <ContentPresenter Name="PART_IconPresenter" Width="16" Height="16" VerticalAlignment="Center"
-                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+            <rice:RiceIconPresenter Name="PART_IconPresenter" Width="16" Height="16" VerticalAlignment="Center"
                               Foreground="{DynamicResource RiceAccentBrush}"
                               Content="{TemplateBinding Icon}"
-                              IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
-              <ContentPresenter.DataTemplates>
-                <DataTemplate DataType="media:IImage">
-                  <Image Source="{Binding}" Stretch="Uniform" />
-                </DataTemplate>
-                <DataTemplate DataType="icons:MaterialIconKind">
-                  <mi:MaterialIcon Kind="{Binding}" Width="16" Height="16" />
-                </DataTemplate>
-              </ContentPresenter.DataTemplates>
-            </ContentPresenter>
+                              IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
             <ContentPresenter Name="PART_HeaderPresenter" VerticalAlignment="Center" FontWeight="SemiBold"
                               Content="{TemplateBinding Header}"
                               ContentTemplate="{TemplateBinding HeaderTemplate}"

@@ -16,7 +16,6 @@ on:
 env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  PROJECT: src/KD.Avalonia.Rice/KD.Avalonia.Rice.csproj
   PACKAGE_DIR: ${{ github.workspace }}/artifacts/packages
 
 jobs:
@@ -36,11 +35,9 @@ jobs:
       - name: Restore
         run: dotnet restore KD.Avalonia.Rice.slnx
 
+      # GeneratePackageOnBuild packs the library into artifacts/packages (PACKAGE_DIR) as part of the build.
       - name: Build
         run: dotnet build KD.Avalonia.Rice.slnx -c Release --no-restore -p:ContinuousIntegrationBuild=true
-
-      - name: Pack
-        run: dotnet pack ${{ env.PROJECT }} -c Release --no-build -o ${{ env.PACKAGE_DIR }}
 
       - name: Upload packages
         uses: actions/upload-artifact@v4

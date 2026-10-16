@@ -16,7 +16,7 @@ namespace KD.Avalonia.Rice.Controls;
 public class RiceLoadingOverlay : ContentControl
 {
     public static readonly StyledProperty<bool> IsActiveProperty =
-        AvaloniaProperty.Register<RiceLoadingOverlay, bool>(nameof(IsActive));
+        RiceSpinner.IsActiveProperty.AddOwner<RiceLoadingOverlay>(new(false));
 
     public static readonly StyledProperty<object?> MessageProperty =
         AvaloniaProperty.Register<RiceLoadingOverlay, object?>(nameof(Message));
@@ -42,18 +42,12 @@ public class RiceLoadingOverlay : ContentControl
     public static readonly StyledProperty<bool> BlurContentProperty =
         AvaloniaProperty.Register<RiceLoadingOverlay, bool>(nameof(BlurContent));
 
-    public static readonly DirectProperty<RiceLoadingOverlay, bool> IsSpinningProperty =
-        AvaloniaProperty.RegisterDirect<RiceLoadingOverlay, bool>(nameof(IsSpinning), o => o.IsSpinning);
-
-    private bool _isSpinning;
-
     public RiceLoadingOverlay()
     {
         // Tunnel: the covered content must not see keys or text, Tab included, while the overlay is shown.
         AddHandler(KeyDownEvent, BlockInput, RoutingStrategies.Tunnel);
         AddHandler(KeyUpEvent, BlockInput, RoutingStrategies.Tunnel);
         AddHandler(TextInputEvent, BlockInput, RoutingStrategies.Tunnel);
-        UpdateState();
     }
 
     /// <summary>Shows the overlay and blocks the content.</summary>
@@ -118,28 +112,13 @@ public class RiceLoadingOverlay : ContentControl
         set => SetValue(BlurContentProperty, value);
     }
 
-    /// <summary>The ring spins: active and indeterminate. It stops while hidden, so it costs nothing then.</summary>
-    public bool IsSpinning
-    {
-        get => _isSpinning;
-        private set => SetAndRaise(IsSpinningProperty, ref _isSpinning, value);
-    }
-
     protected override Type StyleKeyOverride => typeof(RiceLoadingOverlay);
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == IsActiveProperty || change.Property == IsIndeterminateProperty
-            || change.Property == BlurContentProperty)
-            UpdateState();
-    }
-
-    private void UpdateState()
-    {
-        IsSpinning = IsActive && IsIndeterminate;
-        PseudoClasses.Set(":active", IsActive);
-        PseudoClasses.Set(":blur", BlurContent);
+        if (change.Property == IsActiveProperty)
+            PseudoClasses.Set(":active", IsActive);
     }
 
     private void BlockInput(object? sender, RoutedEventArgs e)

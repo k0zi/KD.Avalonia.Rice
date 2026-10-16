@@ -17,7 +17,6 @@ public partial class ThemeSelector : UserControl
     {
         InitializeComponent();
         ThemeList.ItemsSource = _manager.SupportedThemes;
-        ThemeList.SelectedItem = _manager.CurrentTheme;
         ThemeList.SelectionChanged += (_, _) =>
         {
             if (ThemeList.SelectedItem is RiceTheme theme)

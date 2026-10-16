@@ -18,7 +18,7 @@ namespace KD.Avalonia.Rice.Controls;
 public class RiceSideMenuItem : TreeViewItem
 {
     public static readonly StyledProperty<object?> IconProperty =
-        AvaloniaProperty.Register<RiceSideMenuItem, object?>(nameof(Icon));
+        RiceCard.IconProperty.AddOwner<RiceSideMenuItem>();
 
     public static readonly StyledProperty<bool> IsCollapsedProperty =
         RiceSideMenu.IsCollapsedProperty.AddOwner<RiceSideMenuItem>();

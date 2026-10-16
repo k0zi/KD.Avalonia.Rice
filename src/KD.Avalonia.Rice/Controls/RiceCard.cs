@@ -30,6 +30,8 @@ public class RiceCard : HeaderedContentControl
     public static readonly StyledProperty<int> ElevationProperty =
         AvaloniaProperty.Register<RiceCard, int>(nameof(Elevation), 1, coerce: (_, value) => Math.Clamp(value, 0, 3));
 
+    private static readonly string[] ElevationClasses = [":elevation0", ":elevation1", ":elevation2", ":elevation3"];
+
     public RiceCard() => UpdatePseudoClasses();
 
     public object? Subtitle
@@ -87,7 +89,7 @@ public class RiceCard : HeaderedContentControl
     {
         PseudoClasses.Set(":has-header", Header is not null || Subtitle is not null || Icon is not null || HeaderActions is not null);
         PseudoClasses.Set(":has-footer", Footer is not null);
-        for (var i = 0; i <= 3; i++)
-            PseudoClasses.Set($":elevation{i}", Elevation == i);
+        for (var i = 0; i < ElevationClasses.Length; i++)
+            PseudoClasses.Set(ElevationClasses[i], Elevation == i);
     }
 }

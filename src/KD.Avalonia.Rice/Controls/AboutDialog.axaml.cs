@@ -1,4 +1,3 @@
-using Avalonia.Markup.Xaml;
 using KD.Avalonia.Rice.Options;
 
 namespace KD.Avalonia.Rice.Controls;

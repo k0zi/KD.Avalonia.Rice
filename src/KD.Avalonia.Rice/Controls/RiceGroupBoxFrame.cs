@@ -31,6 +31,9 @@ public class RiceGroupBoxFrame : Control
     public static readonly StyledProperty<double> GapWidthProperty =
         AvaloniaProperty.Register<RiceGroupBoxFrame, double>(nameof(GapWidth));
 
+    // Kept across renders; only changes with BorderBrush or BorderThickness.
+    private Pen? _pen;
+
     static RiceGroupBoxFrame() =>
         AffectsRender<RiceGroupBoxFrame>(BackgroundProperty, BorderBrushProperty, BorderThicknessProperty,
             CornerRadiusProperty, GapStartProperty, GapWidthProperty);
@@ -69,6 +72,13 @@ public class RiceGroupBoxFrame : Control
     {
         get => GetValue(GapWidthProperty);
         set => SetValue(GapWidthProperty, value);
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == BorderBrushProperty || change.Property == BorderThicknessProperty)
+            _pen = null;
     }
 
     public override void Render(DrawingContext context)
@@ -112,7 +122,8 @@ public class RiceGroupBoxFrame : Control
             ctx.EndFigure(!hasGap);
         }
 
-        context.DrawGeometry(null, new Pen(brush, thickness), geometry);
+        _pen ??= new Pen(brush, thickness);
+        context.DrawGeometry(null, _pen, geometry);
     }
 
     private static void Corner(StreamGeometryContext ctx, Point end, double radius)

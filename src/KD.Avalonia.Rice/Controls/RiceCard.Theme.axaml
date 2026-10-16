@@ -1,9 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
-                    xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
-                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-                    xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons">
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
   <ControlTheme x:Key="{x:Type rice:RiceCard}" TargetType="rice:RiceCard">
     <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
     <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
@@ -23,21 +20,11 @@
           <DockPanel>
             <Grid Name="PART_Header" DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto" Margin="16,14,16,0"
                   IsVisible="False">
-              <ContentPresenter Name="PART_IconPresenter" Width="24" Height="24" Margin="0,0,12,0"
+              <rice:RiceIconPresenter Name="PART_IconPresenter" Width="24" Height="24" Margin="0,0,12,0"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                 Foreground="{DynamicResource RiceAccentBrush}"
                                 Content="{TemplateBinding Icon}"
-                                IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
-                <ContentPresenter.DataTemplates>
-                  <DataTemplate DataType="media:IImage">
-                    <Image Source="{Binding}" Stretch="Uniform" />
-                  </DataTemplate>
-                  <DataTemplate DataType="icons:MaterialIconKind">
-                    <mi:MaterialIcon Kind="{Binding}" Width="24" Height="24" />
-                  </DataTemplate>
-                </ContentPresenter.DataTemplates>
-              </ContentPresenter>
+                                IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
               <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
                 <ContentPresenter Name="PART_HeaderPresenter" FontSize="16" FontWeight="SemiBold"
                                   Content="{TemplateBinding Header}"

@@ -22,6 +22,9 @@ public class RiceProgressArc : Control
     public static readonly StyledProperty<double> StrokeThicknessProperty =
         AvaloniaProperty.Register<RiceProgressArc, double>(nameof(StrokeThickness), 4);
 
+    // Kept across frames: an animated arc renders every frame, but its pen only changes with Stroke or StrokeThickness.
+    private Pen? _pen;
+
     static RiceProgressArc() =>
         AffectsRender<RiceProgressArc>(StartAngleProperty, SweepAngleProperty, StrokeProperty, StrokeThicknessProperty);
 
@@ -49,6 +52,13 @@ public class RiceProgressArc : Control
         set => SetValue(StrokeThicknessProperty, value);
     }
 
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == StrokeProperty || change.Property == StrokeThicknessProperty)
+            _pen = null;
+    }
+
     public override void Render(DrawingContext context)
     {
         var sweep = Math.Clamp(SweepAngle, 0, 360);
@@ -58,10 +68,12 @@ public class RiceProgressArc : Control
         if (Stroke is null || sweep <= 0 || thickness <= 0 || radius <= 0)
             return;
 
+        // Round caps only show on an open arc; a closed circle has no ends.
+        _pen ??= new Pen(Stroke, thickness, lineCap: PenLineCap.Round);
         var center = new Point(Bounds.Width / 2, Bounds.Height / 2);
         if (sweep >= 360)
         {
-            context.DrawEllipse(null, new Pen(Stroke, thickness), center, radius, radius);
+            context.DrawEllipse(null, _pen, center, radius, radius);
             return;
         }
 
@@ -73,7 +85,7 @@ public class RiceProgressArc : Control
                 sweep > 180, SweepDirection.Clockwise);
             ctx.EndFigure(false);
         }
-        context.DrawGeometry(null, new Pen(Stroke, thickness, lineCap: PenLineCap.Round), geometry);
+        context.DrawGeometry(null, _pen, geometry);
     }
 
     private static Point PointOnCircle(Point center, double radius, double angle)
