@@ -337,6 +337,8 @@ internal sealed class GraphSceneBuilder
             FromHead = fromHead,
             ToHead = toHead,
             Label = relation.Label,
+            // Labels of parallel lines go beside them, so they do not cover the neighbouring line.
+            LabelSide = Math.Sign(offset),
             LabelDirection = relation.LabelDirection,
             FromLabel = relation.FromLabel,
             ToLabel = relation.ToLabel,

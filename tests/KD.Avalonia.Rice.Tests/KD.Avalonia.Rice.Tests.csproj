@@ -14,6 +14,7 @@
     <ProjectReference Include="..\..\src\KD.Avalonia.Rice\KD.Avalonia.Rice.csproj" />
     <!-- The demo's samples cover every diagram type. -->
     <Compile Include="..\..\samples\KD.Avalonia.Rice.Demo\UmlSamples.cs" Link="UmlSamples.cs" />
+    <Compile Include="..\..\samples\KD.Avalonia.Rice.Demo\MarkdownSamples.cs" Link="MarkdownSamples.cs" />
   </ItemGroup>
 
   <ItemGroup>

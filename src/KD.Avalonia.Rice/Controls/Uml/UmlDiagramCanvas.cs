@@ -87,7 +87,11 @@ public class UmlDiagramCanvas : Control
     public static readonly StyledProperty<BoxShadows> NodeShadowProperty =
         AvaloniaProperty.Register<UmlDiagramCanvas, BoxShadows>(nameof(NodeShadow));
 
-    private const double ViewMargin = 32;
+    public static readonly StyledProperty<bool> IsInteractiveProperty =
+        AvaloniaProperty.Register<UmlDiagramCanvas, bool>(nameof(IsInteractive), true);
+
+    private const double InteractiveMargin = 32;
+    private const double StaticMargin = 12;
     private const double DragThreshold = 4;
     private const double GridStep = 24;
 
@@ -113,6 +117,13 @@ public class UmlDiagramCanvas : Control
     private Point? _pressPosition;
     private Point _lastPointer;
     private bool _panning;
+    private IUmlSceneSource? _sceneSource;
+
+    public UmlDiagramCanvas()
+    {
+        ResourcesChanged += (sender, _) => OnThemeResourcesChanged(sender, EventArgs.Empty);
+        ActualThemeVariantChanged += OnThemeResourcesChanged;
+    }
 
     static UmlDiagramCanvas()
     {
@@ -203,6 +214,33 @@ public class UmlDiagramCanvas : Control
         set => SetValue(NodeShadowProperty, value);
     }
 
+    /// <summary>
+    /// False makes a picture of the diagram, e.g. in a document: the control takes the size of the diagram (scaled
+    /// down to the available space), and there is no panning, zooming, hover or selection; the scroll wheel scrolls
+    /// the parent.
+    /// </summary>
+    public bool IsInteractive
+    {
+        get => GetValue(IsInteractiveProperty);
+        set => SetValue(IsInteractiveProperty, value);
+    }
+
+    /// <summary>Scene of a diagram that is not a <see cref="UmlDiagram"/> (Mermaid); replaces <see cref="Diagram"/>.</summary>
+    internal IUmlSceneSource? SceneSource
+    {
+        get => _sceneSource;
+        set
+        {
+            _sceneSource = value;
+            _sceneDirty = true;
+            EnsureScene();
+            InvalidateMeasure();
+            InvalidateVisual();
+        }
+    }
+
+    private double ViewMargin => IsInteractive ? InteractiveMargin : StaticMargin;
+
     /// <summary>Size of the laid out diagram at 100 %.</summary>
     public Size ContentSize
     {
@@ -244,6 +282,20 @@ public class UmlDiagramCanvas : Control
 
     private Point ViewportCenter => new(Bounds.Width / 2, Bounds.Height / 2);
 
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        if (IsInteractive)
+            return base.MeasureOverride(availableSize);
+        // A picture: the size of the diagram, scaled down when there is not enough room.
+        EnsureScene();
+        var content = _scene.Bounds.Size;
+        if (content.Width <= 0 || content.Height <= 0)
+            return default;
+        var size = new Size(content.Width + 2 * ViewMargin, content.Height + 2 * ViewMargin);
+        var scale = Math.Min(1, Math.Min(availableSize.Width / size.Width, availableSize.Height / size.Height));
+        return new Size(size.Width * scale, size.Height * scale);
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -255,7 +307,16 @@ public class UmlDiagramCanvas : Control
             if (property != DiagramProperty)
                 _measurer = null;
             EnsureScene();
+            InvalidateMeasure();
             InvalidateVisual();
+        }
+        else if (property == IsInteractiveProperty)
+        {
+            Focusable = IsInteractive;
+            _userMoved = false;
+            _hover = -1;
+            InvalidateMeasure();
+            InitializeView();
         }
         else if (property == ZoomProperty)
         {
@@ -276,7 +337,7 @@ public class UmlDiagramCanvas : Control
         else if (property == BoundsProperty)
         {
             var old = change.GetOldValue<Rect>();
-            if (!_userMoved)
+            if (!_userMoved || !IsInteractive)
                 InitializeView();
             else
                 _offset += new Vector((Bounds.Width - old.Width) / 2, (Bounds.Height - old.Height) / 2);
@@ -300,7 +361,8 @@ public class UmlDiagramCanvas : Control
         var previous = _scene;
         try
         {
-            _scene = UmlSceneBuilder.Build(Diagram, new UmlStyle(_measurer, FontSize > 0 ? FontSize : 13));
+            var style = new UmlStyle(_measurer, FontSize > 0 ? FontSize : 13);
+            _scene = _sceneSource?.Build(style) ?? UmlSceneBuilder.Build(Diagram, style);
         }
         catch (Exception)
         {
@@ -397,8 +459,30 @@ public class UmlDiagramCanvas : Control
         UmlBrush.BadgeInterface => BadgeInterfaceBrush,
         UmlBrush.BadgeEnum => BadgeEnumBrush,
         UmlBrush.BadgeOther => BadgeOtherBrush,
+        UmlBrush.OnSeries => Brushes.White,
+        >= UmlBrush.Series0 and <= UmlBrush.Series7 => SeriesBrush(role - UmlBrush.Series0),
         _ => null,
     };
+
+    private readonly IBrush?[] _series = new IBrush?[8];
+
+    /// <summary>Chart colors come from the theme resources (RiceChartSeries0Brush …), with fixed ones as fallback.</summary>
+    private IBrush? SeriesBrush(int index)
+    {
+        if (_series[index] is { } cached)
+            return cached;
+        if (this.TryFindResource($"RiceChartSeries{index}Brush", ActualThemeVariant, out var resource) && resource is IBrush brush)
+            return _series[index] = brush;
+        string[] fallback = ["#4C78A8", "#4C9AFF", "#36B37E", "#FFAB00", "#FF5630", "#8B5CF6", "#00B8D9", "#E5892E"];
+        return _series[index] = new SolidColorBrush(Color.Parse(fallback[index]));
+    }
+
+    private void OnThemeResourcesChanged(object? sender, EventArgs e)
+    {
+        Array.Clear(_series);
+        _renderer = null;
+        InvalidateVisual();
+    }
 
     // ---- rendering ----
 
@@ -511,6 +595,8 @@ public class UmlDiagramCanvas : Control
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
+        if (!IsInteractive)
+            return;
         Focus();
         var point = e.GetCurrentPoint(this);
         _lastPointer = point.Position;
@@ -529,6 +615,8 @@ public class UmlDiagramCanvas : Control
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
+        if (!IsInteractive)
+            return;
         var position = e.GetPosition(this);
         if (_pressPosition is { } press)
         {
@@ -588,6 +676,8 @@ public class UmlDiagramCanvas : Control
     protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
     {
         base.OnPointerWheelChanged(e);
+        if (!IsInteractive)
+            return;
         if (e.KeyModifiers.HasFlag(KeyModifiers.Control) || e.KeyModifiers.HasFlag(KeyModifiers.Meta))
             ZoomAround(e.GetPosition(this), Zoom * Math.Pow(1.15, e.Delta.Y));
         else
@@ -603,6 +693,8 @@ public class UmlDiagramCanvas : Control
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
+        if (!IsInteractive)
+            return;
         const double step = 48;
         switch (e.Key)
         {

@@ -7,32 +7,38 @@ internal static class UmlSceneBuilder
 {
     public static UmlScene Build(UmlDiagram? diagram, UmlStyle style)
     {
-        var scene = new UmlScene();
         if (diagram is null)
-            return scene;
-
-        var titleFontSize = style.FontSize + 5;
-        var titleSize = diagram.Title is { Length: > 0 } title ? style.Measurer.Measure(title, titleFontSize, bold: true) : default;
-        var origin = new Point(0, titleSize.Height > 0 ? titleSize.Height + 20 : 0);
-
-        switch (diagram)
+            return new UmlScene();
+        return WithTitle(diagram.Title, style, (scene, origin) =>
         {
-            case UmlGraphDiagram graph:
-                new GraphSceneBuilder(graph, style).Build(scene, origin);
-                break;
-            case UmlActivityDiagram activity:
-                new ActivitySceneBuilder(activity, style).Build(scene, origin);
-                break;
-            case UmlSequenceDiagram sequence:
-                new SequenceSceneBuilder(sequence, style).Build(scene, origin);
-                break;
-            case UmlTimingDiagram timing:
-                new TimingSceneBuilder(timing, style).Build(scene, origin);
-                break;
-        }
+            switch (diagram)
+            {
+                case UmlGraphDiagram graph:
+                    new GraphSceneBuilder(graph, style).Build(scene, origin);
+                    break;
+                case UmlActivityDiagram activity:
+                    new ActivitySceneBuilder(activity, style).Build(scene, origin);
+                    break;
+                case UmlSequenceDiagram sequence:
+                    new SequenceSceneBuilder(sequence, style).Build(scene, origin);
+                    break;
+                case UmlTimingDiagram timing:
+                    new TimingSceneBuilder(timing, style).Build(scene, origin);
+                    break;
+            }
+        });
+    }
+
+    /// <summary>Builds a scene below its title (when there is one), the title centered over the drawing.</summary>
+    public static UmlScene WithTitle(string? title, UmlStyle style, Action<UmlScene, Point> build)
+    {
+        var scene = new UmlScene();
+        var titleFontSize = style.FontSize + 5;
+        var titleSize = title is { Length: > 0 } ? style.Measurer.Measure(title, titleFontSize, bold: true) : default;
+        build(scene, new Point(0, titleSize.Height > 0 ? titleSize.Height + 20 : 0));
 
         var bounds = BoundsOf(scene);
-        if (diagram.Title is { Length: > 0 } text)
+        if (title is { Length: > 0 } text)
         {
             var center = bounds.Width > 0 ? bounds.Center.X : titleSize.Width / 2;
             var prim = scene.Add(new TextPrim
@@ -78,6 +84,9 @@ internal static class UmlSceneBuilder
                     break;
                 case GlyphPrim g:
                     Add(g.Rect);
+                    break;
+                case WedgePrim w:
+                    Add(new Rect(w.Center.X - w.Radius, w.Center.Y - w.Radius, 2 * w.Radius, 2 * w.Radius));
                     break;
             }
         }

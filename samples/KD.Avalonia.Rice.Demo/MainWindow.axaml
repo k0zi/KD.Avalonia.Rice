@@ -26,6 +26,7 @@
       <rice:RiceSideMenuItem Name="ChatItem" Icon="💬" Header="Chat" />
       <rice:RiceSideMenuItem Name="ProgressItem" Icon="{x:Static icons:MaterialIconKind.ProgressClock}" Header="Progress" />
       <rice:RiceSideMenuItem Name="UmlItem" Icon="{x:Static icons:MaterialIconKind.SitemapOutline}" Header="UML" />
+      <rice:RiceSideMenuItem Name="MarkdownItem" Icon="{x:Static icons:MaterialIconKind.LanguageMarkdownOutline}" Header="Markdown" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Header="Settings"

@@ -26,4 +26,14 @@ public static class RiceStrings
     public static string UmlResetZoom { get; set; } = "Actual size (100 %)";
     /// <summary>Diagram reading problem; {0} is the line number, {1} the message.</summary>
     public static string UmlParseError { get; set; } = "Line {0}: {1}";
+    public static string MarkdownCopy { get; set; } = "Copy";
+    public static string MarkdownCopied { get; set; } = "Copied";
+    public static string MarkdownExpandDiagram { get; set; } = "Open the diagram";
+    public static string MarkdownCloseDiagram { get; set; } = "Close";
+    /// <summary>Shown instead of an image that cannot be loaded; {0} is the alt text.</summary>
+    public static string MarkdownImageFailed { get; set; } = "{0}";
+    public static string MarkdownFootnotes { get; set; } = "Footnotes";
+    public static string MarkdownBackToReference { get; set; } = "Back to the reference";
+    /// <summary>Mermaid reading problem; {0} is the line number, {1} the message.</summary>
+    public static string MermaidParseError { get; set; } = "Line {0}: {1}";
 }
