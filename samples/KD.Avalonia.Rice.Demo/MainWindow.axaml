@@ -1,28 +1,25 @@
 <rice:RiceWindow xmlns="https://github.com/avaloniaui"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
-                 xmlns:local="clr-namespace:KD.Avalonia.Rice.Demo"
                  xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
-                 xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
                  x:Class="KD.Avalonia.Rice.Demo.MainWindow"
                  Width="980" Height="600" MinWidth="640" MinHeight="360"
                  WindowStartupLocation="CenterScreen"
                  ShowThemeSettingsButton="True" ShowAboutButton="True">
   <DockPanel>
+    <!-- One item per control; the icons show the supported kinds: image, Material icon, emoji. -->
     <rice:RiceSideMenu Name="SideMenu" DockPanel.Dock="Left" SelectedIndex="0">
       <rice:RiceSideMenu.Header>
         <TextBlock FontWeight="SemiBold" Text="Rice Demo" TextTrimming="CharacterEllipsis" />
       </rice:RiceSideMenu.Header>
-      <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.HomeOutline}" Content="Home" />
-      <rice:RiceSideMenuItem Name="ChatItem" Icon="{x:Static icons:MaterialIconKind.ChatOutline}" Content="Chat" />
-      <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Bookshelf}" Content="Library" />
-      <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.DownloadOutline}" Content="Downloads" />
-      <rice:RiceSideMenuItem Content="Linux">
+      <rice:RiceSideMenuItem Name="HomeItem" Content="Home">
         <rice:RiceSideMenuItem.Icon>
           <Image Source="/Assets/icon.png" />
         </rice:RiceSideMenuItem.Icon>
       </rice:RiceSideMenuItem>
-      <rice:RiceSideMenuItem Icon="🍚" Content="Emoji icon" />
+      <rice:RiceSideMenuItem Name="CardItem" Icon="{x:Static icons:MaterialIconKind.CardOutline}" Content="Card" />
+      <rice:RiceSideMenuItem Name="GroupBoxItem" Icon="{x:Static icons:MaterialIconKind.SelectGroup}" Content="Group box" />
+      <rice:RiceSideMenuItem Name="ChatItem" Icon="💬" Content="Chat" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Content="Settings"
@@ -33,78 +30,6 @@
       </rice:RiceSideMenu.Footer>
     </rice:RiceSideMenu>
 
-    <Panel>
-      <local:SettingsPage Name="SettingsPage" IsVisible="False" />
-      <DockPanel Name="ChatPage" IsVisible="False">
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="16" Margin="24,16">
-          <TextBlock FontSize="24" FontWeight="SemiBold" Text="Chat" VerticalAlignment="Center" />
-          <RadioButton Content="Bubbles" GroupName="chatStyle" IsChecked="True" Click="OnBubblesClicked" />
-          <RadioButton Content="Classic (IRC)" GroupName="chatStyle" Click="OnClassicClicked" />
-        </StackPanel>
-        <rice:RiceChat Name="Chat" BorderThickness="0,1,0,0" MessageSent="OnMessageSent" />
-      </DockPanel>
-      <ScrollViewer Name="HomePage">
-        <StackPanel Margin="24" Spacing="16" MaxWidth="560" HorizontalAlignment="Left">
-          <TextBlock Name="PageTitle" FontSize="24" FontWeight="SemiBold" Text="Hello, Rice!" />
-          <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                     Text="Use the lightbulb button to switch light and dark for this session. Pick a theme with the gear button in the title bar or on the Settings page – that choice is saved." />
-
-          <WrapPanel ItemSpacing="16" LineSpacing="16">
-            <rice:RiceCard Width="320" Header="Downloads" Subtitle="3 files, 1.2 GB"
-                           Icon="{x:Static icons:MaterialIconKind.DownloadOutline}">
-              <rice:RiceCard.HeaderActions>
-                <Button Padding="6">
-                  <mi:MaterialIcon Kind="DotsVertical" />
-                </Button>
-              </rice:RiceCard.HeaderActions>
-              <TextBlock TextWrapping="Wrap" Text="The ISO image is ready. Verify the checksum before installing." />
-              <rice:RiceCard.Footer>
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                  <Button Content="Cancel" />
-                  <Button Classes="accent" Content="Save" />
-                </StackPanel>
-              </rice:RiceCard.Footer>
-            </rice:RiceCard>
-            <rice:RiceCard Width="200" Header="Elevation 2" Elevation="2">
-              <TextBlock TextWrapping="Wrap" Text="Title only, deeper shadow." />
-            </rice:RiceCard>
-            <rice:RiceCard Width="200" Elevation="0">
-              <TextBlock TextWrapping="Wrap" Text="Content only, flat (elevation 0)." />
-            </rice:RiceCard>
-          </WrapPanel>
-
-          <rice:RiceGroupBox Header="Controls" Icon="{x:Static icons:MaterialIconKind.Tune}">
-            <StackPanel Spacing="12">
-              <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Classes="accent" Content="Accent button" />
-                <Button Content="Button" />
-                <ToggleButton Content="Toggle" IsChecked="True" />
-              </StackPanel>
-              <TextBox PlaceholderText="Type something…" />
-              <StackPanel Orientation="Horizontal" Spacing="16">
-                <CheckBox Content="Check me" IsChecked="True" />
-                <RadioButton Content="One" GroupName="demo" IsChecked="True" />
-                <RadioButton Content="Two" GroupName="demo" />
-                <ToggleSwitch IsChecked="True" />
-              </StackPanel>
-              <Slider Value="40" />
-              <ProgressBar Value="65" />
-              <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
-                <ComboBoxItem Content="Ubuntu" />
-                <ComboBoxItem Content="Fedora" />
-                <ComboBoxItem Content="Arch" />
-              </ComboBox>
-            </StackPanel>
-          </rice:RiceGroupBox>
-
-          <rice:RiceGroupBox Header="Network">
-            <StackPanel Spacing="8">
-              <CheckBox Content="Use DHCP" />
-              <TextBox Text="192.168.1.10" />
-            </StackPanel>
-          </rice:RiceGroupBox>
-        </StackPanel>
-      </ScrollViewer>
-    </Panel>
+    <ContentControl Name="PageHost" />
   </DockPanel>
 </rice:RiceWindow>

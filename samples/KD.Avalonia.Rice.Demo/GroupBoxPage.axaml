@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Demo.GroupBoxPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="560" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Group box" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceGroupBox: like the WinForms GroupBox, the title sits on the frame and cuts the line – on any background." />
+
+      <rice:RiceGroupBox Header="Network" Icon="{x:Static icons:MaterialIconKind.LanConnect}">
+        <StackPanel Spacing="8">
+          <CheckBox Content="Use DHCP" IsChecked="True" />
+          <TextBox Text="192.168.1.10" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Without icon">
+        <StackPanel Spacing="8">
+          <RadioButton Content="Ubuntu" GroupName="distro" IsChecked="True" />
+          <RadioButton Content="Fedora" GroupName="distro" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <Border Background="{DynamicResource RiceSurfaceBrush}" CornerRadius="8" Padding="16">
+        <rice:RiceGroupBox Header="On a surface, square corners" CornerRadius="0">
+          <Slider Value="40" />
+        </rice:RiceGroupBox>
+      </Border>
+
+      <rice:RiceGroupBox>
+        <TextBlock TextWrapping="Wrap" Text="Without a header the frame is closed." />
+      </rice:RiceGroupBox>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
