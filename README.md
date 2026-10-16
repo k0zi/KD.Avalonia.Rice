@@ -10,6 +10,10 @@ Avalonia 12 library: frameless `RiceWindow` with a custom title bar and Linux di
 (Ubuntu, Fedora, Manjaro, openSUSE, Nord, Solarized, Dracula, Gruvbox, Catppuccin) plus a Windows 11 theme – each with
 light and dark variants.
 
+## Documentation
+
+Usage guides for every control are in the [docs](docs/README.md) folder.
+
 ## Usage
 
 ```csharp
