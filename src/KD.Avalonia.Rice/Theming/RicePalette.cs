@@ -17,6 +17,15 @@ public sealed record RicePalette(Color Accent, Color Background, Color Surface, 
     public Color TitleBarForeground { get; init; } = Foreground;
     public Color Danger { get; init; } = Color.Parse("#E81123");
 
+    /// <summary>Text on <see cref="Danger"/>; derived from it unless set.</summary>
+    public Color DangerForeground
+    {
+        get => _dangerForeground ?? ColorMath.ContrastingForeground(Danger);
+        init => _dangerForeground = value;
+    }
+
+    private readonly Color? _dangerForeground;
+
     public bool IsDark => ColorMath.Luminance(Background) < 0.5;
 
     /// <summary>Background, surface, accent and foreground brushes for previews.</summary>
@@ -40,6 +49,8 @@ internal static class ColorMath
 
     public static Color ContrastingForeground(Color background) =>
         Luminance(background) > 0.6 ? Color.Parse("#1A1A1A") : Colors.White;
+
+    public static Color WithAlpha(Color c, byte alpha) => Color.FromArgb(alpha, c.R, c.G, c.B);
 
     private static byte Lerp(byte a, byte b, double t) => (byte)Math.Round(a + (b - a) * t);
 }

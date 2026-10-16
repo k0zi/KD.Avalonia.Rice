@@ -30,6 +30,7 @@ public sealed class ThemeManager : INotifyPropertyChanged
     private readonly ColorPaletteResources _darkPalette = new();
     private ThemeSettingsStore? _store;
     private RiceTheme _currentTheme;
+    private bool _applied;
 
     public static ThemeManager Instance { get; } = new();
 
@@ -38,7 +39,6 @@ public sealed class ThemeManager : INotifyPropertyChanged
         _brushes.ThemeDictionaries[ThemeVariant.Light] = new ResourceDictionary();
         _brushes.ThemeDictionaries[ThemeVariant.Dark] = new ResourceDictionary();
         _currentTheme = Options.SupportedThemes[0];
-        Apply();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -105,6 +105,9 @@ public sealed class ThemeManager : INotifyPropertyChanged
         resources.MergedDictionaries.Add(_brushes);
         fluent.Palettes[ThemeVariant.Light] = _lightPalette;
         fluent.Palettes[ThemeVariant.Dark] = _darkPalette;
+        // Normally Configure (UseRice) has already applied the theme; without it, the defaults are applied here.
+        if (!_applied)
+            Apply();
     }
 
     private RiceTheme? Find(string? id) =>
@@ -112,6 +115,7 @@ public sealed class ThemeManager : INotifyPropertyChanged
 
     private void Apply()
     {
+        _applied = true;
         _brushes["RiceWindowCornerRadius"] = Options.WindowCornerRadius;
         ApplyBrushes((ResourceDictionary)_brushes.ThemeDictionaries[ThemeVariant.Light], _currentTheme.Light);
         ApplyBrushes((ResourceDictionary)_brushes.ThemeDictionaries[ThemeVariant.Dark], _currentTheme.Dark);
@@ -133,12 +137,13 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceTitleBarForegroundBrush"] = new SolidColorBrush(p.TitleBarForeground);
         target["RiceTitleBarHoverBrush"] = new SolidColorBrush(ColorMath.Blend(p.TitleBarBackground, p.TitleBarForeground, 0.12));
         target["RiceDangerBrush"] = new SolidColorBrush(p.Danger);
+        target["RiceDangerForegroundBrush"] = new SolidColorBrush(p.DangerForeground);
         // Loading overlay: the background color, translucent, so the content stays recognizable but recedes.
-        target["RiceOverlayBrush"] = new SolidColorBrush(Color.FromArgb(0xB8, p.Background.R, p.Background.G, p.Background.B));
+        target["RiceOverlayBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Background, 0xB8));
         // Side menu states are accent tints of the title bar color. The idle brush is the same color fully
         // transparent, so the background transition does not fade through white (Transparent is #00FFFFFF).
         Color MenuTint(double amount) => ColorMath.Blend(p.TitleBarBackground, p.Accent, amount);
-        target["RiceSideMenuItemBackgroundBrush"] = new SolidColorBrush(Color.FromArgb(0, p.TitleBarBackground.R, p.TitleBarBackground.G, p.TitleBarBackground.B));
+        target["RiceSideMenuItemBackgroundBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.TitleBarBackground, 0));
         target["RiceSideMenuItemHoverBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.10 : 0.07));
         target["RiceSideMenuItemPressedBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.16 : 0.11));
         target["RiceSideMenuItemSelectedBrush"] = new SolidColorBrush(MenuTint(p.IsDark ? 0.22 : 0.15));
@@ -146,7 +151,7 @@ public sealed class ThemeManager : INotifyPropertyChanged
 
         target["RiceChatBubbleBrush"] = new SolidColorBrush(ColorMath.Blend(p.Surface, p.Foreground, p.IsDark ? 0.10 : 0.06));
         target["RiceChatOwnBubbleBrush"] = new SolidColorBrush(p.Accent);
-        target["RiceChatOwnSelectionBrush"] = new SolidColorBrush(Color.FromArgb(0x60, p.AccentForeground.R, p.AccentForeground.G, p.AccentForeground.B));
+        target["RiceChatOwnSelectionBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.AccentForeground, 0x60));
 
         // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
         target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);

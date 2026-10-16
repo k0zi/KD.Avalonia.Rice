@@ -1,9 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
-                    xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
-                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-                    xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons">
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
   <ControlTheme x:Key="{x:Type rice:RiceSideMenu}" TargetType="rice:RiceSideMenu">
     <Setter Property="Background" Value="{DynamicResource RiceTitleBarBackgroundBrush}" />
     <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
@@ -99,19 +97,9 @@
                       HorizontalAlignment="Left" VerticalAlignment="Center"
                       Background="{DynamicResource RiceAccentBrush}" IsVisible="False" />
               <Grid Name="PART_HeaderContent" ColumnDefinitions="40,*,Auto">
-                <ContentPresenter Name="PART_IconPresenter" Width="20" Height="20"
+                <rice:RiceIconPresenter Name="PART_IconPresenter" Width="20" Height="20"
                                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                  Content="{TemplateBinding Icon}">
-                  <ContentPresenter.DataTemplates>
-                    <DataTemplate DataType="media:IImage">
-                      <Image Source="{Binding}" Stretch="Uniform" />
-                    </DataTemplate>
-                    <DataTemplate DataType="icons:MaterialIconKind">
-                      <mi:MaterialIcon Kind="{Binding}" Width="20" Height="20" />
-                    </DataTemplate>
-                  </ContentPresenter.DataTemplates>
-                </ContentPresenter>
+                                  Content="{TemplateBinding Icon}" />
                 <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="1" Margin="4,0,0,0"
                                   VerticalAlignment="Center"
                                   Content="{TemplateBinding Header}"
@@ -155,15 +143,10 @@
       <Style Selector="^ /template/ Border#PART_Header:pointerover">
         <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemSelectedHoverBrush}" />
       </Style>
-      <Style Selector="^ /template/ Border#PART_Indicator">
-        <Setter Property="IsVisible" Value="True" />
-      </Style>
-      <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter">
-        <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
-      </Style>
     </Style>
-    <!-- A closed parent (or the collapsed menu) shows that one of its sub items is selected. -->
-    <Style Selector="^:childselected:not(:expanded), ^:childselected:collapsed">
+    <!-- Indicator and accent icon on the selected item; a closed parent (or the collapsed menu) shows them too
+         when one of its sub items is selected. -->
+    <Style Selector="^:selected, ^:childselected:not(:expanded), ^:childselected:collapsed">
       <Style Selector="^ /template/ Border#PART_Indicator">
         <Setter Property="IsVisible" Value="True" />
       </Style>

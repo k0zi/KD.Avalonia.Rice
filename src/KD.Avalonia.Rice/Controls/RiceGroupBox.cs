@@ -12,7 +12,7 @@ namespace KD.Avalonia.Rice.Controls;
 public class RiceGroupBox : HeaderedContentControl
 {
     public static readonly StyledProperty<object?> IconProperty =
-        AvaloniaProperty.Register<RiceGroupBox, object?>(nameof(Icon));
+        RiceCard.IconProperty.AddOwner<RiceGroupBox>();
 
     // Space between the line ends and the title.
     private const double GapPadding = 4;
@@ -35,31 +35,22 @@ public class RiceGroupBox : HeaderedContentControl
         _frame = e.NameScope.Find<RiceGroupBoxFrame>("PART_Frame");
         _header = e.NameScope.Find<Control>("PART_Header");
         _header?.PropertyChanged += OnHeaderPropertyChanged;
-        UpdateHeaderVisibility();
         UpdateGap();
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (change.Property == HeaderProperty || change.Property == IconProperty)
-            UpdateHeaderVisibility();
     }
 
     private void OnHeaderPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
-        if (e.Property == BoundsProperty || e.Property == IsVisibleProperty)
+        if (e.Property == BoundsProperty)
             UpdateGap();
     }
 
-    private void UpdateHeaderVisibility() => _header?.IsVisible = Header is not null || Icon is not null;
-
-    // The line runs through the middle of the title and is cut where the title is.
+    // The line runs through the middle of the title and is cut where the title is. Without header and icon both
+    // presenters hide themselves, so the header is 0 × 0 and the frame is closed.
     private void UpdateGap()
     {
         if (_frame is null || _header is null)
             return;
-        var bounds = _header.IsVisible ? _header.Bounds : default;
+        var bounds = _header.Bounds;
         _frame.Margin = new Thickness(0, bounds.Height / 2, 0, 0);
         _frame.GapStart = bounds.X - GapPadding;
         _frame.GapWidth = bounds.Width > 0 ? bounds.Width + 2 * GapPadding : 0;

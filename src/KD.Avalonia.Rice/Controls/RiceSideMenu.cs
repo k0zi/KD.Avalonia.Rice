@@ -31,16 +31,16 @@ public class RiceSideMenu : TreeView
         AvaloniaProperty.Register<RiceSideMenu, bool>(nameof(ShowCollapseButton), true);
 
     public static readonly StyledProperty<object?> HeaderProperty =
-        AvaloniaProperty.Register<RiceSideMenu, object?>(nameof(Header));
+        HeaderedContentControl.HeaderProperty.AddOwner<RiceSideMenu>();
 
     public static readonly StyledProperty<IDataTemplate?> HeaderTemplateProperty =
-        AvaloniaProperty.Register<RiceSideMenu, IDataTemplate?>(nameof(HeaderTemplate));
+        HeaderedContentControl.HeaderTemplateProperty.AddOwner<RiceSideMenu>();
 
     public static readonly StyledProperty<object?> FooterProperty =
-        AvaloniaProperty.Register<RiceSideMenu, object?>(nameof(Footer));
+        RiceCard.FooterProperty.AddOwner<RiceSideMenu>();
 
     public static readonly StyledProperty<IDataTemplate?> FooterTemplateProperty =
-        AvaloniaProperty.Register<RiceSideMenu, IDataTemplate?>(nameof(FooterTemplate));
+        RiceCard.FooterTemplateProperty.AddOwner<RiceSideMenu>();
 
     public static readonly RoutedEvent<RoutedEventArgs> CollapsedChangedEvent =
         RoutedEvent.Register<RiceSideMenu, RoutedEventArgs>(nameof(CollapsedChanged), RoutingStrategies.Bubble);

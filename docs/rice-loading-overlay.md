@@ -38,7 +38,6 @@ With real progress:
 | `BlurContent` | `false` | Blurs the covered content while active. |
 | `CornerRadius` | `0` | Rounds the layer (and the content background); match it to the content, e.g. a card. |
 | `Background`, `Padding` | – | Background and padding of the content area. |
-| `IsSpinning` | – | Read-only: the ring is spinning (active and indeterminate). |
 
 ## Examples
 
@@ -91,5 +90,5 @@ A darker, modal like layer:
 
 ## Styling
 
-Pseudo classes: `:active`, `:blur`. Template parts: `PART_ContentPresenter`, `PART_Overlay` (the layer, a `Border`),
+Pseudo class: `:active`. Template parts: `PART_ContentPresenter`, `PART_Overlay` (the layer, a `Border`),
 `PART_Ring` (`RiceProgressRing`, `Thickness` 5), `PART_MessagePresenter`. Brush: `RiceOverlayBrush`.

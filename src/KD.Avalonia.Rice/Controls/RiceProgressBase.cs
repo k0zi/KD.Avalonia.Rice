@@ -2,6 +2,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 
 namespace KD.Avalonia.Rice.Controls;
 
@@ -82,6 +83,18 @@ public abstract class RiceProgressBase : RangeBase
             || change.Property == IsIndeterminateProperty || change.Property == ShowValueProperty
             || change.Property == ValueStringFormatProperty)
             UpdateProgress();
+    }
+
+    // Avalonia stops the style animations of the template parts when the control leaves the visual tree, and does
+    // not start them again when it comes back (e.g. a cached page shown again). Switching the pseudo class off and
+    // on re-activates the indeterminate style, which starts its animation anew.
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        if (!IsIndeterminate)
+            return;
+        PseudoClasses.Set(":indeterminate", false);
+        PseudoClasses.Set(":indeterminate", true);
     }
 
     /// <summary>Called after <see cref="Percentage"/> changed, to update the indicator's geometry.</summary>

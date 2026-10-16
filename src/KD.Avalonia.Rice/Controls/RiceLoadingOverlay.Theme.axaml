@@ -29,7 +29,6 @@
                                      Width="{TemplateBinding IndicatorSize}"
                                      Height="{TemplateBinding IndicatorSize}"
                                      Thickness="5"
-                                     IsIndeterminate="{TemplateBinding IsSpinning}"
                                      Value="{TemplateBinding Value}"
                                      ShowValue="{TemplateBinding ShowValue}" />
               <ContentPresenter Name="PART_MessagePresenter" HorizontalAlignment="Center" MaxWidth="320"
@@ -47,7 +46,11 @@
       <Setter Property="Opacity" Value="1" />
       <Setter Property="IsHitTestVisible" Value="True" />
     </Style>
-    <Style Selector="^:active:blur /template/ ContentPresenter#PART_ContentPresenter">
+    <!-- The ring only spins while shown, so a hidden overlay costs nothing. -->
+    <Style Selector="^:active /template/ rice|RiceProgressRing#PART_Ring">
+      <Setter Property="IsIndeterminate" Value="{TemplateBinding IsIndeterminate}" />
+    </Style>
+    <Style Selector="^:active[BlurContent=True] /template/ ContentPresenter#PART_ContentPresenter">
       <Setter Property="Effect" Value="blur(6)" />
     </Style>
   </ControlTheme>

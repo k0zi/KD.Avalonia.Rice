@@ -51,23 +51,16 @@
       </ControlTemplate>
     </Setter>
 
-    <Style Selector="^[WindowState=Maximized]">
+    <Style Selector="^[WindowState=Maximized], ^[WindowState=FullScreen]">
       <Setter Property="BorderThickness" Value="0" />
       <Style Selector="^ /template/ Panel#PART_ResizeGrips">
         <Setter Property="IsVisible" Value="False" />
       </Style>
     </Style>
     <!-- Square corners when maximized / full screen, or when the platform cannot draw a transparent window. -->
-    <Style Selector="^[WindowState=Maximized] /template/ Border#PART_Frame, ^[WindowState=FullScreen] /template/ Border#PART_Frame, ^:not(:rounded) /template/ Border#PART_Frame">
-      <Setter Property="CornerRadius" Value="0" />
-    </Style>
-    <Style Selector="^[WindowState=Maximized] /template/ Border#PART_FrameOutline, ^[WindowState=FullScreen] /template/ Border#PART_FrameOutline, ^:not(:rounded) /template/ Border#PART_FrameOutline">
-      <Setter Property="CornerRadius" Value="0" />
-    </Style>
-    <Style Selector="^[WindowState=FullScreen]">
-      <Setter Property="BorderThickness" Value="0" />
-      <Style Selector="^ /template/ Panel#PART_ResizeGrips">
-        <Setter Property="IsVisible" Value="False" />
+    <Style Selector="^[WindowState=Maximized], ^[WindowState=FullScreen], ^:not(:rounded)">
+      <Style Selector="^ /template/ Border#PART_Frame, ^ /template/ Border#PART_FrameOutline">
+        <Setter Property="CornerRadius" Value="0" />
       </Style>
     </Style>
     <Style Selector="^[CanResize=False] /template/ Panel#PART_ResizeGrips">
