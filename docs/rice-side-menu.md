@@ -190,6 +190,21 @@ Pseudo classes for styling: `:selected`, `:expanded`, `:haschildren`, `:childsel
 Template parts: `PART_Header` (the row), `PART_Indicator`, `PART_IconPresenter`, `PART_HeaderPresenter`, `PART_Chevron`,
 `PART_ItemsPresenter`.
 
+## Migrating from the ListBox based menu
+
+Earlier versions derived `RiceSideMenu` from `ListBox` and `RiceSideMenuItem` from `ListBoxItem`. Since sub items were
+added they are a `TreeView` / `TreeViewItem`:
+
+| Before | Now |
+|--------|-----|
+| `<rice:RiceSideMenuItem Content="Home" />` | `<rice:RiceSideMenuItem Header="Home" />` (also in the footer) |
+| `SelectedIndex="0"` | `IsSelected="True"` on the item, or set `SelectedItem` |
+| `SelectedIndex` in code | `SelectedItem` (the item, or the data item with `ItemsSource`) |
+| `ItemsSource` + style binding `Content` | `ItemsSource` + `ItemTemplate` (`TreeDataTemplate`), or a style binding `Header` |
+| Styles targeting `ListBoxItem` states on `PART_Background` | Target `RiceSideMenuItem` / `Border#PART_Header` (see [pseudo classes](#ricesidemenuitem-properties)) |
+
+`SelectedItem`, `SelectionChanged`, `IsCollapsed`, `Header` / `Footer`, `Icon`, `Click` and `Command` work as before.
+
 ## Theme resources
 
 `RiceSideMenuItemBackgroundBrush`, `RiceSideMenuItemHoverBrush`, `RiceSideMenuItemPressedBrush`,

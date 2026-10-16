@@ -11,6 +11,8 @@ themes that every control relies on.
 | [RiceCard](rice-card.md) | Raised surface with header, actions, footer and shadow |
 | [RiceGroupBox](rice-group-box.md) | Frame with the title on the top line |
 | [RiceChat](rice-chat.md) | Chat view with bubbles or IRC like log and an input box |
+| [RiceProgressRing](rice-progress-ring.md) | Circular progress, 0–100 % or indeterminate (spinning) |
+| [RiceProgressBar](rice-progress-bar.md) | Horizontal progress bar, 0–100 % or indeterminate (sliding) |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
 
 All examples use these XML namespaces:

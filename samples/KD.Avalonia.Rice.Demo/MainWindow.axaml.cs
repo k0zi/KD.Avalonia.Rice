@@ -38,6 +38,7 @@ public partial class MainWindow : RiceWindow
                 _ when key == CardItem => new CardPage(),
                 _ when key == GroupBoxItem => new GroupBoxPage(),
                 _ when key == ChatItem => new ChatPage(),
+                _ when key == ProgressItem => new ProgressPage(),
                 nameof(SettingsPage) => new SettingsPage(),
                 _ => new HomePage(),
             };

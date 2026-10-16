@@ -1,0 +1,65 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceProgressBar}" TargetType="rice:RiceProgressBar">
+    <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="MinWidth" Value="80" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="*,Auto">
+          <Panel Height="{TemplateBinding Thickness}" VerticalAlignment="Center">
+            <rice:RiceProgressSegment Name="PART_Track" Fill="{TemplateBinding Background}" />
+            <rice:RiceProgressSegment Name="PART_Indicator"
+                                      End="{TemplateBinding Fraction}"
+                                      Fill="{TemplateBinding Foreground}" />
+          </Panel>
+          <!-- Fixed minimum width, so the bar does not jump while the text grows from 0% to 100%. -->
+          <TextBlock Name="PART_Text" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center"
+                     MinWidth="36" TextAlignment="Right"
+                     FontWeight="SemiBold" IsVisible="False"
+                     Foreground="{DynamicResource RiceForegroundBrush}"
+                     Text="{TemplateBinding ValueText}" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- Value changes fill the bar smoothly; a resize redraws it at once. -->
+    <Style Selector="^:determinate /template/ rice|RiceProgressSegment#PART_Indicator">
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="End" Duration="0:0:0.2">
+            <DoubleTransition.Easing>
+              <CubicEaseOut />
+            </DoubleTransition.Easing>
+          </DoubleTransition>
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="^:determinate:showvalue /template/ TextBlock#PART_Text">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <!-- The head runs ahead (the segment grows), then the tail catches up and both leave on the right;
+         the parts outside the bar are cut, so the segment slides in and out. -->
+    <Style Selector="^:indeterminate /template/ rice|RiceProgressSegment#PART_Indicator">
+      <Style.Animations>
+        <Animation Duration="0:0:1.6" IterationCount="Infinite">
+          <KeyFrame Cue="0%">
+            <Setter Property="Start" Value="-0.1" />
+            <Setter Property="End" Value="0" />
+          </KeyFrame>
+          <KeyFrame Cue="50%">
+            <Setter Property="Start" Value="0.15" />
+            <Setter Property="End" Value="0.75" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Start" Value="1" />
+            <Setter Property="End" Value="1.1" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>
