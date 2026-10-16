@@ -16,12 +16,19 @@ themes that every control relies on.
 | [RiceSpinner](rice-spinner.md) | Small busy indicator for buttons and status lines |
 | [RiceLoadingOverlay](rice-loading-overlay.md) | Covers and blocks content while it loads, with ring and message |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
+| [UML diagrams](rice-uml.md) | `UmlDiagramView`: all 14 UML diagram types, read from and written to PlantUML (`.puml`) |
 
 All examples use these XML namespaces:
 
 ```xml
 xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
 xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+```
+
+The UML controls have their own namespace:
+
+```xml
+xmlns:uml="clr-namespace:KD.Avalonia.Rice.Controls.Uml;assembly=KD.Avalonia.Rice"
 ```
 
 The [demo app](../samples/KD.Avalonia.Rice.Demo) shows every control:

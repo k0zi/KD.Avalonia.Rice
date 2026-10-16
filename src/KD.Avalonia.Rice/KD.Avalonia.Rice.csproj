@@ -2,14 +2,14 @@
   <PropertyGroup>
     <RootNamespace>KD.Avalonia.Rice</RootNamespace>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <Description>Frameless Avalonia window with a custom title bar and Linux distro inspired themes, plus themed controls: side menu, card, group box, chat, progress ring, progress bar, spinner and loading overlay.</Description>
+    <Description>Frameless Avalonia window with a custom title bar and Linux distro inspired themes, plus themed controls: side menu, card, group box, chat, progress ring, progress bar, spinner, loading overlay and UML diagrams (all 14 kinds, read from and written to PlantUML).</Description>
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>KD.Avalonia.Rice</PackageId>
     <Authors>k0zi</Authors>
-    <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula;sidemenu;navigation;card;groupbox;chat;progress;progressring;spinner;loading;overlay</PackageTags>
+    <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula;sidemenu;navigation;card;groupbox;chat;progress;progressring;spinner;loading;overlay;uml;plantuml;diagram</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -22,6 +22,10 @@
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="Assets\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="KD.Avalonia.Rice.Tests" />
   </ItemGroup>
 
   <ItemGroup>

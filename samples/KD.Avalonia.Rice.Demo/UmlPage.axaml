@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:uml="clr-namespace:KD.Avalonia.Rice.Controls.Uml;assembly=KD.Avalonia.Rice"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Demo.UmlPage">
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top" Margin="24,16,24,12">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <ComboBox Name="SampleBox" MinWidth="190" />
+        <Button Click="OnOpenClicked" ToolTip.Tip="Open a .puml file">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <mi:MaterialIcon Kind="FolderOpenOutline" Width="16" Height="16" />
+            <TextBlock Text="Open" />
+          </StackPanel>
+        </Button>
+        <Button Click="OnSaveClicked" ToolTip.Tip="Save the source as a .puml file">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <mi:MaterialIcon Kind="ContentSaveOutline" Width="16" Height="16" />
+            <TextBlock Text="Save" />
+          </StackPanel>
+        </Button>
+      </StackPanel>
+      <StackPanel Spacing="2">
+        <TextBlock FontSize="24" FontWeight="SemiBold" Text="UML diagrams" />
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                   Text="UmlDiagramView draws all 14 UML diagram types from PlantUML. Edit the source, drag to pan, Ctrl + wheel to zoom, click to select." />
+      </StackPanel>
+    </DockPanel>
+
+    <TextBlock Name="StatusText" DockPanel.Dock="Bottom" Margin="24,6,24,10" FontSize="12"
+               Foreground="{DynamicResource RiceForegroundMutedBrush}" TextTrimming="CharacterEllipsis" />
+
+    <Grid ColumnDefinitions="2*,8,3*" Margin="24,0">
+      <TextBox Name="SourceBox" AcceptsReturn="True" TextWrapping="NoWrap" FontSize="12"
+               FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Noto Sans Mono, monospace"
+               VerticalContentAlignment="Top"
+               ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+      <GridSplitter Grid.Column="1" Background="Transparent" ResizeDirection="Columns" />
+      <Border Grid.Column="2" CornerRadius="8" BorderThickness="1" ClipToBounds="True"
+              BorderBrush="{DynamicResource RiceBorderBrush}">
+        <uml:UmlDiagramView Name="DiagramView" CornerRadius="8" />
+      </Border>
+    </Grid>
+  </DockPanel>
+</UserControl>

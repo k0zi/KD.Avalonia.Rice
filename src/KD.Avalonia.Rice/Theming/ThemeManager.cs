@@ -153,6 +153,22 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceChatOwnBubbleBrush"] = new SolidColorBrush(p.Accent);
         target["RiceChatOwnSelectionBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.AccentForeground, 0x60));
 
+        // UML diagrams: nodes a bit lighter (dark: brighter) than the surface, headers tinted with the accent,
+        // warm notes, translucent containers so nested ones get darker.
+        var umlNode = p.IsDark ? ColorMath.Blend(p.Surface, p.Foreground, 0.05) : ColorMath.Blend(p.Surface, Colors.White, 0.7);
+        var umlNote = p.IsDark ? ColorMath.Blend(p.Surface, Color.Parse("#E3B341"), 0.16) : ColorMath.Blend(Color.Parse("#FFF4C4"), p.Surface, 0.25);
+        target["RiceUmlNodeBrush"] = new SolidColorBrush(umlNode);
+        target["RiceUmlNodeHeaderBrush"] = new SolidColorBrush(ColorMath.Blend(umlNode, p.Accent, p.IsDark ? 0.20 : 0.12));
+        target["RiceUmlNodeBorderBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Foreground, p.IsDark ? 0.30 : 0.24));
+        target["RiceUmlLineBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Foreground, 0.62));
+        target["RiceUmlNoteBrush"] = new SolidColorBrush(umlNote);
+        target["RiceUmlNoteBorderBrush"] = new SolidColorBrush(ColorMath.Blend(umlNote, p.IsDark ? Color.Parse("#E3B341") : Color.Parse("#9A7B00"), 0.45));
+        target["RiceUmlContainerBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x0C : (byte)0x08));
+        target["RiceUmlLaneBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x0A : (byte)0x07));
+        target["RiceUmlSelectionBrush"] = new SolidColorBrush(p.Accent);
+        target["RiceUmlHoverBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Accent, 0x99));
+        target["RiceUmlGridBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x1E : (byte)0x26));
+
         // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
         target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);
         target["RiceCardShadow2"] = Shadow(3, 10, p.IsDark ? 0.45 : 0.12);

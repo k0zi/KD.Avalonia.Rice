@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: dotnet build KD.Avalonia.Rice.slnx -c Release --no-restore -p:ContinuousIntegrationBuild=true
 
+      - name: Test
+        run: dotnet test KD.Avalonia.Rice.slnx -c Release --no-build
+
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:

@@ -20,4 +20,10 @@ public static class RiceStrings
     public static string ExpandMenu { get; set; } = "Expand menu";
     public static string ChatPlaceholder { get; set; } = "Type a message…";
     public static string Send { get; set; } = "Send";
+    public static string UmlZoomIn { get; set; } = "Zoom in";
+    public static string UmlZoomOut { get; set; } = "Zoom out";
+    public static string UmlZoomToFit { get; set; } = "Fit to view";
+    public static string UmlResetZoom { get; set; } = "Actual size (100 %)";
+    /// <summary>Diagram reading problem; {0} is the line number, {1} the message.</summary>
+    public static string UmlParseError { get; set; } = "Line {0}: {1}";
 }
