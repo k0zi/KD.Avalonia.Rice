@@ -9,6 +9,7 @@ Circular progress indicator with two modes:
 
 `RiceProgressRing` is a `RangeBase` like `ProgressBar`, so `Minimum`, `Maximum` and `Value` work the same way.
 It shares its API with the horizontal [`RiceProgressBar`](rice-progress-bar.md) (both derive from `RiceProgressBase`).
+For a small inline busy indicator (e.g. in a button) use [`RiceSpinner`](rice-spinner.md).
 
 ```xml
 <!-- 0–100 % with the value in the center -->

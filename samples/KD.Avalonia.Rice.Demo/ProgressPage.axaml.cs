@@ -29,6 +29,56 @@ public partial class ProgressPage : UserControl
         }, TimeSpan.FromSeconds(2));
     }
 
+    // Busy for two seconds: the spinner shows and the button ignores clicks, but keeps its colors
+    // (a disabled button would turn the spinner gray).
+    private void OnBusyButtonClicked(object? sender, RoutedEventArgs e)
+    {
+        var (button, spinner, text, idle, busy) = sender == SaveButton
+            ? (SaveButton, SaveSpinner, SaveText, "Save", "Saving…")
+            : (RefreshButton, RefreshSpinner, RefreshText, "Refresh", "Refreshing…");
+        if (spinner.IsActive)
+            return;
+
+        spinner.IsActive = true;
+        text.Text = busy;
+        button.IsHitTestVisible = false;
+        DispatcherTimer.RunOnce(() =>
+        {
+            spinner.IsActive = false;
+            text.Text = idle;
+            button.IsHitTestVisible = true;
+        }, TimeSpan.FromSeconds(2));
+    }
+
+    // Indeterminate for two seconds, or 0-100 % in about two seconds.
+    private void OnOverlayClicked(object? sender, RoutedEventArgs e)
+    {
+        if (FormOverlay.IsActive)
+            return;
+
+        var withProgress = sender == OverlayProgressButton;
+        FormOverlay.IsIndeterminate = !withProgress;
+        FormOverlay.Value = 0;
+        FormOverlay.Message = withProgress ? "Uploading…" : "Loading profile…";
+        FormOverlay.IsActive = true;
+        if (!withProgress)
+        {
+            DispatcherTimer.RunOnce(() => FormOverlay.IsActive = false, TimeSpan.FromSeconds(2));
+            return;
+        }
+
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(20) };
+        timer.Tick += (_, _) =>
+        {
+            FormOverlay.Value += 1;
+            if (FormOverlay.Value < 100)
+                return;
+            timer.Stop();
+            FormOverlay.IsActive = false;
+        };
+        timer.Start();
+    }
+
     private void OnTick(object? sender, EventArgs e)
     {
         WorkRing.Value += 1;

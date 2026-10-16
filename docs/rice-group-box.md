@@ -41,7 +41,7 @@ A check box as title, enabling the content:
   <rice:RiceGroupBox.Header>
     <CheckBox Name="ProxyEnabled" Content="Use a proxy" />
   </rice:RiceGroupBox.Header>
-  <TextBox IsEnabled="{Binding #ProxyEnabled.IsChecked}" Watermark="proxy.example.com:8080" />
+  <TextBox IsEnabled="{Binding #ProxyEnabled.IsChecked}" PlaceholderText="proxy.example.com:8080" />
 </rice:RiceGroupBox>
 ```
 

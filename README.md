@@ -11,7 +11,7 @@ Avalonia 12 library: frameless `RiceWindow` with a custom title bar and Linux di
 light and dark variants.
 
 Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card (`RiceCard`), group box
-(`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`) and a theme
+(`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`) and a theme
 selector (`ThemeSelector`, `ThemeDialog`).
 
 ## Documentation
@@ -157,13 +157,24 @@ private void OnMessageSent(object? sender, RiceChatMessageSentEventArgs e) =>
   `AutoScroll` (follows new messages while scrolled to the bottom).
 - Brushes: `RiceChatBubbleBrush`, `RiceChatOwnBubbleBrush`; texts: `RiceStrings.ChatPlaceholder`, `RiceStrings.Send`.
 
-### Progress ring and progress bar
+### Progress ring, progress bar, spinner and loading overlay
 
 ```xml
 <rice:RiceProgressRing Value="{Binding Percent}" Width="64" Height="64" Thickness="6" ShowValue="True" />
 <rice:RiceProgressRing IsIndeterminate="True" />
 <rice:RiceProgressBar Value="{Binding Percent}" ShowValue="True" />
 <rice:RiceProgressBar IsIndeterminate="True" />
+
+<Button Classes="accent">
+  <StackPanel Orientation="Horizontal" Spacing="8">
+    <rice:RiceSpinner IsActive="{Binding IsSaving}" />
+    <TextBlock Text="Save" />
+  </StackPanel>
+</Button>
+
+<rice:RiceLoadingOverlay IsActive="{Binding IsLoading}" Message="Loading profile…">
+  <local:ProfileForm />
+</rice:RiceLoadingOverlay>
 ```
 
 - Same API for both: determinate fills by `Value` between `Minimum` and `Maximum` (0–100), `ShowValue` shows the
@@ -171,6 +182,10 @@ private void OnMessageSent(object? sender, RiceChatMessageSentEventArgs e) =>
   switched off.
 - `Thickness` (ring: stroke width, bar: height), `Foreground` (accent), `Background` (track).
   See the [ring](docs/rice-progress-ring.md) and [bar](docs/rice-progress-bar.md) docs.
+- `RiceSpinner`: 16 px spinning arc in the current text color (white in an accent button), `IsActive="False"` hides it.
+  See the [spinner docs](docs/rice-spinner.md).
+- `RiceLoadingOverlay`: while `IsActive`, covers its content with a translucent layer, a ring (indeterminate or
+  `Value`) and a `Message`, and blocks pointer and keyboard input to it. See the [overlay docs](docs/rice-loading-overlay.md).
 
 ## Demo
 

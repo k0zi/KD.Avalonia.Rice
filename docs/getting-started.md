@@ -104,6 +104,7 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceBorderBrush` | Separators and frames |
 | `RiceTitleBarBackgroundBrush`, `RiceTitleBarForegroundBrush`, `RiceTitleBarHoverBrush` | Title bar and side menu |
 | `RiceDangerBrush` | Destructive actions, errors |
+| `RiceOverlayBrush` | Translucent background color for layers over content (loading overlay) |
 
 ```xml
 <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="1">

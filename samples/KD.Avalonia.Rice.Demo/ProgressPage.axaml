@@ -6,7 +6,7 @@
     <StackPanel Margin="24" Spacing="16" MaxWidth="560" HorizontalAlignment="Left">
       <TextBlock FontSize="24" FontWeight="SemiBold" Text="Progress" />
       <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                 Text="RiceProgressRing and RiceProgressBar: 0–100 % or indeterminate (moves until the work is done)." />
+                 Text="RiceProgressRing and RiceProgressBar: 0–100 % or indeterminate (moves until the work is done). RiceSpinner: small busy indicator, e.g. in buttons. RiceLoadingOverlay: covers and blocks its content while loading." />
 
       <rice:RiceGroupBox Header="Determinate">
         <StackPanel Spacing="12">
@@ -33,6 +33,58 @@
           </StackPanel>
           <rice:RiceProgressBar IsIndeterminate="True" />
           <rice:RiceProgressBar IsIndeterminate="True" Thickness="2" Background="Transparent" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Inline spinner">
+        <StackPanel Spacing="12">
+          <!-- The spinner takes the button's text color; click to see it for two seconds. -->
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Name="SaveButton" Classes="accent" Click="OnBusyButtonClicked">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <rice:RiceSpinner Name="SaveSpinner" IsActive="False" />
+                <TextBlock Name="SaveText" Text="Save" />
+              </StackPanel>
+            </Button>
+            <Button Name="RefreshButton" Click="OnBusyButtonClicked">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <rice:RiceSpinner Name="RefreshSpinner" IsActive="False" />
+                <TextBlock Name="RefreshText" Text="Refresh" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <rice:RiceSpinner />
+            <TextBlock VerticalAlignment="Center" Text="Loading messages…" />
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <rice:RiceSpinner Foreground="{DynamicResource RiceAccentBrush}" />
+            <rice:RiceSpinner Width="24" Height="24" Thickness="3" Foreground="{DynamicResource RiceAccentBrush}" />
+            <rice:RiceSpinner Width="12" Height="12" Thickness="1.5"
+                              Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+          </StackPanel>
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Loading overlay">
+        <StackPanel Spacing="12">
+          <!-- The covered form does not get clicks or keys while the overlay is active. -->
+          <rice:RiceLoadingOverlay Name="FormOverlay" CornerRadius="8"
+                                   BlurContent="{Binding #BlurCheck.IsChecked}">
+            <Border Background="{DynamicResource RiceSurfaceBrush}" CornerRadius="8" Padding="16">
+              <StackPanel Spacing="8">
+                <TextBlock FontWeight="SemiBold" Text="Profile" />
+                <TextBox PlaceholderText="Name" Text="Tux" />
+                <TextBox PlaceholderText="E-mail" Text="tux@example.org" />
+                <CheckBox Content="Subscribe to the newsletter" />
+              </StackPanel>
+            </Border>
+          </rice:RiceLoadingOverlay>
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Name="OverlayButton" Content="Load" Click="OnOverlayClicked" />
+            <Button Name="OverlayProgressButton" Content="Load with progress" Click="OnOverlayClicked" />
+            <CheckBox Name="BlurCheck" Content="Blur" VerticalAlignment="Center" />
+          </StackPanel>
         </StackPanel>
       </rice:RiceGroupBox>
 
