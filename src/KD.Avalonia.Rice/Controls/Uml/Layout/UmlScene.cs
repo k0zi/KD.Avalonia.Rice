@@ -30,6 +30,17 @@ internal enum UmlBrush
     BadgeInterface,
     BadgeEnum,
     BadgeOther,
+    /// <summary>Chart colors (pie slices, gantt sections, mind map branches); Series0 + n.</summary>
+    Series0,
+    Series1,
+    Series2,
+    Series3,
+    Series4,
+    Series5,
+    Series6,
+    Series7,
+    /// <summary>Text on the chart colors.</summary>
+    OnSeries,
 }
 
 internal enum UmlShape
@@ -55,6 +66,19 @@ internal enum UmlShape
     Collections,
     /// <summary>Band with pointed ends (concise timing lifeline).</summary>
     Band,
+    /// <summary>Rectangle with double vertical lines at the sides (flowchart subroutine).</summary>
+    Subroutine,
+    /// <summary>Leaning right.</summary>
+    Parallelogram,
+    /// <summary>Leaning left.</summary>
+    ParallelogramAlt,
+    /// <summary>Wider at the bottom.</summary>
+    Trapezoid,
+    /// <summary>Wider at the top.</summary>
+    TrapezoidAlt,
+    /// <summary>Flag: rectangle with a notch on the left.</summary>
+    Asymmetric,
+    DoubleCircle,
 }
 
 internal enum UmlStroke
@@ -163,6 +187,17 @@ internal sealed class GlyphPrim : UmlPrim
     public UmlBrush Fill { get; init; } = UmlBrush.Node;
 }
 
+/// <summary>Slice of a pie chart; angles in degrees, clockwise from the top.</summary>
+internal sealed class WedgePrim : UmlPrim
+{
+    public Point Center { get; init; }
+    public double Radius { get; init; }
+    public double StartAngle { get; init; }
+    public double SweepAngle { get; init; }
+    public UmlBrush Fill { get; init; } = UmlBrush.Series0;
+    public UmlBrush Stroke { get; init; } = UmlBrush.Background;
+}
+
 /// <summary>Something that can be hovered and selected: an element, a relation, a message, …</summary>
 internal sealed class UmlHitItem(object model, Rect bounds)
 {
@@ -215,6 +250,12 @@ internal sealed class UmlScene
     }
 }
 
+/// <summary>A diagram that builds its own scene (Mermaid diagrams without a UML model).</summary>
+internal interface IUmlSceneSource
+{
+    UmlScene Build(UmlStyle style);
+}
+
 /// <summary>Text measurement; the real one uses Avalonia's text layout, tests use an estimate.</summary>
 internal interface IUmlTextMeasurer
 {
@@ -224,6 +265,8 @@ internal interface IUmlTextMeasurer
 /// <summary>Font sizes and spacing shared by the scene builders.</summary>
 internal sealed class UmlStyle(IUmlTextMeasurer measurer, double fontSize)
 {
+    public static UmlBrush Series(int index) => UmlBrush.Series0 + (index % 8 + 8) % 8;
+
     public IUmlTextMeasurer Measurer { get; } = measurer;
 
     public double FontSize { get; } = fontSize;

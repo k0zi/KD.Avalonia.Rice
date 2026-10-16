@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:md="clr-namespace:KD.Avalonia.Rice.Controls.Markdowns">
+  <ControlTheme x:Key="{x:Type md:MarkdownView}" TargetType="md:MarkdownView">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Padding" Value="28,20" />
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <Panel>
+            <ScrollViewer Name="PART_ScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+              <Decorator Name="PART_Host" Padding="{TemplateBinding Padding}"
+                         MaxWidth="{TemplateBinding ContentMaxWidth}" HorizontalAlignment="Stretch" />
+            </ScrollViewer>
+            <!-- Full size view of a diagram, over the text. -->
+            <Panel Name="PART_Overlay" IsVisible="False" Background="{DynamicResource RiceOverlayBrush}" />
+          </Panel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

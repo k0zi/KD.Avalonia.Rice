@@ -23,6 +23,14 @@ public enum UmlArrowHead
     Circle,
     /// <summary>Required interface ("socket") end.</summary>
     Socket,
+    /// <summary>Crow's foot notation (entity relationship): a bar and a circle.</summary>
+    ZeroOrOne,
+    /// <summary>Crow's foot notation: two bars.</summary>
+    ExactlyOne,
+    /// <summary>Crow's foot notation: a crow's foot and a circle.</summary>
+    ZeroOrMore,
+    /// <summary>Crow's foot notation: a crow's foot and a bar.</summary>
+    OneOrMore,
 }
 
 public enum UmlLineStyle

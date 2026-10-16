@@ -169,6 +169,30 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceUmlHoverBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Accent, 0x99));
         target["RiceUmlGridBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x1E : (byte)0x26));
 
+        // Markdown: code a shade off the background, accent tinted quote bar and table header, accent links made
+        // readable on the background. Syntax colors are GitHub like, pulled a bit toward the theme foreground.
+        target["RiceMarkdownCodeBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Foreground, p.IsDark ? 0.06 : 0.04));
+        target["RiceMarkdownInlineCodeBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x22 : (byte)0x14));
+        target["RiceMarkdownQuoteBrush"] = new SolidColorBrush(ColorMath.Blend(p.Border, p.Accent, 0.55));
+        target["RiceMarkdownTableHeaderBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Accent, p.IsDark ? 0.14 : 0.08));
+        target["RiceMarkdownTableStripeBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x0A : (byte)0x06));
+        target["RiceMarkdownLinkBrush"] = new SolidColorBrush(ColorMath.Blend(p.Accent, p.Foreground, p.IsDark ? 0.22 : 0.08));
+        Color Syntax(string light, string dark) => ColorMath.Blend(Color.Parse(p.IsDark ? dark : light), p.Foreground, 0.12);
+        target["RiceCodeKeywordBrush"] = new SolidColorBrush(Syntax("#CF222E", "#FF7B72"));
+        target["RiceCodeTypeBrush"] = new SolidColorBrush(Syntax("#8250DF", "#D2A8FF"));
+        target["RiceCodeStringBrush"] = new SolidColorBrush(Syntax("#0A3069", "#A5D6FF"));
+        target["RiceCodeNumberBrush"] = new SolidColorBrush(Syntax("#0550AE", "#79C0FF"));
+        target["RiceCodeCommentBrush"] = new SolidColorBrush(ColorMath.Blend(p.ForegroundMuted, p.Background, 0.15));
+        target["RiceCodeOperatorBrush"] = new SolidColorBrush(Syntax("#953800", "#FFA657"));
+        target["RiceCodeTagBrush"] = new SolidColorBrush(Syntax("#116329", "#7EE787"));
+        target["RiceCodeAttributeBrush"] = new SolidColorBrush(Syntax("#0550AE", "#79C0FF"));
+
+        // Chart colors (pie slices, gantt sections, mind map branches): the accent first, then fixed hues.
+        string[] series = ["#4C9AFF", "#36B37E", "#FFAB00", "#FF5630", "#8B5CF6", "#00B8D9", "#E5892E"];
+        target["RiceChartSeries0Brush"] = new SolidColorBrush(p.Accent);
+        for (var i = 0; i < series.Length; i++)
+            target[$"RiceChartSeries{i + 1}Brush"] = new SolidColorBrush(ColorMath.Blend(Color.Parse(series[i]), p.Surface, p.IsDark ? 0.18 : 0.08));
+
         // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
         target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);
         target["RiceCardShadow2"] = Shadow(3, 10, p.IsDark ? 0.45 : 0.12);

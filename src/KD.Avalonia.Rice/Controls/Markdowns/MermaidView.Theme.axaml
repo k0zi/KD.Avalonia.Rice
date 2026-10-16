@@ -1,0 +1,80 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:uml="clr-namespace:KD.Avalonia.Rice.Controls.Uml"
+                    xmlns:md="clr-namespace:KD.Avalonia.Rice.Controls.Markdowns"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+  <!-- Same look as the UML diagram view; the diagram is given to the canvas in code. -->
+  <ControlTheme x:Key="{x:Type md:MermaidView}" TargetType="md:MermaidView">
+    <Setter Property="Background" Value="{DynamicResource RiceBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <Panel>
+            <uml:UmlDiagramCanvas Name="PART_Canvas"
+                                  Background="{TemplateBinding Background}"
+                                  FontSize="{TemplateBinding FontSize}"
+                                  MinZoom="{TemplateBinding MinZoom}"
+                                  MaxZoom="{TemplateBinding MaxZoom}"
+                                  IsSelectionEnabled="{TemplateBinding IsSelectionEnabled}"
+                                  ShowGrid="{TemplateBinding ShowGrid}"
+                                  Zoom="{Binding Zoom, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                  SelectedElement="{Binding SelectedElement, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+
+            <Border Name="PART_ErrorBadge" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="12"
+                    MaxWidth="520" Padding="10,6" CornerRadius="8" IsVisible="False"
+                    Background="{DynamicResource RiceDangerBrush}">
+              <DockPanel>
+                <mi:MaterialIcon DockPanel.Dock="Left" Kind="AlertCircleOutline" Width="16" Height="16" Margin="0,0,8,0"
+                                 VerticalAlignment="Top" Foreground="{DynamicResource RiceDangerForegroundBrush}" />
+                <TextBlock Text="{TemplateBinding ErrorText}" TextWrapping="Wrap" FontSize="12"
+                           Foreground="{DynamicResource RiceDangerForegroundBrush}" />
+              </DockPanel>
+            </Border>
+
+            <Border Name="PART_ZoomBar" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="12" Padding="3"
+                    CornerRadius="10" BorderThickness="1"
+                    Background="{DynamicResource RiceSurfaceBrush}"
+                    BorderBrush="{DynamicResource RiceBorderBrush}"
+                    BoxShadow="{DynamicResource RiceCardShadow2}"
+                    IsVisible="{TemplateBinding ShowZoomControls}">
+              <StackPanel Orientation="Horizontal" Spacing="2">
+                <Button Name="PART_ZoomOutButton" Classes="uml-zoom">
+                  <mi:MaterialIcon Kind="Minus" Width="16" Height="16" />
+                </Button>
+                <Button Name="PART_ResetZoomButton" Classes="uml-zoom" MinWidth="54">
+                  <TextBlock FontSize="12" HorizontalAlignment="Center"
+                             Text="{Binding Zoom, RelativeSource={RelativeSource TemplatedParent}, StringFormat={}{0:P0}}" />
+                </Button>
+                <Button Name="PART_ZoomInButton" Classes="uml-zoom">
+                  <mi:MaterialIcon Kind="Plus" Width="16" Height="16" />
+                </Button>
+                <Button Name="PART_ZoomToFitButton" Classes="uml-zoom">
+                  <mi:MaterialIcon Kind="FitToScreenOutline" Width="16" Height="16" />
+                </Button>
+              </StackPanel>
+            </Border>
+          </Panel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ Button.uml-zoom">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="Padding" Value="8,5" />
+      <Setter Property="MinHeight" Value="28" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="^:error /template/ Border#PART_ErrorBadge">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

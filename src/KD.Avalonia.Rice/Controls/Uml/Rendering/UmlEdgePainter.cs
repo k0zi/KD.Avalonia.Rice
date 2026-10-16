@@ -17,6 +17,8 @@ internal sealed class UmlEdgePainter(UmlStyle style)
         public UmlLabelDirection LabelDirection { get; init; }
         /// <summary>Where the label sits along the line (0–1).</summary>
         public double LabelAt { get; init; } = 0.5;
+        /// <summary>+1 / -1 puts the label beside the line on that side of its normal (parallel lines), 0 on it.</summary>
+        public int LabelSide { get; init; }
         public string? FromLabel { get; init; }
         public string? ToLabel { get; init; }
         public IReadOnlyList<UmlLinkMessage>? Messages { get; init; }
@@ -71,7 +73,16 @@ internal sealed class UmlEdgePainter(UmlStyle style)
         var (mid, direction) = UmlGeometry.PointAt(flat, edge.LabelAt);
         var normal = new Vector(-direction.Y, direction.X);
         if (edge.Label is { Length: > 0 } label)
-            bounds = bounds.Union(PaintLabel(scene, label, mid, item, edge.LabelDirection, direction));
+        {
+            var at = mid;
+            if (edge.LabelSide != 0)
+            {
+                var size = style.Measure(label, small: true);
+                var side = normal * edge.LabelSide;
+                at += side * (Math.Abs(side.X) * (size.Width / 2 + 9) + Math.Abs(side.Y) * (size.Height / 2 + 6));
+            }
+            bounds = bounds.Union(PaintLabel(scene, label, at, item, edge.LabelDirection, direction));
+        }
 
         if (edge.Messages is { Count: > 0 } messages)
             bounds = bounds.Union(PaintMessages(scene, messages, mid, direction, normal, edge.AwayFrom, item));

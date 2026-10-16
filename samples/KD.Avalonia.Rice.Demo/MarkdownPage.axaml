@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="clr-namespace:KD.Avalonia.Rice.Controls.Markdowns;assembly=KD.Avalonia.Rice"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Demo.MarkdownPage">
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top" Margin="24,16,24,12">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <ComboBox Name="SampleBox" MinWidth="190" />
+        <ToggleButton Name="EditorToggle" IsChecked="True" ToolTip.Tip="Show the editor">
+          <mi:MaterialIcon Kind="PencilOutline" Width="16" Height="16" />
+        </ToggleButton>
+        <Button Click="OnOpenClicked" ToolTip.Tip="Open a Markdown or Mermaid file">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <mi:MaterialIcon Kind="FolderOpenOutline" Width="16" Height="16" />
+            <TextBlock Text="Open" />
+          </StackPanel>
+        </Button>
+        <Button Click="OnSaveClicked" ToolTip.Tip="Save the text as a .md file">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <mi:MaterialIcon Kind="ContentSaveOutline" Width="16" Height="16" />
+            <TextBlock Text="Save" />
+          </StackPanel>
+        </Button>
+      </StackPanel>
+      <StackPanel Spacing="2">
+        <TextBlock FontSize="24" FontWeight="SemiBold" Text="Markdown" />
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                   Text="MarkdownView shows CommonMark + GFM with syntax colored code, and mermaid / plantuml code blocks as diagrams." />
+      </StackPanel>
+    </DockPanel>
+
+    <TextBlock Name="StatusText" DockPanel.Dock="Bottom" Margin="24,6,24,10" FontSize="12"
+               Foreground="{DynamicResource RiceForegroundMutedBrush}" TextTrimming="CharacterEllipsis" />
+
+    <Grid Name="Columns" ColumnDefinitions="2*,8,3*" Margin="24,0">
+      <TextBox Name="SourceBox" AcceptsReturn="True" TextWrapping="NoWrap" FontSize="12"
+               FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Noto Sans Mono, monospace"
+               VerticalContentAlignment="Top"
+               ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+      <GridSplitter Name="Splitter" Grid.Column="1" Background="Transparent" ResizeDirection="Columns" />
+      <Border Name="PreviewBorder" Grid.Column="2" CornerRadius="8" BorderThickness="1" ClipToBounds="True"
+              BorderBrush="{DynamicResource RiceBorderBrush}">
+        <md:MarkdownView Name="Preview" CornerRadius="8" />
+      </Border>
+    </Grid>
+  </DockPanel>
+</UserControl>

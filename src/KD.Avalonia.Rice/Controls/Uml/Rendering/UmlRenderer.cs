@@ -37,6 +37,9 @@ internal sealed class UmlRenderer(UmlScene scene, Func<UmlBrush, IBrush?> brushe
                 case TextPrim t:
                     DrawText(context, t);
                     break;
+                case WedgePrim w:
+                    DrawWedge(context, w);
+                    break;
             }
         }
     }
@@ -78,10 +81,12 @@ internal sealed class UmlRenderer(UmlScene scene, Func<UmlBrush, IBrush?> brushe
             case UmlShape.TopRounded:
                 context.DrawRectangle(fill, pen, new RoundedRect(r, new CornerRadius(s.Radius, s.Radius, 0, 0)), default);
                 return;
-            case UmlShape.Ellipse:
+            case UmlShape.Ellipse or UmlShape.DoubleCircle:
                 if (s.Shadow)
                     context.DrawEllipse(_shadowBrush, null, r.Translate(new Vector(0, 2)));
                 context.DrawEllipse(fill, pen, r);
+                if (s.Shape == UmlShape.DoubleCircle)
+                    context.DrawEllipse(null, pen, r.Deflate(4));
                 return;
         }
 
@@ -124,6 +129,10 @@ internal sealed class UmlRenderer(UmlScene scene, Func<UmlBrush, IBrush?> brushe
                 context.DrawRectangle(fill, pen, new RoundedRect(front, s.Radius));
                 break;
             }
+            case UmlShape.Subroutine when pen is not null:
+                context.DrawLine(pen, new Point(r.X + 8, r.Y), new Point(r.X + 8, r.Bottom));
+                context.DrawLine(pen, new Point(r.Right - 8, r.Y), new Point(r.Right - 8, r.Bottom));
+                break;
         }
     }
 
@@ -144,10 +153,48 @@ internal sealed class UmlRenderer(UmlScene scene, Func<UmlBrush, IBrush?> brushe
             UmlShape.Cylinder => Cylinder(r, s.Extra),
             UmlShape.Cloud => Cloud(r),
             UmlShape.Collections => new RectangleGeometry(new Rect(r.X + 4, r.Y, r.Width - 4, r.Height - 4), s.Radius, s.Radius),
+            UmlShape.Subroutine => new RectangleGeometry(r, s.Radius, s.Radius),
+            UmlShape.Parallelogram => Polygon(new Point(r.X + Lean(r), r.Y), r.TopRight, new Point(r.Right - Lean(r), r.Bottom), r.BottomLeft),
+            UmlShape.ParallelogramAlt => Polygon(r.TopLeft, new Point(r.Right - Lean(r), r.Y), r.BottomRight, new Point(r.X + Lean(r), r.Bottom)),
+            UmlShape.Trapezoid => Polygon(new Point(r.X + Lean(r), r.Y), new Point(r.Right - Lean(r), r.Y), r.BottomRight, r.BottomLeft),
+            UmlShape.TrapezoidAlt => Polygon(r.TopLeft, r.TopRight, new Point(r.Right - Lean(r), r.Bottom), new Point(r.X + Lean(r), r.Bottom)),
+            UmlShape.Asymmetric => Polygon(r.TopLeft, r.TopRight, r.BottomRight, r.BottomLeft, new Point(r.X + Lean(r), r.Center.Y)),
             _ => new RectangleGeometry(r),
         };
         _geometries[s] = geometry;
         return geometry;
+    }
+
+    private static double Lean(Rect r) => Math.Min(r.Height * 0.45, r.Width / 4);
+
+    private void DrawWedge(DrawingContext context, WedgePrim w)
+    {
+        var fill = Brush(w.Fill);
+        var pen = Pen(w.Stroke, 2);
+        if (w.SweepAngle >= 359.99)
+        {
+            context.DrawEllipse(fill, pen, w.Center, w.Radius, w.Radius);
+            return;
+        }
+        if (!_geometries.TryGetValue(w, out var geometry))
+        {
+            Point At(double degrees)
+            {
+                var radians = (degrees - 90) * Math.PI / 180;
+                return new Point(w.Center.X + w.Radius * Math.Cos(radians), w.Center.Y + w.Radius * Math.Sin(radians));
+            }
+            var stream = new StreamGeometry();
+            using (var ctx = stream.Open())
+            {
+                ctx.BeginFigure(w.Center, true);
+                ctx.LineTo(At(w.StartAngle));
+                ctx.ArcTo(At(w.StartAngle + w.SweepAngle), new Size(w.Radius, w.Radius), 0, w.SweepAngle > 180, SweepDirection.Clockwise);
+                ctx.EndFigure(true);
+            }
+            geometry = stream;
+            _geometries[w] = geometry;
+        }
+        context.DrawGeometry(fill, pen, geometry);
     }
 
     private static Geometry Polygon(params Point[] points)
@@ -342,6 +389,32 @@ internal sealed class UmlRenderer(UmlScene scene, Func<UmlBrush, IBrush?> brushe
             case UmlArrowHead.Square:
                 context.DrawGeometry(hollow, stroke, Polygon(tip + n * 4, tip - d * 8 + n * 4, tip - d * 8 - n * 4, tip - n * 4));
                 break;
+            case UmlArrowHead.ZeroOrOne or UmlArrowHead.ExactlyOne or UmlArrowHead.ZeroOrMore or UmlArrowHead.OneOrMore when stroke is not null:
+            {
+                // Crow's foot notation: the many side spreads to the entity, the bar or circle is further out.
+                void Bar(double at) => context.DrawLine(stroke, tip - d * at + n * 6, tip - d * at - n * 6);
+                var many = h.Head is UmlArrowHead.ZeroOrMore or UmlArrowHead.OneOrMore;
+                if (many)
+                {
+                    context.DrawLine(stroke, tip - d * 11, tip + n * 7);
+                    context.DrawLine(stroke, tip - d * 11, tip - n * 7);
+                }
+                var near = many ? 15 : 6;
+                if (h.Head is UmlArrowHead.ExactlyOne)
+                {
+                    Bar(6);
+                    Bar(11);
+                }
+                else if (h.Head is UmlArrowHead.OneOrMore)
+                    Bar(near);
+                else
+                {
+                    if (!many)
+                        Bar(near);
+                    context.DrawEllipse(hollow, stroke, tip - d * (many ? 19 : 15), 4, 4);
+                }
+                break;
+            }
         }
     }
 
