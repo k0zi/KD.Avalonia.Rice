@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Demo.ChatPage">
+  <DockPanel>
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="16" Margin="24,16">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Chat" VerticalAlignment="Center" />
+      <RadioButton Content="Bubbles" GroupName="chatStyle" IsChecked="True" Click="OnBubblesClicked" />
+      <RadioButton Content="Classic (IRC)" GroupName="chatStyle" Click="OnClassicClicked" />
+    </StackPanel>
+    <rice:RiceChat Name="Chat" BorderThickness="0,1,0,0" MessageSent="OnMessageSent" />
+  </DockPanel>
+</UserControl>

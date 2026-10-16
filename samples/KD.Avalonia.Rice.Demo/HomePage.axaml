@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Demo.HomePage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="560" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Hello, Rice!" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="Use the lightbulb button to switch light and dark for this session. Pick a theme with the gear button in the title bar or on the Settings page – that choice is saved. Every Rice control has its own page in the menu." />
+
+      <TextBlock FontWeight="SemiBold" Text="Standard controls follow the theme" />
+      <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}"
+              BorderThickness="1" CornerRadius="8" Padding="16">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Classes="accent" Content="Accent button" />
+            <Button Content="Button" />
+            <ToggleButton Content="Toggle" IsChecked="True" />
+          </StackPanel>
+          <TextBox PlaceholderText="Type something…" />
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <CheckBox Content="Check me" IsChecked="True" />
+            <RadioButton Content="One" GroupName="demo" IsChecked="True" />
+            <RadioButton Content="Two" GroupName="demo" />
+            <ToggleSwitch IsChecked="True" />
+          </StackPanel>
+          <Slider Value="40" />
+          <ProgressBar Value="65" />
+          <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+            <ComboBoxItem Content="Ubuntu" />
+            <ComboBoxItem Content="Fedora" />
+            <ComboBoxItem Content="Arch" />
+          </ComboBox>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
