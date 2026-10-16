@@ -1,0 +1,65 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceProgressRing}" TargetType="rice:RiceProgressRing">
+    <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <rice:RiceProgressArc Name="PART_Track" SweepAngle="360"
+                                Stroke="{TemplateBinding Background}"
+                                StrokeThickness="{TemplateBinding Thickness}" />
+          <rice:RiceProgressArc Name="PART_Indicator" StartAngle="-90"
+                                SweepAngle="{TemplateBinding SweepAngle}"
+                                Stroke="{TemplateBinding Foreground}"
+                                StrokeThickness="{TemplateBinding Thickness}" />
+          <TextBlock Name="PART_Text" HorizontalAlignment="Center" VerticalAlignment="Center"
+                     FontWeight="SemiBold" IsVisible="False"
+                     Foreground="{DynamicResource RiceForegroundBrush}"
+                     Text="{TemplateBinding ValueText}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- Value changes fill the ring smoothly. -->
+    <Style Selector="^:determinate /template/ rice|RiceProgressArc#PART_Indicator">
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="SweepAngle" Duration="0:0:0.2">
+            <DoubleTransition.Easing>
+              <CubicEaseOut />
+            </DoubleTransition.Easing>
+          </DoubleTransition>
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="^:determinate:showvalue /template/ TextBlock#PART_Text">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <!-- The arc grows while its head runs ahead, then shrinks while its tail catches up; both ends only move
+         forward and one cycle turns the ring by 360°, so the loop is seamless. -->
+    <Style Selector="^:indeterminate /template/ rice|RiceProgressArc#PART_Indicator">
+      <Style.Animations>
+        <Animation Duration="0:0:1.5" IterationCount="Infinite">
+          <KeyFrame Cue="0%">
+            <Setter Property="StartAngle" Value="-90" />
+            <Setter Property="SweepAngle" Value="30" />
+          </KeyFrame>
+          <KeyFrame Cue="50%">
+            <Setter Property="StartAngle" Value="-30" />
+            <Setter Property="SweepAngle" Value="270" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="StartAngle" Value="270" />
+            <Setter Property="SweepAngle" Value="30" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

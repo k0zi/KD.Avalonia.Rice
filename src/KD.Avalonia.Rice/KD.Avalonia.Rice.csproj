@@ -2,14 +2,14 @@
   <PropertyGroup>
     <RootNamespace>KD.Avalonia.Rice</RootNamespace>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <Description>Frameless Avalonia window with a custom title bar and Linux distro inspired themes.</Description>
+    <Description>Frameless Avalonia window with a custom title bar and Linux distro inspired themes, plus themed controls: side menu, card, group box, chat, progress ring and progress bar.</Description>
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>KD.Avalonia.Rice</PackageId>
     <Authors>k0zi</Authors>
-    <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula</PackageTags>
+    <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula;sidemenu;navigation;card;groupbox;chat;progress;progressring;spinner</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

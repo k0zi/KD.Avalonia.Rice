@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             x:Class="KD.Avalonia.Rice.Demo.ProgressPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="560" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Progress" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceProgressRing and RiceProgressBar: 0–100 % or indeterminate (moves until the work is done)." />
+
+      <rice:RiceGroupBox Header="Determinate">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="24">
+            <rice:RiceProgressRing Value="{Binding #ValueSlider.Value}" />
+            <rice:RiceProgressRing Value="{Binding #ValueSlider.Value}" Width="64" Height="64" Thickness="6"
+                                   ShowValue="True" />
+            <rice:RiceProgressRing Value="{Binding #ValueSlider.Value}" Width="96" Height="96" Thickness="10"
+                                   ShowValue="True" FontSize="18" />
+          </StackPanel>
+          <rice:RiceProgressBar Value="{Binding #ValueSlider.Value}" />
+          <rice:RiceProgressBar Value="{Binding #ValueSlider.Value}" Thickness="8" ShowValue="True" />
+          <Slider Name="ValueSlider" Minimum="0" Maximum="100" Value="65" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Indeterminate">
+        <StackPanel Spacing="16">
+          <StackPanel Orientation="Horizontal" Spacing="24">
+            <rice:RiceProgressRing IsIndeterminate="True" Width="24" Height="24" Thickness="3" />
+            <rice:RiceProgressRing IsIndeterminate="True" />
+            <rice:RiceProgressRing IsIndeterminate="True" Width="64" Height="64" Thickness="6"
+                                   Background="Transparent" />
+          </StackPanel>
+          <rice:RiceProgressBar IsIndeterminate="True" />
+          <rice:RiceProgressBar IsIndeterminate="True" Thickness="2" Background="Transparent" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Simulated work">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <rice:RiceProgressRing Name="WorkRing" Width="64" Height="64" Thickness="6" ShowValue="True" />
+            <StackPanel VerticalAlignment="Center" Spacing="8">
+              <TextBlock Name="WorkStatus" Text="Idle" />
+              <Button Name="StartButton" Classes="accent" Content="Start" Click="OnStartClicked" />
+            </StackPanel>
+          </StackPanel>
+          <rice:RiceProgressBar Name="WorkBar" ShowValue="True"
+                                Value="{Binding #WorkRing.Value}"
+                                IsIndeterminate="{Binding #WorkRing.IsIndeterminate}" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

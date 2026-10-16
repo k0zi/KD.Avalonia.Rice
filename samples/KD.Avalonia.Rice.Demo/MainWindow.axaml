@@ -24,6 +24,7 @@
         <rice:RiceSideMenuItem Name="GroupBoxItem" Icon="{x:Static icons:MaterialIconKind.SelectGroup}" Header="Group box" />
       </rice:RiceSideMenuItem>
       <rice:RiceSideMenuItem Name="ChatItem" Icon="💬" Header="Chat" />
+      <rice:RiceSideMenuItem Name="ProgressItem" Icon="{x:Static icons:MaterialIconKind.ProgressClock}" Header="Progress" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Header="Settings"
