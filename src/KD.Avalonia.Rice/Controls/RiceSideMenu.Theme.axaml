@@ -40,7 +40,7 @@
                                 IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}" />
             </DockPanel>
 
-            <ContentPresenter Name="PART_FooterPresenter" DockPanel.Dock="Bottom" Padding="0,4"
+            <ContentPresenter Name="PART_FooterPresenter" DockPanel.Dock="Bottom" Padding="8,4"
                               BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="0,1,0,0"
                               Content="{TemplateBinding Footer}"
                               ContentTemplate="{TemplateBinding FooterTemplate}"
@@ -49,7 +49,7 @@
             <ScrollViewer Name="PART_ScrollViewer"
                           HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                           VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
-              <ItemsPresenter Name="PART_ItemsPresenter" Margin="0,4"
+              <ItemsPresenter Name="PART_ItemsPresenter" Margin="8,4"
                               ItemsPanel="{TemplateBinding ItemsPanel}" />
             </ScrollViewer>
           </DockPanel>
@@ -75,64 +75,84 @@
   <ControlTheme x:Key="{x:Type rice:RiceSideMenuItem}" TargetType="rice:RiceSideMenuItem">
     <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemBackgroundBrush}" />
     <Setter Property="Foreground" Value="{DynamicResource RiceTitleBarForegroundBrush}" />
-    <Setter Property="Margin" Value="8,2" />
+    <Setter Property="Margin" Value="0,2,0,0" />
     <Setter Property="MinHeight" Value="40" />
     <Setter Property="Padding" Value="0,0,12,0" />
     <Setter Property="CornerRadius" Value="8" />
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="Template">
       <ControlTemplate>
-        <Border Name="PART_Background"
-                Background="{TemplateBinding Background}"
-                CornerRadius="{TemplateBinding CornerRadius}"
-                Padding="{TemplateBinding Padding}">
-          <Border.Transitions>
-            <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.1" />
-            </Transitions>
-          </Border.Transitions>
-          <Grid ColumnDefinitions="40,*">
-            <Border Name="PART_Indicator" Width="3" Height="18" CornerRadius="2"
-                    HorizontalAlignment="Left" VerticalAlignment="Center"
-                    Background="{DynamicResource RiceAccentBrush}" IsVisible="False" />
-            <ContentPresenter Name="PART_IconPresenter" Width="20" Height="20"
-                              HorizontalAlignment="Center" VerticalAlignment="Center"
-                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                              Content="{TemplateBinding Icon}">
-              <ContentPresenter.DataTemplates>
-                <DataTemplate DataType="media:IImage">
-                  <Image Source="{Binding}" Stretch="Uniform" />
-                </DataTemplate>
-                <DataTemplate DataType="icons:MaterialIconKind">
-                  <mi:MaterialIcon Kind="{Binding}" Width="20" Height="20" />
-                </DataTemplate>
-              </ContentPresenter.DataTemplates>
-            </ContentPresenter>
-            <ContentPresenter Name="PART_ContentPresenter" Grid.Column="1" Margin="4,0,0,0"
-                              VerticalAlignment="Center"
-                              Content="{TemplateBinding Content}"
-                              ContentTemplate="{TemplateBinding ContentTemplate}">
-              <ContentPresenter.Transitions>
-                <Transitions>
-                  <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
-                </Transitions>
-              </ContentPresenter.Transitions>
-            </ContentPresenter>
-          </Grid>
-        </Border>
+        <StackPanel>
+          <Border Name="PART_Header"
+                  Background="{TemplateBinding Background}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  MinHeight="{TemplateBinding MinHeight}"
+                  Padding="{TemplateBinding Padding}"
+                  Margin="0,0,0,2">
+            <Border.Transitions>
+              <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.1" />
+              </Transitions>
+            </Border.Transitions>
+            <Panel>
+              <Border Name="PART_Indicator" Width="3" Height="18" CornerRadius="2"
+                      HorizontalAlignment="Left" VerticalAlignment="Center"
+                      Background="{DynamicResource RiceAccentBrush}" IsVisible="False" />
+              <Grid Name="PART_HeaderContent" ColumnDefinitions="40,*,Auto">
+                <ContentPresenter Name="PART_IconPresenter" Width="20" Height="20"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                  Content="{TemplateBinding Icon}">
+                  <ContentPresenter.DataTemplates>
+                    <DataTemplate DataType="media:IImage">
+                      <Image Source="{Binding}" Stretch="Uniform" />
+                    </DataTemplate>
+                    <DataTemplate DataType="icons:MaterialIconKind">
+                      <mi:MaterialIcon Kind="{Binding}" Width="20" Height="20" />
+                    </DataTemplate>
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
+                <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="1" Margin="4,0,0,0"
+                                  VerticalAlignment="Center"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}">
+                  <ContentPresenter.Transitions>
+                    <Transitions>
+                      <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                    </Transitions>
+                  </ContentPresenter.Transitions>
+                </ContentPresenter>
+                <mi:MaterialIcon Name="PART_Chevron" Grid.Column="2" Kind="ChevronDown" Width="16" Height="16"
+                                 Margin="4,0,0,0" VerticalAlignment="Center" IsVisible="False">
+                  <mi:MaterialIcon.Transitions>
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+                      <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                    </Transitions>
+                  </mi:MaterialIcon.Transitions>
+                </mi:MaterialIcon>
+              </Grid>
+            </Panel>
+          </Border>
+          <ItemsPresenter Name="PART_ItemsPresenter" IsVisible="False"
+                          ItemsPanel="{TemplateBinding ItemsPanel}" />
+        </StackPanel>
       </ControlTemplate>
     </Setter>
 
-    <Style Selector="^:pointerover">
+    <!-- The item contains its sub items, so the row's own states are matched on PART_Header. -->
+    <Style Selector="^ /template/ Border#PART_Header:pointerover">
       <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemHoverBrush}" />
     </Style>
-    <Style Selector="^:pressed">
+    <Style Selector="^:pressed /template/ Border#PART_Header:pointerover">
       <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemPressedBrush}" />
     </Style>
     <Style Selector="^:selected">
-      <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemSelectedBrush}" />
       <Setter Property="FontWeight" Value="SemiBold" />
-      <Style Selector="^:pointerover">
+      <Style Selector="^ /template/ Border#PART_Header">
+        <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemSelectedBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_Header:pointerover">
         <Setter Property="Background" Value="{DynamicResource RiceSideMenuItemSelectedHoverBrush}" />
       </Style>
       <Style Selector="^ /template/ Border#PART_Indicator">
@@ -142,12 +162,41 @@
         <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
       </Style>
     </Style>
+    <!-- A closed parent (or the collapsed menu) shows that one of its sub items is selected. -->
+    <Style Selector="^:childselected:not(:expanded), ^:childselected:collapsed">
+      <Style Selector="^ /template/ Border#PART_Indicator">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:haschildren /template/ mi|MaterialIcon#PART_Chevron">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:expanded">
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Chevron">
+        <Setter Property="RenderTransform" Value="rotate(180deg)" />
+      </Style>
+      <Style Selector="^ /template/ ItemsPresenter#PART_ItemsPresenter">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
     <Style Selector="^:disabled">
       <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
       <Setter Property="Opacity" Value="0.6" />
     </Style>
-    <Style Selector="^:collapsed /template/ ContentPresenter#PART_ContentPresenter">
-      <Setter Property="Opacity" Value="0" />
+    <Style Selector="^:collapsed">
+      <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+        <Setter Property="Opacity" Value="0" />
+      </Style>
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Chevron">
+        <Setter Property="Opacity" Value="0" />
+      </Style>
+      <!-- Only the icons fit, the sub items open with the menu. -->
+      <Style Selector="^ /template/ ItemsPresenter#PART_ItemsPresenter">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
     </Style>
   </ControlTheme>
 </ResourceDictionary>

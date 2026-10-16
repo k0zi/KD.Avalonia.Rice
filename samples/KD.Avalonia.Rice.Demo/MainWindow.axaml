@@ -7,24 +7,28 @@
                  WindowStartupLocation="CenterScreen"
                  ShowThemeSettingsButton="True" ShowAboutButton="True">
   <DockPanel>
-    <!-- One item per control; the icons show the supported kinds: image, Material icon, emoji. -->
-    <rice:RiceSideMenu Name="SideMenu" DockPanel.Dock="Left" SelectedIndex="0">
+    <!-- One item per control; the icons show the supported kinds: image, Material icon, emoji.
+         "Containers" has sub items: it expands / collapses instead of being selected. -->
+    <rice:RiceSideMenu Name="SideMenu" DockPanel.Dock="Left">
       <rice:RiceSideMenu.Header>
         <TextBlock FontWeight="SemiBold" Text="Rice Demo" TextTrimming="CharacterEllipsis" />
       </rice:RiceSideMenu.Header>
-      <rice:RiceSideMenuItem Name="HomeItem" Content="Home">
+      <rice:RiceSideMenuItem Name="HomeItem" Header="Home" IsSelected="True">
         <rice:RiceSideMenuItem.Icon>
           <Image Source="/Assets/icon.png" />
         </rice:RiceSideMenuItem.Icon>
       </rice:RiceSideMenuItem>
-      <rice:RiceSideMenuItem Name="CardItem" Icon="{x:Static icons:MaterialIconKind.CardOutline}" Content="Card" />
-      <rice:RiceSideMenuItem Name="GroupBoxItem" Icon="{x:Static icons:MaterialIconKind.SelectGroup}" Content="Group box" />
-      <rice:RiceSideMenuItem Name="ChatItem" Icon="💬" Content="Chat" />
+      <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.ViewDashboardOutline}" Header="Containers"
+                             IsExpanded="True">
+        <rice:RiceSideMenuItem Name="CardItem" Icon="{x:Static icons:MaterialIconKind.CardOutline}" Header="Card" />
+        <rice:RiceSideMenuItem Name="GroupBoxItem" Icon="{x:Static icons:MaterialIconKind.SelectGroup}" Header="Group box" />
+      </rice:RiceSideMenuItem>
+      <rice:RiceSideMenuItem Name="ChatItem" Icon="💬" Header="Chat" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
-          <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Content="Settings"
+          <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Header="Settings"
                                  Click="OnSettingsClicked" />
-          <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.InformationOutline}" Content="About"
+          <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.InformationOutline}" Header="About"
                                  Click="OnAboutClicked" />
         </StackPanel>
       </rice:RiceSideMenu.Footer>
