@@ -133,6 +133,8 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceTitleBarForegroundBrush"] = new SolidColorBrush(p.TitleBarForeground);
         target["RiceTitleBarHoverBrush"] = new SolidColorBrush(ColorMath.Blend(p.TitleBarBackground, p.TitleBarForeground, 0.12));
         target["RiceDangerBrush"] = new SolidColorBrush(p.Danger);
+        // Loading overlay: the background color, translucent, so the content stays recognizable but recedes.
+        target["RiceOverlayBrush"] = new SolidColorBrush(Color.FromArgb(0xB8, p.Background.R, p.Background.G, p.Background.B));
         // Side menu states are accent tints of the title bar color. The idle brush is the same color fully
         // transparent, so the background transition does not fade through white (Transparent is #00FFFFFF).
         Color MenuTint(double amount) => ColorMath.Blend(p.TitleBarBackground, p.Accent, amount);

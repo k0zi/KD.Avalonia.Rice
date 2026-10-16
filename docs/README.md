@@ -13,6 +13,8 @@ themes that every control relies on.
 | [RiceChat](rice-chat.md) | Chat view with bubbles or IRC like log and an input box |
 | [RiceProgressRing](rice-progress-ring.md) | Circular progress, 0–100 % or indeterminate (spinning) |
 | [RiceProgressBar](rice-progress-bar.md) | Horizontal progress bar, 0–100 % or indeterminate (sliding) |
+| [RiceSpinner](rice-spinner.md) | Small busy indicator for buttons and status lines |
+| [RiceLoadingOverlay](rice-loading-overlay.md) | Covers and blocks content while it loads, with ring and message |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
 
 All examples use these XML namespaces:

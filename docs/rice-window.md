@@ -67,7 +67,7 @@ public MainWindow()
 
 ```xml
 <rice:RiceWindow.TitleBarContent>
-  <TextBox Width="240" Watermark="Search…" VerticalAlignment="Center" />
+  <TextBox Width="240" PlaceholderText="Search…" VerticalAlignment="Center" />
 </rice:RiceWindow.TitleBarContent>
 ```
 

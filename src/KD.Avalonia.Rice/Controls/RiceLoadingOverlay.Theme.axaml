@@ -1,0 +1,54 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceLoadingOverlay}" TargetType="rice:RiceLoadingOverlay">
+    <Setter Property="OverlayBrush" Value="{DynamicResource RiceOverlayBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          <!-- Hidden by opacity, so it can fade in and out; the background catches the pointer while shown. -->
+          <Border Name="PART_Overlay" Background="{TemplateBinding OverlayBrush}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Opacity="0" IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+              </Transitions>
+            </Border.Transitions>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12" Margin="16">
+              <rice:RiceProgressRing Name="PART_Ring" HorizontalAlignment="Center"
+                                     Width="{TemplateBinding IndicatorSize}"
+                                     Height="{TemplateBinding IndicatorSize}"
+                                     Thickness="5"
+                                     IsIndeterminate="{TemplateBinding IsSpinning}"
+                                     Value="{TemplateBinding Value}"
+                                     ShowValue="{TemplateBinding ShowValue}" />
+              <ContentPresenter Name="PART_MessagePresenter" HorizontalAlignment="Center" MaxWidth="320"
+                                FontWeight="SemiBold" TextWrapping="Wrap" TextAlignment="Center"
+                                Content="{TemplateBinding Message}"
+                                ContentTemplate="{TemplateBinding MessageTemplate}"
+                                IsVisible="{TemplateBinding Message, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+          </Border>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:active /template/ Border#PART_Overlay">
+      <Setter Property="Opacity" Value="1" />
+      <Setter Property="IsHitTestVisible" Value="True" />
+    </Style>
+    <Style Selector="^:active:blur /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Effect" Value="blur(6)" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>
