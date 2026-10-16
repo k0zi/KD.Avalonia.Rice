@@ -5,4 +5,7 @@
   <Folder Name="/src/">
     <Project Path="src/KD.Avalonia.Rice/KD.Avalonia.Rice.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KD.Avalonia.Rice.Tests/KD.Avalonia.Rice.Tests.csproj" />
+  </Folder>
 </Solution>

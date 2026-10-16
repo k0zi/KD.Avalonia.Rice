@@ -11,8 +11,9 @@ Avalonia 12 library: frameless `RiceWindow` with a custom title bar and Linux di
 light and dark variants.
 
 Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card (`RiceCard`), group box
-(`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`) and a theme
-selector (`ThemeSelector`, `ThemeDialog`).
+(`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`), a theme
+selector (`ThemeSelector`, `ThemeDialog`) and UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
+PlantUML).
 
 ## Documentation
 
@@ -56,6 +57,8 @@ AppBuilder.Configure<App>()
   Your app's own settings belong elsewhere (e.g. a settings page); open the same dialog from there with
   `window.ShowThemeDialog()`.
 - The about button opens a built-in dialog (name, author, version); handle `AboutRequested` to replace it.
+- UML diagrams: `<uml:UmlDiagramView Source="{Binding PlantUml}" />` (namespace `KD.Avalonia.Rice.Controls.Uml`),
+  see [UML diagrams](docs/rice-uml.md).
 - Brushes for your own controls: `RiceAccentBrush`, `RiceBackgroundBrush`, `RiceSurfaceBrush`, `RiceForegroundBrush`, `RiceForegroundMutedBrush`, `RiceBorderBrush`, … (use `DynamicResource`).
 - Custom themes: `new RiceTheme("id", "Name", Light: new RicePalette(accent, bg, surface, fg), Dark: ...)`.
 - Texts can be localized via `RiceStrings`.

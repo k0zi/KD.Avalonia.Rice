@@ -39,6 +39,7 @@ public partial class MainWindow : RiceWindow
                 _ when key == GroupBoxItem => new GroupBoxPage(),
                 _ when key == ChatItem => new ChatPage(),
                 _ when key == ProgressItem => new ProgressPage(),
+                _ when key == UmlItem => new UmlPage(),
                 nameof(SettingsPage) => new SettingsPage(),
                 _ => new HomePage(),
             };
