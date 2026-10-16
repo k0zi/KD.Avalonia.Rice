@@ -3,6 +3,7 @@ using Avalonia.Media;
 namespace KD.Avalonia.Rice.Theming;
 
 /// <summary>Themes inspired by Linux distributions, Windows 11 and popular color schemes.</summary>
+// Palette sources and retained upstream terms: THIRD_PARTY_NOTICES.md and licenses/.
 public static class BuiltInThemes
 {
     public static RiceTheme Ubuntu { get; } = new("ubuntu", "Ubuntu",

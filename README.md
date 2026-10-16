@@ -212,9 +212,33 @@ Builds on `main`/`master` or `v*` tags get a clean version; other branches get a
 dotnet pack -c Release src/KD.Avalonia.Rice   # release package
 ```
 
+## License and third-party material
+
+The library's own source is [MIT licensed](LICENSE). External dependencies,
+icons and adapted specification examples retain their respective licenses; see
+[third-party notices](THIRD_PARTY_NOTICES.md). The NuGet package includes LICENSE,
+THIRD_PARTY_NOTICES.md and the applicable license texts. The demo also copies its
+font and native dependency notices to build and publish output.
+
+The CommonMark/GFM test data is separately licensed under CC-BY-SA-4.0; see
+[the test data attribution](tests/KD.Avalonia.Rice.Tests/TestData/README.md).
+These test fixtures are not included in the library package.
+
 ## Icon
 
 The package icon (`src/KD.Avalonia.Rice/Assets/icon.png`) is based on the
 [Linux icon](https://www.iconarchive.com/show/material-icons-by-pictogrammers/linux-icon.html)
 from the Material Icons set by Pictogrammers, licensed under the
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+The full Apache-2.0 text is included in `licenses/Apache-2.0.txt`; this icon is a
+modified project composition. The demo uses a separate rice-bowl illustration
+generated specifically for this project; its prompt and provenance are recorded
+in `samples/KD.Avalonia.Rice.Demo/Assets/icon.provenance.md`.
+
+To check notices after building or publishing:
+
+```sh
+python3 scripts/verify_license_packaging.py --demo-output samples/KD.Avalonia.Rice.Demo/bin/Release/net10.0
+# For a published demo, pass its publish directory as --demo-output instead.
+```

@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <EmbeddedResource Include="TestData\*-examples.json" />
   </ItemGroup>
 </Project>

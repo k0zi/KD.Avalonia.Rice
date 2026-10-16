@@ -1,0 +1,314 @@
+[
+  [
+    "aaa\n\nbbb\n",
+    "<p>aaa</p>\n<p>bbb</p>\n"
+  ],
+  [
+    "aaa\nbbb\n",
+    "<p>aaa\nbbb</p>\n"
+  ],
+  [
+    "  aaa\n bbb\n",
+    "<p>aaa\nbbb</p>\n"
+  ],
+  [
+    "foo  \nbaz\n",
+    "<p>foo<br />\nbaz</p>\n"
+  ],
+  [
+    "foo\\\nbaz\n",
+    "<p>foo<br />\nbaz</p>\n"
+  ],
+  [
+    "foo  \n",
+    "<p>foo</p>\n"
+  ],
+  [
+    "# foo\n## foo\n###### foo\n",
+    "<h1>foo</h1>\n<h2>foo</h2>\n<h6>foo</h6>\n"
+  ],
+  [
+    "####### foo\n",
+    "<p>####### foo</p>\n"
+  ],
+  [
+    "#5 bolt\n",
+    "<p>#5 bolt</p>\n"
+  ],
+  [
+    "# foo ##\n",
+    "<h1>foo</h1>\n"
+  ],
+  [
+    "### foo ### b\n",
+    "<h3>foo ### b</h3>\n"
+  ],
+  [
+    "Foo *bar*\n=========\n\nFoo *bar*\n---------\n",
+    "<h1>Foo <em>bar</em></h1>\n<h2>Foo <em>bar</em></h2>\n"
+  ],
+  [
+    "Foo\nbar\n---\n",
+    "<h2>Foo\nbar</h2>\n"
+  ],
+  [
+    "***\n---\n___\n",
+    "<hr />\n<hr />\n<hr />\n"
+  ],
+  [
+    " - - -\n",
+    "<hr />\n"
+  ],
+  [
+    "--\n",
+    "<p>--</p>\n"
+  ],
+  [
+    "    a simple\n      indented code block\n",
+    "<pre><code>a simple\n  indented code block\n</code></pre>\n"
+  ],
+  [
+    "```\n<\n >\n```\n",
+    "<pre><code>&lt;\n &gt;\n</code></pre>\n"
+  ],
+  [
+    "~~~ruby startline=3\ndef foo(x)\nend\n~~~\n",
+    "<pre><code class=\"language-ruby\">def foo(x)\nend\n</code></pre>\n"
+  ],
+  [
+    "```\naaa\n~~~\n```\n",
+    "<pre><code>aaa\n~~~\n</code></pre>\n"
+  ],
+  [
+    " ```\n aaa\naaa\n```\n",
+    "<pre><code>aaa\naaa\n</code></pre>\n"
+  ],
+  [
+    "```\nabc\n",
+    "<pre><code>abc\n</code></pre>\n"
+  ],
+  [
+    "Foo\n    bar\n",
+    "<p>Foo\nbar</p>\n"
+  ],
+  [
+    "> # Foo\n> bar\n> baz\n",
+    "<blockquote>\n<h1>Foo</h1>\n<p>bar\nbaz</p>\n</blockquote>\n"
+  ],
+  [
+    "> bar\nbaz\n> foo\n",
+    "<blockquote>\n<p>bar\nbaz\nfoo</p>\n</blockquote>\n"
+  ],
+  [
+    "> foo\n---\n",
+    "<blockquote>\n<p>foo</p>\n</blockquote>\n<hr />\n"
+  ],
+  [
+    "> a\n>\n> > b\n",
+    "<blockquote>\n<p>a</p>\n<blockquote>\n<p>b</p>\n</blockquote>\n</blockquote>\n"
+  ],
+  [
+    "- foo\n- bar\n+ baz\n",
+    "<ul>\n<li>foo</li>\n<li>bar</li>\n</ul>\n<ul>\n<li>baz</li>\n</ul>\n"
+  ],
+  [
+    "1. foo\n2. bar\n3) baz\n",
+    "<ol>\n<li>foo</li>\n<li>bar</li>\n</ol>\n<ol start=\"3\">\n<li>baz</li>\n</ol>\n"
+  ],
+  [
+    "- foo\n\n- bar\n",
+    "<ul>\n<li>\n<p>foo</p>\n</li>\n<li>\n<p>bar</p>\n</li>\n</ul>\n"
+  ],
+  [
+    "- a\n  - b\n    - c\n",
+    "<ul>\n<li>a\n<ul>\n<li>b\n<ul>\n<li>c</li>\n</ul>\n</li>\n</ul>\n</li>\n</ul>\n"
+  ],
+  [
+    "The number of windows in my house is\n14.  The number of doors is 6.\n",
+    "<p>The number of windows in my house is\n14.  The number of doors is 6.</p>\n"
+  ],
+  [
+    "1. a\n\n   b\n",
+    "<ol>\n<li>\n<p>a</p>\n<p>b</p>\n</li>\n</ol>\n"
+  ],
+  [
+    "-one\n\n2.two\n",
+    "<p>-one</p>\n<p>2.two</p>\n"
+  ],
+  [
+    "- a\n- b\n\n  c\n- d\n",
+    "<ul>\n<li>\n<p>a</p>\n</li>\n<li>\n<p>b</p>\n<p>c</p>\n</li>\n<li>\n<p>d</p>\n</li>\n</ul>\n"
+  ],
+  [
+    "123456789. ok\n",
+    "<ol start=\"123456789\">\n<li>ok</li>\n</ol>\n"
+  ],
+  [
+    "*foo bar*\n",
+    "<p><em>foo bar</em></p>\n"
+  ],
+  [
+    "a * foo bar*\n",
+    "<p>a * foo bar*</p>\n"
+  ],
+  [
+    "foo*bar*\n",
+    "<p>foo<em>bar</em></p>\n"
+  ],
+  [
+    "foo_bar_\n",
+    "<p>foo_bar_</p>\n"
+  ],
+  [
+    "_foo_bar_baz_\n",
+    "<p><em>foo_bar_baz</em></p>\n"
+  ],
+  [
+    "**foo bar**\n",
+    "<p><strong>foo bar</strong></p>\n"
+  ],
+  [
+    "***strong emph***\n",
+    "<p><em><strong>strong emph</strong></em></p>\n"
+  ],
+  [
+    "*foo**bar**baz*\n",
+    "<p><em>foo<strong>bar</strong>baz</em></p>\n"
+  ],
+  [
+    "*foo**bar*\n",
+    "<p><em>foo**bar</em></p>\n"
+  ],
+  [
+    "**foo*bar*baz**\n",
+    "<p><strong>foo<em>bar</em>baz</strong></p>\n"
+  ],
+  [
+    "foo***bar***baz\n",
+    "<p>foo<em><strong>bar</strong></em>baz</p>\n"
+  ],
+  [
+    "*foo [bar](/url)*\n",
+    "<p><em>foo <a href=\"/url\">bar</a></em></p>\n"
+  ],
+  [
+    "**foo*\n",
+    "<p>*<em>foo</em></p>\n"
+  ],
+  [
+    "*foo**\n",
+    "<p><em>foo</em>*</p>\n"
+  ],
+  [
+    "`foo`\n",
+    "<p><code>foo</code></p>\n"
+  ],
+  [
+    "`` foo ` bar ``\n",
+    "<p><code>foo ` bar</code></p>\n"
+  ],
+  [
+    "`foo\nbar  \nbaz`\n",
+    "<p><code>foo bar   baz</code></p>\n"
+  ],
+  [
+    "`foo\\`bar`\n",
+    "<p><code>foo\\</code>bar`</p>\n"
+  ],
+  [
+    "*foo`*`\n",
+    "<p>*foo<code>*</code></p>\n"
+  ],
+  [
+    "\\*not emphasized*\n",
+    "<p>*not emphasized*</p>\n"
+  ],
+  [
+    "&copy; &#35; &#x22; &nbsp;x\n",
+    "<p>© # &quot;  x</p>\n"
+  ],
+  [
+    "[link](/uri \"title\")\n",
+    "<p><a href=\"/uri\" title=\"title\">link</a></p>\n"
+  ],
+  [
+    "[link]()\n",
+    "<p><a href=\"\">link</a></p>\n"
+  ],
+  [
+    "[link](<foo bar>)\n",
+    "<p><a href=\"foo bar\">link</a></p>\n"
+  ],
+  [
+    "[link](foo(and(bar)))\n",
+    "<p><a href=\"foo(and(bar))\">link</a></p>\n"
+  ],
+  [
+    "[link [foo [bar]]](/uri)\n",
+    "<p><a href=\"/uri\">link [foo [bar]]</a></p>\n"
+  ],
+  [
+    "[foo [bar](/uri)](/uri)\n",
+    "<p>[foo <a href=\"/uri\">bar</a>](/uri)</p>\n"
+  ],
+  [
+    "[foo]: /url \"title\"\n\n[foo]\n",
+    "<p><a href=\"/url\" title=\"title\">foo</a></p>\n"
+  ],
+  [
+    "[foo][bar]\n\n[BAR]: /url\n",
+    "<p><a href=\"/url\">foo</a></p>\n"
+  ],
+  [
+    "[foo][]\n\n[foo]: /url\n",
+    "<p><a href=\"/url\">foo</a></p>\n"
+  ],
+  [
+    "[Foo\n  bar]: /url\n\n[Baz][Foo bar]\n",
+    "<p><a href=\"/url\">Baz</a></p>\n"
+  ],
+  [
+    "[foo]: /url\n=== \n[foo]\n",
+    "<p>===\n<a href=\"/url\">foo</a></p>\n"
+  ],
+  [
+    "![foo *bar*](train.jpg \"train & tracks\")\n",
+    "<p><img src=\"train.jpg\" alt=\"foo bar\" title=\"train &amp; tracks\" /></p>\n"
+  ],
+  [
+    "[![moon](moon.jpg)](/uri)\n",
+    "<p><a href=\"/uri\"><img src=\"moon.jpg\" alt=\"moon\" /></a></p>\n"
+  ],
+  [
+    "<http://foo.bar.baz>\n",
+    "<p><a href=\"http://foo.bar.baz\">http://foo.bar.baz</a></p>\n"
+  ],
+  [
+    "<foo@bar.example.com>\n",
+    "<p><a href=\"mailto:foo@bar.example.com\">foo@bar.example.com</a></p>\n"
+  ],
+  [
+    "[foo]\n",
+    "<p>[foo]</p>\n"
+  ],
+  [
+    "<div>\n*hello*\n</div>\n",
+    "<div>\n*hello*\n</div>\n"
+  ],
+  [
+    "foo <b>bar</b>\n",
+    "<p>foo <b>bar</b></p>\n"
+  ],
+  [
+    "<!-- comment -->\nafter\n",
+    "<!-- comment -->\n<p>after</p>\n"
+  ],
+  [
+    "\tfoo\tbaz\t\tbim\n",
+    "<pre><code>foo\tbaz\t\tbim\n</code></pre>\n"
+  ],
+  [
+    "- foo\n\n\tbar\n",
+    "<ul>\n<li>\n<p>foo</p>\n<p>bar</p>\n</li>\n</ul>\n"
+  ]
+]

@@ -1,0 +1,62 @@
+[
+  [
+    "~~Hi~~ Hello, ~there~ world!\n",
+    "<p><del>Hi</del> Hello, <del>there</del> world!</p>\n"
+  ],
+  [
+    "x ~~~not struck~~~ y\n",
+    "<p>x ~~~not struck~~~ y</p>\n"
+  ],
+  [
+    "- [ ] foo\n- [x] bar\n",
+    "<ul>\n<li>[ ] foo</li>\n<li>[x] bar</li>\n</ul>\n"
+  ],
+  [
+    "| foo | bar |\n| --- | --- |\n| baz | bim |\n",
+    "<table>\n<tr><th>foo</th><th>bar</th></tr>\n<tr><td>baz</td><td>bim</td></tr>\n</table>\n"
+  ],
+  [
+    "| f\\|oo  |\n| ------ |\n| b `\\|` az |\n| b **\\|** im |\n",
+    "<table>\n<tr><th>f|oo</th></tr>\n<tr><td>b <code>|</code> az</td></tr>\n<tr><td>b <strong>|</strong> im</td></tr>\n</table>\n"
+  ],
+  [
+    "| abc | def |\n| --- | --- |\n| bar |\n| bar | baz | boo |\n",
+    "<table>\n<tr><th>abc</th><th>def</th></tr>\n<tr><td>bar</td><td></td></tr>\n<tr><td>bar</td><td>baz</td></tr>\n</table>\n"
+  ],
+  [
+    "| abc | def |\n| --- |\n| bar |\n",
+    "<p>| abc | def |\n| --- |\n| bar |</p>\n"
+  ],
+  [
+    "intro\n| a |\n| - |\n| b |\n",
+    "<p>intro</p>\n<table>\n<tr><th>a</th></tr>\n<tr><td>b</td></tr>\n</table>\n"
+  ],
+  [
+    "www.commonmark.org/help for more.\n",
+    "<p><a href=\"http://www.commonmark.org/help\">www.commonmark.org/help</a> for more.</p>\n"
+  ],
+  [
+    "Visit https://example.com/a_b_c.\n",
+    "<p>Visit <a href=\"https://example.com/a_b_c\">https://example.com/a_b_c</a>.</p>\n"
+  ],
+  [
+    "(https://example.com/x)\n",
+    "<p>(<a href=\"https://example.com/x\">https://example.com/x</a>)</p>\n"
+  ],
+  [
+    "mail foo@bar.baz now\n",
+    "<p>mail <a href=\"mailto:foo@bar.baz\">foo@bar.baz</a> now</p>\n"
+  ],
+  [
+    "[x](https://a.b) https://c.d\n",
+    "<p><a href=\"https://a.b\">x</a> <a href=\"https://c.d\">https://c.d</a></p>\n"
+  ],
+  [
+    "Text[^1] and [^n].\n\n[^1]: First.\n[^n]: Second.\n",
+    "<p>Text<sup>1</sup> and <sup>2</sup>.</p>\n"
+  ],
+  [
+    "[^missing] x\n",
+    "<p>[^missing] x</p>\n"
+  ]
+]

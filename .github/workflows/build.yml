@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: dotnet build KD.Avalonia.Rice.slnx -c Release --no-restore -p:ContinuousIntegrationBuild=true
 
+      - name: Verify license packaging
+        run: python3 scripts/verify_license_packaging.py --demo-output samples/KD.Avalonia.Rice.Demo/bin/Release/net10.0
+
       - name: Test
         run: dotnet test KD.Avalonia.Rice.slnx -c Release --no-build
 

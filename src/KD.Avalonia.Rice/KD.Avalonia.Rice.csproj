@@ -9,6 +9,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>KD.Avalonia.Rice</PackageId>
     <Authors>k0zi</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula;sidemenu;navigation;card;groupbox;chat;progress;progressring;spinner;loading;overlay;uml;plantuml;diagram;markdown;commonmark;gfm;mermaid</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
@@ -20,6 +21,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="/" />
+    <None Include="..\..\THIRD_PARTY_NOTICES.md" Pack="true" PackagePath="/" />
+    <None Include="..\..\licenses\*.txt" Pack="true" PackagePath="licenses/" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="Assets\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
