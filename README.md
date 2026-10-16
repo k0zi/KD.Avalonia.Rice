@@ -56,26 +56,34 @@ AppBuilder.Configure<App>()
 
 ```xml
 <!-- xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons" -->
-<rice:RiceSideMenu DockPanel.Dock="Left" SelectedIndex="0" IsCollapsed="{Binding MenuCollapsed}">
+<rice:RiceSideMenu DockPanel.Dock="Left" IsCollapsed="{Binding MenuCollapsed}">
   <rice:RiceSideMenu.Header>
     <TextBlock FontWeight="SemiBold" Text="My App" />
   </rice:RiceSideMenu.Header>
-  <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.HomeOutline}" Content="Home" />
-  <rice:RiceSideMenuItem Content="Photos">
+  <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.HomeOutline}" Header="Home" IsSelected="True" />
+  <rice:RiceSideMenuItem Header="Photos">
     <rice:RiceSideMenuItem.Icon><Image Source="/Assets/photos.png" /></rice:RiceSideMenuItem.Icon>
   </rice:RiceSideMenuItem>
+  <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.FolderOutline}" Header="Library" IsExpanded="True">
+    <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.MusicNote}" Header="Music" />
+    <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Video}" Header="Videos" />
+  </rice:RiceSideMenuItem>
   <rice:RiceSideMenu.Footer>
-    <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.CogOutline}" Content="Settings"
+    <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.CogOutline}" Header="Settings"
                            Command="{Binding OpenSettingsCommand}" />
   </rice:RiceSideMenu.Footer>
 </rice:RiceSideMenu>
 ```
 
-- `RiceSideMenu` is a `ListBox`: use `SelectedItem` / `SelectedIndex` / `SelectionChanged`, or `ItemsSource` with a
-  `RiceSideMenuItem` style that binds `Icon` and `Content`.
+- `RiceSideMenu` is a `TreeView`: use `SelectedItem` / `SelectionChanged` (`IsSelected` on an item), or `ItemsSource`
+  with a `TreeDataTemplate` (sub items) or a `RiceSideMenuItem` style that binds `Icon`, `Header` and `ItemsSource`.
+- Sub items: nest `RiceSideMenuItem`s to any depth. A parent shows a chevron and expands / collapses on click
+  (`IsExpanded`, also ←/→ keys) instead of being selected; sub items are indented by `Indent` (default 16) per level.
+  Selecting a sub item expands its parents; a closed parent shows the selection indicator while a sub item is selected.
 - `Icon` takes an `IImage` (bitmap), a `MaterialIconKind`, a string (e.g. emoji) or any control.
 - The hamburger button (`ShowCollapseButton`) toggles `IsCollapsed`: only the icons stay visible (width animates from
-  `ExpandedWidth` to `CollapsedWidth`), the items keep working and show their text as tool tip.
+  `ExpandedWidth` to `CollapsedWidth`), the items keep working and show their text as tool tip. Sub items are hidden
+  then; clicking a parent opens the menu with that parent expanded.
 - `Header` and `Footer` are optional. Items in the footer are not selectable; they raise `Click` / run `Command`.
 - `IsCollapsed` is inherited, so custom header/footer content can react to it as well.
 
