@@ -25,21 +25,16 @@ public sealed class ThemeManager : INotifyPropertyChanged
         "ToggleSwitchKnobFillOn", "ToggleSwitchKnobFillOnPointerOver", "ToggleSwitchKnobFillOnPressed",
     ];
 
-    private readonly ResourceDictionary _brushes = new();
-    private readonly ColorPaletteResources _lightPalette = new();
-    private readonly ColorPaletteResources _darkPalette = new();
+    // A resource provider can have only one owner, so every RiceStyles instance (e.g. one per Application,
+    // as in headless tests) gets its own brushes and palettes. Keyed weakly by its brushes dictionary, so an
+    // attachment lives exactly as long as the styles that merged it.
+    private readonly ConditionalWeakTable<ResourceDictionary, Attachment> _attachments = new();
     private ThemeSettingsStore? _store;
     private RiceTheme _currentTheme;
-    private bool _applied;
 
     public static ThemeManager Instance { get; } = new();
 
-    private ThemeManager()
-    {
-        _brushes.ThemeDictionaries[ThemeVariant.Light] = new ResourceDictionary();
-        _brushes.ThemeDictionaries[ThemeVariant.Dark] = new ResourceDictionary();
-        _currentTheme = Options.SupportedThemes[0];
-    }
+    private ThemeManager() => _currentTheme = Options.SupportedThemes[0];
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -99,15 +94,15 @@ public sealed class ThemeManager : INotifyPropertyChanged
         OnPropertyChanged(nameof(IsDark));
     }
 
-    /// <summary>Hooks the brushes and the Fluent palettes into <see cref="RiceStyles"/>.</summary>
+    /// <summary>Hooks new brushes and Fluent palettes, filled with the current theme, into <see cref="RiceStyles"/>.</summary>
     internal void Attach(IResourceDictionary resources, FluentTheme fluent)
     {
-        resources.MergedDictionaries.Add(_brushes);
-        fluent.Palettes[ThemeVariant.Light] = _lightPalette;
-        fluent.Palettes[ThemeVariant.Dark] = _darkPalette;
-        // Normally Configure (UseRice) has already applied the theme; without it, the defaults are applied here.
-        if (!_applied)
-            Apply();
+        var attachment = new Attachment();
+        ApplyTo(attachment);
+        resources.MergedDictionaries.Add(attachment.Brushes);
+        fluent.Palettes[ThemeVariant.Light] = attachment.LightPalette;
+        fluent.Palettes[ThemeVariant.Dark] = attachment.DarkPalette;
+        _attachments.Add(attachment.Brushes, attachment);
     }
 
     private RiceTheme? Find(string? id) =>
@@ -115,12 +110,33 @@ public sealed class ThemeManager : INotifyPropertyChanged
 
     private void Apply()
     {
-        _applied = true;
-        _brushes["RiceWindowCornerRadius"] = Options.WindowCornerRadius;
-        ApplyBrushes((ResourceDictionary)_brushes.ThemeDictionaries[ThemeVariant.Light], _currentTheme.Light);
-        ApplyBrushes((ResourceDictionary)_brushes.ThemeDictionaries[ThemeVariant.Dark], _currentTheme.Dark);
-        ApplyFluentPalette(_lightPalette, _currentTheme.Light, isDark: false);
-        ApplyFluentPalette(_darkPalette, _currentTheme.Dark, isDark: true);
+        foreach (var (_, attachment) in _attachments)
+            ApplyTo(attachment);
+    }
+
+    private void ApplyTo(Attachment attachment)
+    {
+        attachment.Brushes["RiceWindowCornerRadius"] = Options.WindowCornerRadius;
+        ApplyBrushes((ResourceDictionary)attachment.Brushes.ThemeDictionaries[ThemeVariant.Light], _currentTheme.Light);
+        ApplyBrushes((ResourceDictionary)attachment.Brushes.ThemeDictionaries[ThemeVariant.Dark], _currentTheme.Dark);
+        ApplyFluentPalette(attachment.LightPalette, _currentTheme.Light, isDark: false);
+        ApplyFluentPalette(attachment.DarkPalette, _currentTheme.Dark, isDark: true);
+    }
+
+    /// <summary>The theme resources hooked into one <see cref="RiceStyles"/> instance.</summary>
+    private sealed class Attachment
+    {
+        public Attachment()
+        {
+            Brushes.ThemeDictionaries[ThemeVariant.Light] = new ResourceDictionary();
+            Brushes.ThemeDictionaries[ThemeVariant.Dark] = new ResourceDictionary();
+        }
+
+        public ResourceDictionary Brushes { get; } = new();
+
+        public ColorPaletteResources LightPalette { get; } = new();
+
+        public ColorPaletteResources DarkPalette { get; } = new();
     }
 
     private static void ApplyBrushes(ResourceDictionary target, RicePalette p)
