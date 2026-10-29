@@ -41,6 +41,7 @@ public partial class MainWindow : RiceWindow
                 _ when key == ProgressItem => new ProgressPage(),
                 _ when key == UmlItem => new UmlPage(),
                 _ when key == MarkdownItem => new MarkdownPage(),
+                _ when key == ChartsItem => new ChartsPage(),
                 nameof(SettingsPage) => new SettingsPage(),
                 _ => new HomePage(),
             };

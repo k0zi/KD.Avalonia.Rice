@@ -1,0 +1,46 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:charts="clr-namespace:KD.Avalonia.Rice.Controls.Charts">
+  <!-- Every color comes from the theme, so the charts follow theme and light/dark switches. The separator (lines
+       between slices, rings around markers) is the window background; set SeparatorBrush on a different surface. -->
+  <ControlTheme x:Key="RiceChartTheme" TargetType="charts:RiceChartBase">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="MutedForeground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    <Setter Property="AxisBrush" Value="{DynamicResource RiceChartAxisBrush}" />
+    <Setter Property="GridBrush" Value="{DynamicResource RiceChartGridBrush}" />
+    <Setter Property="SeparatorBrush" Value="{DynamicResource RiceBackgroundBrush}" />
+    <Setter Property="TrackBrush" Value="{DynamicResource RiceChartTrackBrush}" />
+    <Setter Property="PositiveBrush" Value="{DynamicResource RiceChartPositiveBrush}" />
+    <Setter Property="NegativeBrush" Value="{DynamicResource RiceChartNegativeBrush}" />
+    <Setter Property="HeatLowBrush" Value="{DynamicResource RiceChartHeatLowBrush}" />
+    <Setter Property="HeatHighBrush" Value="{DynamicResource RiceChartHeatHighBrush}" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource RiceAccentBrush}" />
+    <Setter Property="TooltipBackground" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="TooltipBorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="TooltipShadow" Value="{DynamicResource RiceCardShadow2}" />
+    <Setter Property="FontSize" Value="13" />
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type charts:RiceColumnChart}" TargetType="charts:RiceColumnChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceClusteredColumnChart}" TargetType="charts:RiceClusteredColumnChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceStackedColumnChart}" TargetType="charts:RiceStackedColumnChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceBarChart}" TargetType="charts:RiceBarChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceClusteredBarChart}" TargetType="charts:RiceClusteredBarChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceStackedBarChart}" TargetType="charts:RiceStackedBarChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceDivergingBarChart}" TargetType="charts:RiceDivergingBarChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceLineChart}" TargetType="charts:RiceLineChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceAreaChart}" TargetType="charts:RiceAreaChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceRadarChart}" TargetType="charts:RiceRadarChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RicePieChart}" TargetType="charts:RicePieChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceDonutChart}" TargetType="charts:RiceDonutChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RicePyramidChart}" TargetType="charts:RicePyramidChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceFunnelChart}" TargetType="charts:RiceFunnelChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceScatterChart}" TargetType="charts:RiceScatterChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceBubbleChart}" TargetType="charts:RiceBubbleChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceHeatmapChart}" TargetType="charts:RiceHeatmapChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceWaterfallChart}" TargetType="charts:RiceWaterfallChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceHistogramChart}" TargetType="charts:RiceHistogramChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceGanttChart}" TargetType="charts:RiceGanttChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceBulletChart}" TargetType="charts:RiceBulletChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceGaugeChart}" TargetType="charts:RiceGaugeChart" BasedOn="{StaticResource RiceChartTheme}" />
+</ResourceDictionary>

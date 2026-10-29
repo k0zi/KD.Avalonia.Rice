@@ -30,7 +30,7 @@ public static class CodeHighlighter
         ["cs"] = "csharp", ["c#"] = "csharp", ["csharp"] = "csharp",
         ["xml"] = "xml", ["xaml"] = "xml", ["axaml"] = "xml", ["html"] = "xml", ["htm"] = "xml", ["svg"] = "xml",
         ["csproj"] = "xml", ["props"] = "xml", ["targets"] = "xml", ["xhtml"] = "xml",
-        ["json"] = "json", ["jsonc"] = "json", ["json5"] = "json",
+        ["json"] = "json", ["jsonc"] = "json", ["json5"] = "json", ["chart"] = "json",
         ["js"] = "javascript", ["javascript"] = "javascript", ["jsx"] = "javascript", ["mjs"] = "javascript",
         ["ts"] = "javascript", ["typescript"] = "javascript", ["tsx"] = "javascript",
         ["py"] = "python", ["python"] = "python",
