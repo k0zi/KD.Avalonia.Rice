@@ -357,6 +357,27 @@ public class RiceHistogramChart : RiceChartBase
         XYLayouts.Histogram(context, Values?.ToList(), BinCount, BinWidth, ShowValues);
 }
 
+/// <summary>
+/// Nested rectangles whose areas follow the values: a color per top-level node, its children drawn inside it under
+/// its label.
+/// </summary>
+public class RiceTreeMapChart : RiceChartBase
+{
+    public static readonly StyledProperty<IList<TreeMapNode>?> NodesProperty =
+        AvaloniaProperty.Register<RiceTreeMapChart, IList<TreeMapNode>?>(nameof(Nodes));
+
+    static RiceTreeMapChart() => RegisterData(NodesProperty);
+
+    /// <summary>The top-level nodes; a <see cref="ChartCollection{T}"/> is followed when it changes.</summary>
+    public IList<TreeMapNode>? Nodes
+    {
+        get => GetValue(NodesProperty);
+        set => SetValue(NodesProperty, value);
+    }
+
+    private protected override ChartScene BuildScene(ChartLayoutContext context) => TreeMapLayouts.TreeMap(context, Nodes?.ToList(), ShowValues);
+}
+
 /// <summary>Tasks as bars on a time axis, grouped, with progress, milestones and dependency arrows.</summary>
 public class RiceGanttChart : RiceChartBase
 {

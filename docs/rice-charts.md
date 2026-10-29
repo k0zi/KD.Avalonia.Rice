@@ -1,8 +1,8 @@
 # Charts
 
-22 chart controls, drawn from a typed data model in the colors of the current Rice theme: column, clustered column,
+23 chart controls, drawn from a typed data model in the colors of the current Rice theme: column, clustered column,
 stacked column, line, pie, donut, area, bar, clustered bar, stacked bar, bubble, radar, scatter, heatmap, pyramid,
-funnel, waterfall, gantt, histogram, bullet, gauge and diverging bar.
+funnel, treemap, waterfall, gantt, histogram, bullet, gauge and diverging bar.
 
 Every chart has:
 - **Tooltips:** hover a bar, slice or point to see its value.
@@ -59,6 +59,7 @@ Assigning a new data object replays the animation, and so does `Replay()`.
 | `RiceFunnelChart` | `Slices`, stage widths follow the values | |
 | `RiceScatterChart` | `Series` (`IList<ChartPointSeries>`) | |
 | `RiceBubbleChart` | `Series`; the bubble area follows `ChartPoint.Size` | |
+| `RiceTreeMapChart` | `Nodes` (`IList<TreeMapNode>`): areas follow the values; a node with `Children` is a group, drawn under its label with its children inside, its value the sum of theirs | |
 | `RiceHeatmapChart` | `Data` (`HeatmapData`: column labels, rows of values; `NaN` = empty) | |
 | `RiceWaterfallChart` | `Steps` (`IList<WaterfallStep>`): changes from the running total; `IsTotal` bars from zero | |
 | `RiceHistogramChart` | `Values` (`IList<double>`, raw values) | `BinCount` (0 = auto), `BinWidth` (NaN = auto), `Bins` |
@@ -74,7 +75,7 @@ Assigning a new data object replays the animation, and so does `Replay()`.
 | `ShowLegend` | `true` | The legend; with a single series it is left out. |
 | `LegendPosition` | `Bottom` | `Bottom`, `Top`, `Right`, `Left`. |
 | `ShowTooltips` | `true` | The value box under the pointer. |
-| `ShowValues` | `false` | Value labels on bars and cells (column, bar, waterfall, histogram, heatmap). |
+| `ShowValues` | `false` | Value labels on bars and cells (column, bar, waterfall, histogram, heatmap, treemap). |
 | `IsSelectionEnabled` | `true` | Click selection. |
 | `SelectedItem` | `null` | Two-way. The clicked item; its type depends on the chart, see below. |
 | `IsAnimated` | `true` | Load animation. |
@@ -97,6 +98,7 @@ Assigning a new data object replays the animation, and so does `Replay()`.
 | column, bar, line, area, radar, diverging | `ChartDataPoint` (`Series`, `Index`, `Category`, `Value`). Two points are equal when they have the same series and index. |
 | pie, donut, pyramid, funnel | `ChartSlice` |
 | scatter, bubble | `ChartPoint` |
+| treemap | `TreeMapNode` (a tile, or a group by its label strip) |
 | heatmap | `HeatmapCell` (`Row`, `Column`, `ColumnLabel`, `Value`) |
 | waterfall | `WaterfallStep` |
 | histogram | `HistogramBin` (`From`, `To`, `Count`) |
@@ -107,7 +109,7 @@ Assigning a new data object replays the animation, and so does `Replay()`.
 ## Colors
 
 The series take the theme's chart colors, `RiceChartSeries0Brush` … `RiceChartSeries7Brush`. The first one is the
-accent. Use `Color` on a `ChartSeries`, `ChartSlice`, `ChartPointSeries`, `GanttTask` or `GaugeBand` to give it its
+accent. Use `Color` on a `ChartSeries`, `ChartSlice`, `ChartPointSeries`, `TreeMapNode`, `GanttTask` or `GaugeBand` to give it its
 own color. The other brushes are:
 
 | Brush | Used for |
@@ -158,6 +160,7 @@ In type names, case, spaces, dashes and underscores do not matter, so `stackedCo
 | `column`, `clusteredColumn`, `stackedColumn` (`percent`), `stackedColumn100`, `bar`, `clusteredBar`, `stackedBar` (`percent`), `stackedBar100`, `divergingBar`, `line` (`smooth`, `markers`), `area` (`smooth`, `stacked`), `stackedArea`, `radar` (`filled`) | `categories` and `series: [{name, values, color}]`, or `values` for a single series |
 | `pie`, `donut` (`innerRadius`, `centerText`, `centerLabel`), `pyramid`, `funnel` | `slices: [{label, value, color}]`, or `categories` + `values`, or `data: {"label": value}` |
 | `scatter`, `bubble` | `series: [{name, points}]` or `points`. A point is `[x, y]`, `[x, y, size]` or `{x, y, size, label}`. |
+| `treemap` | `nodes: [{label, value, color, children}]`, or `data: {"label": value, "group": {"label": value}}` |
 | `heatmap` | `columns` and `rows: [{label, values}]` (`null` = empty cell) |
 | `waterfall` | `steps: [{label, value, total}]` |
 | `histogram` | `values`, `bins`, `binWidth` |

@@ -466,3 +466,59 @@ public sealed class GaugeBand : ChartModel
         set => Set(ref _label, value);
     }
 }
+
+// ---- treemap ----
+
+/// <summary>
+/// A rectangle of a treemap. A node with <see cref="Children"/> is a group: its value is the sum of theirs, and they
+/// are drawn inside it.
+/// </summary>
+public sealed class TreeMapNode : ChartModel
+{
+    private string _label;
+    private double _value;
+    private Color? _color;
+
+    public TreeMapNode() : this("", 0)
+    {
+    }
+
+    public TreeMapNode(string label, double value, params IEnumerable<TreeMapNode> children)
+    {
+        _label = label;
+        _value = value;
+        Children = Track(new ChartCollection<TreeMapNode>(children));
+    }
+
+    /// <summary>A group of <paramref name="children"/>.</summary>
+    public TreeMapNode(string label, params IEnumerable<TreeMapNode> children) : this(label, 0, children)
+    {
+    }
+
+    public string Label
+    {
+        get => _label;
+        set => Set(ref _label, value);
+    }
+
+    /// <summary>The size of a leaf; ignored when the node has children.</summary>
+    public double Value
+    {
+        get => _value;
+        set => Set(ref _value, value);
+    }
+
+    /// <summary>Own color; the children take it unless they have their own.</summary>
+    public Color? Color
+    {
+        get => _color;
+        set => Set(ref _color, value);
+    }
+
+    public ChartCollection<TreeMapNode> Children { get; }
+
+    /// <summary>The value as drawn: the sum of the children, or the own value (negative and NaN count as 0).</summary>
+    public double Total => Children.Count > 0 ? Children.Sum(c => c.Total) : double.IsFinite(Value) ? Math.Max(0, Value) : 0;
+
+    public override string ToString() => Label;
+}

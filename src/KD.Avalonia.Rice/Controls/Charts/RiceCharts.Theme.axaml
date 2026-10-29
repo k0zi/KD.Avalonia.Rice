@@ -40,6 +40,7 @@
   <ControlTheme x:Key="{x:Type charts:RiceHeatmapChart}" TargetType="charts:RiceHeatmapChart" BasedOn="{StaticResource RiceChartTheme}" />
   <ControlTheme x:Key="{x:Type charts:RiceWaterfallChart}" TargetType="charts:RiceWaterfallChart" BasedOn="{StaticResource RiceChartTheme}" />
   <ControlTheme x:Key="{x:Type charts:RiceHistogramChart}" TargetType="charts:RiceHistogramChart" BasedOn="{StaticResource RiceChartTheme}" />
+  <ControlTheme x:Key="{x:Type charts:RiceTreeMapChart}" TargetType="charts:RiceTreeMapChart" BasedOn="{StaticResource RiceChartTheme}" />
   <ControlTheme x:Key="{x:Type charts:RiceGanttChart}" TargetType="charts:RiceGanttChart" BasedOn="{StaticResource RiceChartTheme}" />
   <ControlTheme x:Key="{x:Type charts:RiceBulletChart}" TargetType="charts:RiceBulletChart" BasedOn="{StaticResource RiceChartTheme}" />
   <ControlTheme x:Key="{x:Type charts:RiceGaugeChart}" TargetType="charts:RiceGaugeChart" BasedOn="{StaticResource RiceChartTheme}" />
