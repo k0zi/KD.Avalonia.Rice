@@ -130,6 +130,9 @@ public class RiceSideMenuItem : TreeViewItem
     {
     }
 
+    /// <summary>Acts as if the item was clicked: raises <see cref="Click"/> and runs <see cref="Command"/>.</summary>
+    public void PerformClick() => OnClick();
+
     protected virtual void OnClick()
     {
         RaiseEvent(new RoutedEventArgs(ClickEvent));

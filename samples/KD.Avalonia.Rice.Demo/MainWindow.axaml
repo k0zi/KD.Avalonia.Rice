@@ -30,6 +30,10 @@
       <rice:RiceSideMenuItem Name="ChartsItem" Icon="{x:Static icons:MaterialIconKind.ChartBar}" Header="Charts" />
       <rice:RiceSideMenuItem Name="DialogsItem" Icon="{x:Static icons:MaterialIconKind.MessageAlertOutline}" Header="Dialogs" />
       <rice:RiceSideMenuItem Name="ToastsItem" Icon="{x:Static icons:MaterialIconKind.BellOutline}" Header="Toasts" />
+      <rice:RiceSideMenuItem Name="FeedbackItem" Icon="{x:Static icons:MaterialIconKind.InformationSlabCircleOutline}" Header="Feedback" />
+      <rice:RiceSideMenuItem Name="NavigationItem" Icon="{x:Static icons:MaterialIconKind.Tab}" Header="Navigation" />
+      <rice:RiceSideMenuItem Name="PropertyGridItem" Icon="{x:Static icons:MaterialIconKind.FormatListBulletedType}" Header="Property grid" />
+      <rice:RiceSideMenuItem Name="CommandPaletteItem" Icon="{x:Static icons:MaterialIconKind.ConsoleLine}" Header="Command palette" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Header="Settings"

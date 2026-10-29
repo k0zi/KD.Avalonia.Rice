@@ -17,6 +17,14 @@ themes that every control relies on.
 | [RiceLoadingOverlay](rice-loading-overlay.md) | Covers and blocks content while it loads, with ring and message |
 | [Dialogs](rice-dialog.md) | `RiceDialog`: frameless message, question and custom view dialogs with the system icons |
 | [Toasts](rice-toast.md) | `RiceToast`: self-closing info / success / warning / error notifications in a corner of the window |
+| [RiceInfoBar](rice-info-bar.md) | Message bar in the page: info / success / warning / error, with action and close button |
+| [RiceEmptyState](rice-empty-state.md) | Placeholder for a view without data: icon, title, description and buttons |
+| [RiceSkeleton](rice-skeleton.md) | Shimmering placeholder in the shape of content that is still loading |
+| [RiceBreadcrumb](rice-breadcrumb.md) | Path of the current location with clickable parent levels |
+| [RiceSegmentedControl](rice-segmented-control.md) | Row of linked buttons, one of them selected |
+| [RiceTabView](rice-tab-view.md) | Tabs with icons, close buttons, drag to reorder and a "+" button |
+| [RiceCommandPalette](rice-command-palette.md) | Ctrl+Shift+P search over the commands and pages of the window |
+| [RicePropertyGrid](rice-property-grid.md) | Edits the public properties of an object, grouped by category |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
 | [UML diagrams](rice-uml.md) | `UmlDiagramView`: all 14 UML diagram types, read from and written to PlantUML (`.puml`) |
 | [Markdown and Mermaid](rice-markdown.md) | `MarkdownView`: CommonMark + GFM with colored code and diagrams; `MermaidView` for Mermaid diagrams |

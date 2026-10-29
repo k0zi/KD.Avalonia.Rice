@@ -1,0 +1,85 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <!-- The rows are built in code (RicePropertyGrid.Row); the classes in Border.Styles style them. -->
+  <ControlTheme x:Key="{x:Type rice:RicePropertyGrid}" TargetType="rice:RicePropertyGrid">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <!-- The rows are not part of the template, so their styles are scoped to it here, not in the theme. -->
+          <Border.Styles>
+            <Style Selector="Button.rice-category">
+              <Setter Property="HorizontalAlignment" Value="Stretch" />
+              <Setter Property="HorizontalContentAlignment" Value="Left" />
+              <Setter Property="Background" Value="Transparent" />
+              <Setter Property="BorderThickness" Value="0" />
+              <Setter Property="CornerRadius" Value="0" />
+              <Setter Property="Padding" Value="4,6" />
+            </Style>
+            <Style Selector="Button.rice-category:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
+            </Style>
+            <Style Selector="Grid.rice-property-row:pointerover">
+              <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
+            </Style>
+            <Style Selector="Grid.rice-property-row.selected">
+              <Setter Property="Background" Value="{DynamicResource RiceSelectedRowBrush}" />
+            </Style>
+            <Style Selector="TextBlock.rice-property-value">
+              <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+            </Style>
+            <Style Selector="TextBox.error">
+              <Setter Property="BorderBrush" Value="{DynamicResource RiceDangerBrush}" />
+            </Style>
+            <Style Selector="TextBox.error:focus /template/ Border#PART_BorderElement">
+              <Setter Property="BorderBrush" Value="{DynamicResource RiceDangerBrush}" />
+            </Style>
+            <Style Selector="Border.rice-color-swatch">
+              <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+            </Style>
+          </Border.Styles>
+          <DockPanel>
+            <Grid Name="PART_Toolbar" DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="8"
+                  IsVisible="{TemplateBinding ShowToolbar}">
+              <TextBox Name="PART_SearchBox" Text="{TemplateBinding Filter, Mode=TwoWay}">
+                <TextBox.InnerLeftContent>
+                  <mi:MaterialIcon Kind="Magnify" Width="16" Height="16" Margin="8,0,0,0"
+                                   Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+                </TextBox.InnerLeftContent>
+              </TextBox>
+              <rice:RiceSegmentedControl Name="PART_ViewSwitch" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center" />
+            </Grid>
+
+            <Border Name="PART_DescriptionPanel" DockPanel.Dock="Bottom" Padding="12,8" MinHeight="56"
+                    Background="{DynamicResource RiceTrackBrush}"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1,0,0"
+                    IsVisible="{TemplateBinding ShowDescription}">
+              <StackPanel Spacing="2">
+                <TextBlock Name="PART_DescriptionTitle" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                <TextBlock Name="PART_DescriptionText" TextWrapping="Wrap" MaxLines="3"
+                           Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+              </StackPanel>
+            </Border>
+
+            <Border DockPanel.Dock="Top" Height="1" Background="{TemplateBinding BorderBrush}"
+                    IsVisible="{TemplateBinding ShowToolbar}" />
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+              <StackPanel Name="PART_Rows" Margin="0,4" />
+            </ScrollViewer>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+  </ControlTheme>
+</ResourceDictionary>

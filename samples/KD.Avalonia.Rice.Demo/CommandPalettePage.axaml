@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             x:Class="KD.Avalonia.Rice.Demo.CommandPalettePage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="640" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Command palette" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="Press Ctrl+Shift+P anywhere in the window. RiceWindow lists its Commands and every item of its side menu; type a few letters (e.g. “ld” for Light / Dark, “chr” for Charts), move with the arrows, run with Enter. Recently used commands come first. The shortcuts of the commands (e.g. Ctrl+Shift+T, Ctrl+B, F1) work without opening the palette." />
+
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Name="OpenButton" Classes="accent" Content="Open the palette" />
+        <Button Name="OpenWithQueryButton" Content="Open with “theme”" />
+      </StackPanel>
+
+      <rice:RiceGroupBox Header="Embedded in a page">
+        <StackPanel Spacing="8">
+          <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                     Text="The same control placed in a layout, with its own list: a quick picker." />
+          <rice:RiceCommandPalette Name="EmbeddedPalette" Width="NaN" Height="300" Placeholder="Pick a distribution…" />
+          <TextBlock Name="EmbeddedResult" Foreground="{DynamicResource RiceForegroundMutedBrush}" Text="Picked: –" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

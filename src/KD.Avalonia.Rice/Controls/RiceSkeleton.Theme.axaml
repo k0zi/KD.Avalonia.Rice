@@ -1,0 +1,25 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceSkeleton}" TargetType="rice:RiceSkeleton">
+    <Setter Property="Fill" Value="{DynamicResource RiceSkeletonBrush}" />
+    <Setter Property="Highlight" Value="{DynamicResource RiceSkeletonHighlightBrush}" />
+
+    <!-- The band sweeps across, then pauses briefly off the right edge before the next sweep. -->
+    <Style Selector="^:animated">
+      <Style.Animations>
+        <Animation Duration="0:0:1.6" IterationCount="Infinite">
+          <KeyFrame Cue="0%">
+            <Setter Property="ShimmerPosition" Value="0" />
+          </KeyFrame>
+          <KeyFrame Cue="75%">
+            <Setter Property="ShimmerPosition" Value="1" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="ShimmerPosition" Value="1" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

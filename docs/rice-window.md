@@ -39,6 +39,9 @@ can be set per window; the title bar icon is `AppInfo.Icon`, so set `AppInfo` to
 | `AppInfo` | `RiceOptions.AppInfo` | Metadata shown by the about dialog. |
 | `CornerRadius` | `RiceOptions.WindowCornerRadius` (8) | Window corners; `0` = square. |
 | `ToastPosition` | `BottomRight` | Corner of the built-in host of the [toasts](rice-toast.md), below the title bar. |
+| `Commands` | empty | Entries of the [command palette](rice-command-palette.md); their `Gesture`s work in the whole window. |
+| `CommandPaletteGesture` | `Ctrl+Shift+P` | Opens / closes the command palette; `null` turns the shortcut off. |
+| `IncludeNavigationCommands` | `true` | Lists the items of the window's `RiceSideMenu` in the command palette too. |
 
 Inherited `Window` properties (`CanResize`, `CanMinimize`, `CanMaximize`, `WindowState`, `MinWidth`, …) work as usual:
 a non-resizable window has no resize grips, `CanMinimize="False"` / `CanMaximize="False"` hide the matching title bar
@@ -51,6 +54,7 @@ button (the latter also disables the double click maximize).
 | `ShowThemeDialog()` | Opens the theme dialog modally (same as the gear button). Use it from your own settings page. |
 | `RequestAbout()` | Opens the about dialog (same as the info button). |
 | `ToggleMaximized()` | Maximizes / restores the window. |
+| `ShowCommandPalette(query)` | Opens the [command palette](rice-command-palette.md) over the window, optionally with a search text. |
 | `AboutRequested` event | Raised before the built-in about dialog opens; set `e.Handled = true` to show your own. |
 
 ```csharp

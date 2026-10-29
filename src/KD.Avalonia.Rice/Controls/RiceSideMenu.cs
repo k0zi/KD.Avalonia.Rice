@@ -108,6 +108,65 @@ public class RiceSideMenu : TreeView
 
     public void ToggleCollapsed() => IsCollapsed = !IsCollapsed;
 
+    /// <summary>
+    /// One command per item that can be selected (parent items only group them) and per footer item, for the
+    /// <see cref="RiceCommandPalette"/>. Sub items show their parent as description. Data items (<c>ItemsSource</c>)
+    /// are listed on the top level only, by their <c>ToString()</c>.
+    /// </summary>
+    public IEnumerable<RiceCommandItem> GetNavigationCommands()
+    {
+        var commands = new List<RiceCommandItem>();
+        AddItems(Items, null);
+        foreach (var footerItem in FooterItems(Footer))
+        {
+            if (Title(footerItem.Header) is { } title)
+                commands.Add(NavigationCommand(title, footerItem.Icon, null, footerItem.PerformClick));
+        }
+        return commands;
+
+        void AddItems(IEnumerable<object?> items, string? parent)
+        {
+            foreach (var item in items)
+            {
+                if (item is RiceSideMenuItem menuItem)
+                {
+                    if (Title(menuItem.Header) is not { } title)
+                        continue;
+                    if (menuItem.HasChildren)
+                        AddItems(menuItem.Items, parent is null ? title : $"{parent} › {title}");
+                    else
+                        commands.Add(NavigationCommand(title, menuItem.Icon, parent, () => SelectedItem = menuItem));
+                }
+                else if (parent is null && item?.ToString() is { Length: > 0 } text)
+                {
+                    commands.Add(NavigationCommand(text, null, null, () => SelectedItem = item));
+                }
+            }
+        }
+
+        static string? Title(object? header) => header is string text && text.Length > 0 ? text : null;
+
+        // A control can have one parent only: an Image icon is shared by its source, other control icons are left out.
+        static RiceCommandItem NavigationCommand(string title, object? icon, string? parent, Action execute) => new(title, execute)
+        {
+            Icon = icon switch
+            {
+                Image image => image.Source,
+                Control => null,
+                _ => icon,
+            },
+            Description = parent,
+            Category = RiceStrings.CommandPaletteNavigation,
+        };
+
+        static IEnumerable<RiceSideMenuItem> FooterItems(object? footer) => footer switch
+        {
+            RiceSideMenuItem item => [item],
+            Panel panel => panel.Children.OfType<RiceSideMenuItem>(),
+            _ => [],
+        };
+    }
+
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey) =>
         new RiceSideMenuItem();
 

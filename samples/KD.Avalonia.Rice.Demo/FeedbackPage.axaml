@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             x:Class="KD.Avalonia.Rice.Demo.FeedbackPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="640" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Feedback" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceInfoBar keeps a message in the page until it is closed, RiceEmptyState fills a view without data, RiceSkeleton outlines content that is still loading." />
+
+      <rice:RiceGroupBox Header="Info bar">
+        <StackPanel Spacing="8">
+          <rice:RiceInfoBar Name="InfoBar1" Title="Update available" Message="Version 26.10 is ready to install." />
+          <rice:RiceInfoBar Name="InfoBar2" Kind="Success" Title="Saved" Message="All changes are stored." />
+          <rice:RiceInfoBar Name="InfoBar3" Kind="Warning" Title="Low disk space"
+                            Message="Less than 1 GB is free on /home. Old snapshots can be removed to make room.">
+            <rice:RiceInfoBar.Action>
+              <Button Content="Clean up" />
+            </rice:RiceInfoBar.Action>
+          </rice:RiceInfoBar>
+          <rice:RiceInfoBar Name="InfoBar4" Kind="Error" Title="Sync failed" IsClosable="False"
+                            Message="The server could not be reached.">
+            <ProgressBar IsIndeterminate="True" MaxWidth="200" HorizontalAlignment="Left" />
+          </rice:RiceInfoBar>
+          <rice:RiceInfoBar Name="InfoBar5" Icon="🍚" Message="A custom icon, without a title." />
+          <Button Name="ReopenButton" Content="Show the closed bars again" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Empty state">
+        <rice:RiceCard Elevation="0" Padding="0" Height="260">
+          <rice:RiceEmptyState Icon="{x:Static icons:MaterialIconKind.FolderOpenOutline}" Title="No projects yet"
+                               Description="Create a project or open an existing folder to get started.">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Button Classes="accent" Content="New project" />
+              <Button Content="Open folder…" />
+            </StackPanel>
+          </rice:RiceEmptyState>
+        </rice:RiceCard>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Skeleton">
+        <StackPanel Spacing="12">
+          <CheckBox Name="LoadedCheck" Content="Loaded" />
+          <Panel>
+            <!-- The outline of the card while it loads... -->
+            <rice:RiceCard Name="SkeletonCard" Elevation="1">
+              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                <rice:RiceSkeleton Shape="Circle" Width="48" Height="48" Margin="0,0,12,0" />
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                  <rice:RiceSkeleton LineHeight="14" Width="160" HorizontalAlignment="Left" />
+                  <rice:RiceSkeleton LineHeight="10" Width="100" HorizontalAlignment="Left" />
+                </StackPanel>
+                <rice:RiceSkeleton Grid.Row="1" Grid.ColumnSpan="2" Margin="0,16,0,0" Shape="Text" Lines="3" />
+              </Grid>
+            </rice:RiceCard>
+            <!-- ...and the card itself. -->
+            <rice:RiceCard Name="LoadedCard" Elevation="1" IsVisible="False">
+              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                <Border Width="48" Height="48" CornerRadius="24" Margin="0,0,12,0"
+                        Background="{DynamicResource RiceAccentBrush}">
+                  <TextBlock Text="KD" HorizontalAlignment="Center" VerticalAlignment="Center"
+                             Foreground="{DynamicResource RiceAccentForegroundBrush}" FontWeight="SemiBold" />
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                  <TextBlock FontWeight="SemiBold" Text="k0zi" />
+                  <TextBlock FontSize="12" Foreground="{DynamicResource RiceForegroundMutedBrush}" Text="2 hours ago" />
+                </StackPanel>
+                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,16,0,0" TextWrapping="Wrap"
+                           Text="The skeleton has the shape of this card: an avatar, two lines of header and a paragraph. Swapping one for the other keeps the layout steady." />
+              </Grid>
+            </rice:RiceCard>
+          </Panel>
+          <StackPanel Orientation="Horizontal" Spacing="12">
+            <rice:RiceSkeleton Width="120" Height="32" CornerRadius="6" />
+            <rice:RiceSkeleton Width="120" Height="32" CornerRadius="6" IsAnimated="False" />
+          </StackPanel>
+        </StackPanel>
+      </rice:RiceGroupBox>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
