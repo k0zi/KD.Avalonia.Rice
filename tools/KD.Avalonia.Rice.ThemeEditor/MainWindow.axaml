@@ -1,0 +1,206 @@
+<rice:RiceWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+                 xmlns:charts="clr-namespace:KD.Avalonia.Rice.Controls.Charts;assembly=KD.Avalonia.Rice"
+                 xmlns:md="clr-namespace:KD.Avalonia.Rice.Controls.Markdowns;assembly=KD.Avalonia.Rice"
+                 xmlns:theming="clr-namespace:KD.Avalonia.Rice.Theming;assembly=KD.Avalonia.Rice"
+                 xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
+                 xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+                 xmlns:local="clr-namespace:KD.Avalonia.Rice.ThemeEditor"
+                 x:Class="KD.Avalonia.Rice.ThemeEditor.MainWindow"
+                 Width="1320" Height="840" MinWidth="960" MinHeight="560"
+                 WindowStartupLocation="CenterScreen"
+                 ShowAboutButton="True">
+  <rice:RiceWindow.Resources>
+    <DataTemplate x:Key="SwatchStrip" x:DataType="theming:RicePalette">
+      <Border CornerRadius="4" ClipToBounds="True" BorderThickness="1"
+              BorderBrush="{DynamicResource RiceBorderBrush}">
+        <ItemsControl ItemsSource="{Binding Swatches}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="media:IBrush">
+              <Border Width="12" Height="16" Background="{Binding}" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Border>
+    </DataTemplate>
+
+    <!-- One color: override check box (optional colors only), name, picker and hex value. -->
+    <DataTemplate x:Key="ColorRow" x:DataType="local:ColorField">
+      <Grid ColumnDefinitions="32,*,Auto,96" ColumnSpacing="8" Margin="0,3">
+        <CheckBox IsVisible="{Binding IsOptional}" IsChecked="{Binding IsOverridden}"
+                  ToolTip.Tip="Override the derived color" />
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Label}"
+                   Classes.derived="{Binding !CanEdit}" />
+        <ColorPicker Grid.Column="2" Color="{Binding Color, Mode=TwoWay}" IsEnabled="{Binding CanEdit}"
+                     IsAlphaEnabled="False" IsAlphaVisible="False" />
+        <TextBox Grid.Column="3" Text="{Binding Hex, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                 IsEnabled="{Binding CanEdit}" FontFamily="monospace" />
+      </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="PaletteTemplate" x:DataType="local:PaletteEditor">
+      <StackPanel Spacing="4" Margin="0,8,0,0">
+        <TextBlock Classes="section" Text="Core colors" />
+        <ItemsControl ItemsSource="{Binding CoreFields}" ItemTemplate="{StaticResource ColorRow}" />
+        <TextBlock Classes="section" Margin="0,12,0,0" Text="Derived colors" />
+        <TextBlock Classes="hint" TextWrapping="Wrap"
+                   Text="Computed from the core colors. Check a color to set it yourself." />
+        <ItemsControl ItemsSource="{Binding OptionalFields}" ItemTemplate="{StaticResource ColorRow}" />
+      </StackPanel>
+    </DataTemplate>
+  </rice:RiceWindow.Resources>
+
+  <rice:RiceWindow.Styles>
+    <Style Selector="TextBlock.section">
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.hint, TextBlock.derived">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    </Style>
+    <Style Selector="TextBlock#StatusText.error">
+      <Setter Property="Foreground" Value="{DynamicResource RiceDangerBrush}" />
+    </Style>
+    <Style Selector="ListBox#ThemeList ListBoxItem">
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Margin" Value="0,1" />
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    </Style>
+    <Style Selector="ListBox#ThemeList ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource RiceSurfaceAltBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+      <Setter Property="BorderThickness" Value="3,0,0,0" />
+    </Style>
+  </rice:RiceWindow.Styles>
+
+  <Grid ColumnDefinitions="260,460,*">
+    <!-- Themes to start from -->
+    <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}"
+            BorderThickness="0,0,1,0">
+      <DockPanel Margin="12">
+        <TextBlock DockPanel.Dock="Top" Classes="section" Margin="4,0,0,8" Text="Themes" />
+        <StackPanel DockPanel.Dock="Bottom" Spacing="8" Margin="0,8,0,0">
+          <Button Name="DeleteButton" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                  Content="Delete saved theme" IsEnabled="False" />
+          <TextBlock Classes="hint" TextWrapping="Wrap" FontSize="12" Name="FolderText" />
+        </StackPanel>
+        <ListBox Name="ThemeList" Background="Transparent">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="local:ThemeEntry">
+              <Grid ColumnDefinitions="*,Auto,6,Auto" Margin="0,2">
+                <StackPanel>
+                  <TextBlock FontWeight="SemiBold" Text="{Binding DisplayName}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Classes="hint" FontSize="11" Text="{Binding Kind}" />
+                </StackPanel>
+                <ContentControl Grid.Column="1" VerticalAlignment="Center" Content="{Binding Light}"
+                                ContentTemplate="{StaticResource SwatchStrip}" />
+                <ContentControl Grid.Column="3" VerticalAlignment="Center" Content="{Binding Dark}"
+                                ContentTemplate="{StaticResource SwatchStrip}" />
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </DockPanel>
+    </Border>
+
+    <!-- Editor -->
+    <ScrollViewer Grid.Column="1">
+      <StackPanel Margin="20" Spacing="8">
+        <TextBlock FontSize="22" FontWeight="SemiBold" Text="Edit theme" />
+        <TextBlock Classes="section" Text="Name" />
+        <TextBox Name="NameBox" PlaceholderText="Theme name" />
+        <TextBlock Name="IdText" Classes="hint" />
+        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+          <Button Name="SaveButton" Classes="accent" Content="Save" />
+          <Button Name="CopyCodeButton" Content="Copy as C#" />
+          <Button Name="RevertButton" Content="Revert" />
+        </StackPanel>
+        <TextBlock Name="StatusText" Classes="hint" TextWrapping="Wrap" />
+
+        <TabControl Name="VariantTabs" Margin="0,8,0,0">
+          <TabItem Header="Light">
+            <ContentControl Name="LightEditor" ContentTemplate="{StaticResource PaletteTemplate}" />
+          </TabItem>
+          <TabItem Header="Dark">
+            <ContentControl Name="DarkEditor" ContentTemplate="{StaticResource PaletteTemplate}" />
+          </TabItem>
+        </TabControl>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Preview: the whole window uses the edited theme, this side shows the controls. -->
+    <Border Grid.Column="2" BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="1,0,0,0">
+      <ScrollViewer>
+        <StackPanel Margin="20" Spacing="16">
+          <TextBlock FontSize="22" FontWeight="SemiBold" Text="Preview" />
+          <TextBlock Classes="hint" TextWrapping="Wrap"
+                     Text="The whole editor uses the theme being edited. The Light / Dark tab switches the variant, as does the title bar toggle." />
+
+          <WrapPanel ItemSpacing="8" LineSpacing="8">
+            <Button Content="Button" />
+            <Button Classes="accent" Content="Accent" />
+            <Button Content="Disabled" IsEnabled="False" />
+            <ToggleButton Content="Toggle" IsChecked="True" />
+            <HyperlinkButton Content="Link" />
+          </WrapPanel>
+
+          <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+            <StackPanel Spacing="8">
+              <TextBox PlaceholderText="Text box" />
+              <TextBox Text="Disabled text box" IsEnabled="False" />
+              <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="Combo box" />
+                <ComboBoxItem Content="Second item" />
+              </ComboBox>
+              <Slider Value="60" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="4">
+              <CheckBox Content="Check box" IsChecked="True" />
+              <CheckBox Content="Unchecked" />
+              <RadioButton Content="Radio button" GroupName="preview" IsChecked="True" />
+              <RadioButton Content="Other option" GroupName="preview" />
+              <ToggleSwitch IsChecked="True" OnContent="On" OffContent="Off" />
+            </StackPanel>
+          </Grid>
+
+          <Border Background="{DynamicResource RiceDangerBrush}" CornerRadius="6" Padding="12,8">
+            <TextBlock Foreground="{DynamicResource RiceDangerForegroundBrush}" TextWrapping="Wrap"
+                       Text="Danger: errors and the title bar close button use this color." />
+          </Border>
+
+          <WrapPanel ItemSpacing="16" LineSpacing="16">
+            <rice:RiceCard Width="300" Header="Card" Subtitle="Surface, border and shadow"
+                           Icon="{x:Static icons:MaterialIconKind.CardOutline}">
+              <TextBlock TextWrapping="Wrap" Text="Cards sit on the surface color." />
+              <rice:RiceCard.Footer>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button Content="Cancel" />
+                  <Button Classes="accent" Content="OK" />
+                </StackPanel>
+              </rice:RiceCard.Footer>
+            </rice:RiceCard>
+            <rice:RiceGroupBox Width="260" Header="Group box" Icon="{x:Static icons:MaterialIconKind.Tune}">
+              <StackPanel Spacing="12">
+                <rice:RiceProgressBar Value="65" ShowValue="True" Thickness="8" />
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                  <rice:RiceProgressRing Value="65" Width="56" Height="56" Thickness="6" ShowValue="True" />
+                  <rice:RiceProgressRing IsIndeterminate="True" Width="56" Height="56" Thickness="6" />
+                </StackPanel>
+              </StackPanel>
+            </rice:RiceGroupBox>
+          </WrapPanel>
+
+          <charts:RiceClusteredColumnChart Name="PreviewChart" Height="240" Title="Chart series" />
+
+          <md:MarkdownView Name="PreviewMarkdown" CornerRadius="8" />
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+  </Grid>
+</rice:RiceWindow>

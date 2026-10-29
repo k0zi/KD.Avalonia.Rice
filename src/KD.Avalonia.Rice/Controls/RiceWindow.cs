@@ -14,6 +14,9 @@ namespace KD.Avalonia.Rice.Controls;
 /// </summary>
 public class RiceWindow : Window
 {
+    public static readonly StyledProperty<bool> ShowTitleBarProperty =
+        AvaloniaProperty.Register<RiceWindow, bool>(nameof(ShowTitleBar), true);
+
     public static readonly StyledProperty<bool> ShowThemeToggleProperty =
         AvaloniaProperty.Register<RiceWindow, bool>(nameof(ShowThemeToggle), true);
 
@@ -48,6 +51,13 @@ public class RiceWindow : Window
             Icon = new WindowIcon(icon);
         // The platform may report its transparency level up front without a change notification.
         UpdateRoundedPseudoClass();
+    }
+
+    /// <summary>Hides the whole title bar, e.g. for dialogs that only show their content.</summary>
+    public bool ShowTitleBar
+    {
+        get => GetValue(ShowTitleBarProperty);
+        set => SetValue(ShowTitleBarProperty, value);
     }
 
     public bool ShowThemeToggle

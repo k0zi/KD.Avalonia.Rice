@@ -31,6 +31,7 @@ can be set per window; the title bar icon is `AppInfo.Icon`, so set `AppInfo` to
 
 | Property | Default | Description |
 |----------|---------|-------------|
+| `ShowTitleBar` | `true` | `false` hides the whole title bar (the window keeps its frame), as in the [dialogs](rice-dialog.md). |
 | `ShowThemeToggle` | `true` | Light bulb button that switches light / dark for the session. |
 | `ShowThemeSettingsButton` | `false` | Gear button that opens the [`ThemeDialog`](theme-selector.md). |
 | `ShowAboutButton` | `false` | Info button that opens the about dialog. |

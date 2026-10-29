@@ -1,0 +1,33 @@
+<rice:RiceWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                 x:Class="KD.Avalonia.Rice.Dialogs.RiceDialogWindow"
+                 ShowTitleBar="False" SizeToContent="Height"
+                 CanResize="False" CanMinimize="False" CanMaximize="False"
+                 ShowThemeToggle="False" ShowInTaskbar="False"
+                 WindowStartupLocation="CenterOwner">
+  <rice:RiceWindow.Styles>
+    <!-- Colors of the Material icons shown when the system icon cannot be loaded. -->
+    <Style Selector="ContentPresenter#IconPresenter.accent">
+      <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
+    </Style>
+    <Style Selector="ContentPresenter#IconPresenter.warning">
+      <Setter Property="Foreground" Value="#F0A30A" />
+    </Style>
+    <Style Selector="ContentPresenter#IconPresenter.danger">
+      <Setter Property="Foreground" Value="{DynamicResource RiceDangerBrush}" />
+    </Style>
+  </rice:RiceWindow.Styles>
+
+  <DockPanel Margin="24,22,20,16">
+    <StackPanel Name="ButtonsPanel" DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8"
+                HorizontalAlignment="Right" Margin="0,22,0,0" />
+    <Grid ColumnDefinitions="Auto,*">
+      <rice:RiceIconPresenter Name="IconPresenter" Width="48" Height="48" Margin="0,0,18,0" VerticalAlignment="Top" />
+      <StackPanel Grid.Column="1" Spacing="12" VerticalAlignment="Center">
+        <SelectableTextBlock Name="MessageText" TextWrapping="Wrap" />
+        <ContentControl Name="ContentHost" />
+      </StackPanel>
+    </Grid>
+  </DockPanel>
+</rice:RiceWindow>

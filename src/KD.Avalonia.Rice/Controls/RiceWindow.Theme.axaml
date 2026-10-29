@@ -63,6 +63,9 @@
         <Setter Property="CornerRadius" Value="0" />
       </Style>
     </Style>
+    <Style Selector="^[ShowTitleBar=False] /template/ rice|RiceTitleBar#PART_TitleBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
     <Style Selector="^[CanResize=False] /template/ Panel#PART_ResizeGrips">
       <Setter Property="IsVisible" Value="False" />
     </Style>

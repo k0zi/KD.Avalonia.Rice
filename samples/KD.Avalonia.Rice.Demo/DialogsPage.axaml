@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             x:Class="KD.Avalonia.Rice.Demo.DialogsPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="560" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Dialogs" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceDialog: frameless dialogs with the operating system's question / information / warning / error icons (Material icons where none can be loaded), standard or custom buttons, or a custom view with its view model. Drag a dialog by its background." />
+
+      <rice:RiceGroupBox Header="Icons">
+        <WrapPanel Name="IconButtons" ItemSpacing="8" LineSpacing="8" />
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Standard buttons">
+        <WrapPanel Name="ButtonSetButtons" ItemSpacing="8" LineSpacing="8" />
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Custom">
+        <WrapPanel ItemSpacing="8" LineSpacing="8">
+          <Button Name="CustomButtonsButton" Content="Custom buttons with commands" />
+          <Button Name="CustomViewButton" Content="View + view model" />
+        </WrapPanel>
+      </rice:RiceGroupBox>
+
+      <TextBlock Name="ResultText" Foreground="{DynamicResource RiceForegroundMutedBrush}" Text="Result: –" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
