@@ -1,0 +1,181 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceKanbanBoard}" TargetType="rice:RiceKanbanBoard">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="12" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}">
+          <ScrollViewer Name="PART_ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <ItemsPresenter Name="PART_ItemsPresenter" Margin="{TemplateBinding Padding}"
+                            ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </ScrollViewer>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceKanbanColumn}" TargetType="rice:RiceKanbanColumn">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceTrackBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Width" Value="280" />
+    <Setter Property="Padding" Value="8,0,8,8" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Spacing="8" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Root"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}">
+          <DockPanel>
+            <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,*,Auto,Auto" Margin="12,10,8,10">
+              <Ellipse Width="10" Height="10" Margin="0,0,8,0" VerticalAlignment="Center"
+                       Fill="{TemplateBinding Accent}"
+                       IsVisible="{TemplateBinding Accent, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <rice:RiceIconPresenter Grid.Column="1" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"
+                                      Content="{TemplateBinding Icon}"
+                                      IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="2" VerticalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" />
+              <Border Name="PART_Count" Grid.Column="3" Margin="8,0,0,0" Padding="7,1" CornerRadius="9"
+                      VerticalAlignment="Center" Background="{DynamicResource RiceHoverBrush}">
+                <TextBlock Name="PART_CountText" FontSize="12" Text="{TemplateBinding CountText}"
+                           Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+              </Border>
+              <ContentPresenter Grid.Column="4" Margin="4,0,0,0" VerticalAlignment="Center"
+                                Content="{TemplateBinding HeaderActions}"
+                                IsVisible="{TemplateBinding HeaderActions, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </Grid>
+            <Button Name="PART_AddButton" DockPanel.Dock="Bottom" Margin="8,0,8,8" Padding="8,6"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                    Background="Transparent" BorderThickness="0"
+                    Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                    IsVisible="{TemplateBinding ShowAddCardButton}">
+              <Button.ContentTemplate>
+                <DataTemplate>
+                  <StackPanel Orientation="Horizontal" Spacing="6">
+                    <mi:MaterialIcon Kind="Plus" Width="16" Height="16" />
+                    <ContentPresenter Content="{Binding}" />
+                  </StackPanel>
+                </DataTemplate>
+              </Button.ContentTemplate>
+            </Button>
+            <Panel>
+              <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <!-- MinHeight: an empty column still has room to drop a card on. -->
+                <ItemsPresenter Name="PART_ItemsPresenter" Margin="{TemplateBinding Padding}" MinHeight="48"
+                                ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </ScrollViewer>
+              <TextBlock Name="PART_EmptyText" Margin="0,14,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"
+                         FontSize="12" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                         IsVisible="False" IsHitTestVisible="False" />
+              <Canvas Name="PART_DropLayer" Margin="8,0" IsHitTestVisible="False" ClipToBounds="False">
+                <Border Name="PART_DropIndicator" Height="3" CornerRadius="1.5" IsVisible="False"
+                        Background="{DynamicResource RiceAccentBrush}" />
+              </Canvas>
+            </Panel>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:empty /template/ TextBlock#PART_EmptyText">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:at-limit /template/ TextBlock#PART_CountText">
+      <Setter Property="Foreground" Value="{DynamicResource RiceToastWarningBrush}" />
+    </Style>
+    <Style Selector="^:over-limit">
+      <Style Selector="^ /template/ Border#PART_Count">
+        <Setter Property="Background" Value="{DynamicResource RiceToastErrorBackgroundBrush}" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_CountText">
+        <Setter Property="Foreground" Value="{DynamicResource RiceDangerBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+      </Style>
+    </Style>
+    <Style Selector="^:drop-target /template/ Border#PART_Root">
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+    </Style>
+    <Style Selector="^:drop-refused /template/ Border#PART_Root">
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceDangerBrush}" />
+      <Setter Property="Opacity" Value="0.7" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceKanbanCard}" TargetType="rice:RiceKanbanCard">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Cursor" Value="Hand" />
+    <!-- The card draws its own focus border. -->
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Root"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                BoxShadow="{DynamicResource RiceCardShadow1}">
+          <Grid ColumnDefinitions="Auto,*">
+            <Border Name="PART_Accent" Width="4" Margin="4,6,0,6" CornerRadius="2"
+                    Background="{TemplateBinding Accent}" IsVisible="False" />
+            <ContentPresenter Name="PART_ContentPresenter" Grid.Column="1"
+                              Padding="{TemplateBinding Padding}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:has-accent /template/ Border#PART_Accent">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:pointerover /template/ Border#PART_Root">
+      <Setter Property="BoxShadow" Value="{DynamicResource RiceCardShadow2}" />
+    </Style>
+    <Style Selector="^:selected /template/ Border#PART_Root">
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_Root">
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+      <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    <!-- The place the dragged card comes from, while its picture follows the pointer. -->
+    <Style Selector="^:dragging">
+      <Setter Property="Opacity" Value="0.35" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.5" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

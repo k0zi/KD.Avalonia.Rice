@@ -121,6 +121,10 @@ public static class CodeHighlighter
     /// <summary>Whether <paramref name="language"/> (as in the info string: <c>cs</c>, <c>xaml</c>, <c>bash</c>, …) is colored.</summary>
     public static bool IsSupported(string? language) => language is not null && Aliases.ContainsKey(language);
 
+    /// <summary>The language an alias stands for (<c>cs</c> → <c>csharp</c>); null when it is not supported.</summary>
+    internal static string? LanguageName(string? language) =>
+        language is not null && Aliases.TryGetValue(language, out var name) ? name : null;
+
     /// <summary>The colored parts of <paramref name="code"/>, in order and not overlapping.</summary>
     public static IReadOnlyList<CodeToken> Highlight(string code, string? language)
     {

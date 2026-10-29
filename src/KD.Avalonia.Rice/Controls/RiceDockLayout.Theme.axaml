@@ -1,0 +1,178 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <!-- The splitter is a thin band on the inner edge; the side styles below dock it and the border line there. -->
+  <ControlTheme x:Key="{x:Type rice:RiceDockPane}" TargetType="rice:RiceDockPane">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Root" Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}">
+          <Panel>
+            <DockPanel Name="PART_Expanded">
+              <Panel Name="PART_Splitter" Background="Transparent" Focusable="True"
+                     IsVisible="{TemplateBinding CanResize}">
+                <Border Name="PART_SplitterLine" Background="{DynamicResource RiceAccentBrush}" Opacity="0" />
+              </Panel>
+              <Grid Name="PART_HeaderBar" DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto,Auto"
+                    Margin="10,6,6,6" MinHeight="26">
+                <rice:RiceIconPresenter Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"
+                                        Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                        Content="{TemplateBinding Icon}"
+                                        IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="1" VerticalAlignment="Center"
+                                  FontSize="12" FontWeight="SemiBold"
+                                  Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                <ContentPresenter Grid.Column="2" VerticalAlignment="Center"
+                                  Content="{TemplateBinding HeaderActions}"
+                                  IsVisible="{TemplateBinding HeaderActions, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <Button Name="PART_CollapseButton" Grid.Column="3" Width="24" Height="24" Padding="0" Margin="4,0,0,0"
+                        Background="Transparent" BorderThickness="0" CornerRadius="4"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                        IsVisible="{TemplateBinding CanCollapse}">
+                  <mi:MaterialIcon Name="PART_CollapseIcon" Kind="ChevronLeft" Width="16" Height="16" />
+                </Button>
+              </Grid>
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Padding="{TemplateBinding Padding}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </DockPanel>
+
+            <!-- Collapsed: a strip along the edge with the icon and the title (running down on the side edges). -->
+            <Button Name="PART_Strip" IsVisible="False" Padding="0,10" Background="Transparent" BorderThickness="0"
+                    CornerRadius="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
+              <StackPanel Name="PART_StripPanel" Spacing="10">
+                <rice:RiceIconPresenter Width="18" Height="18" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                        Content="{TemplateBinding Icon}"
+                                        IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <LayoutTransformControl Name="PART_StripTitle">
+                  <ContentPresenter FontSize="12" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                </LayoutTransformControl>
+              </StackPanel>
+            </Button>
+          </Panel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ Panel#PART_Splitter:pointerover > Border#PART_SplitterLine">
+      <Setter Property="Opacity" Value="0.6" />
+    </Style>
+    <Style Selector="^ /template/ Panel#PART_Splitter:focus-visible > Border#PART_SplitterLine">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="^:resizing /template/ Border#PART_SplitterLine">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="^ /template/ Button#PART_CollapseButton:pointerover">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    </Style>
+
+    <Style Selector="^:left">
+      <Style Selector="^ /template/ Border#PART_Root">
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
+      </Style>
+      <Style Selector="^ /template/ Panel#PART_Splitter">
+        <Setter Property="DockPanel.Dock" Value="Right" />
+        <Setter Property="Width" Value="5" />
+        <Setter Property="Cursor" Value="SizeWestEast" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_SplitterLine">
+        <Setter Property="Width" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+      </Style>
+    </Style>
+    <Style Selector="^:right">
+      <Style Selector="^ /template/ Border#PART_Root">
+        <Setter Property="BorderThickness" Value="1,0,0,0" />
+      </Style>
+      <Style Selector="^ /template/ Panel#PART_Splitter">
+        <Setter Property="DockPanel.Dock" Value="Left" />
+        <Setter Property="Width" Value="5" />
+        <Setter Property="Cursor" Value="SizeWestEast" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_SplitterLine">
+        <Setter Property="Width" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+      </Style>
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_CollapseIcon">
+        <Setter Property="Kind" Value="ChevronRight" />
+      </Style>
+    </Style>
+    <Style Selector="^:top">
+      <Style Selector="^ /template/ Border#PART_Root">
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+      </Style>
+      <Style Selector="^ /template/ Panel#PART_Splitter">
+        <Setter Property="DockPanel.Dock" Value="Bottom" />
+        <Setter Property="Height" Value="5" />
+        <Setter Property="Cursor" Value="SizeNorthSouth" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_SplitterLine">
+        <Setter Property="Height" Value="2" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+      </Style>
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_CollapseIcon">
+        <Setter Property="Kind" Value="ChevronUp" />
+      </Style>
+    </Style>
+    <Style Selector="^:bottom">
+      <Style Selector="^ /template/ Border#PART_Root">
+        <Setter Property="BorderThickness" Value="0,1,0,0" />
+      </Style>
+      <Style Selector="^ /template/ Panel#PART_Splitter">
+        <Setter Property="DockPanel.Dock" Value="Top" />
+        <Setter Property="Height" Value="5" />
+        <Setter Property="Cursor" Value="SizeNorthSouth" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_SplitterLine">
+        <Setter Property="Height" Value="2" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+      </Style>
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_CollapseIcon">
+        <Setter Property="Kind" Value="ChevronDown" />
+      </Style>
+    </Style>
+
+    <Style Selector="^:collapsed">
+      <Style Selector="^ /template/ DockPanel#PART_Expanded">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ Button#PART_Strip">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:collapsed:left, ^:collapsed:right">
+      <Style Selector="^ /template/ Button#PART_Strip">
+        <Setter Property="Width" Value="34" />
+      </Style>
+      <Style Selector="^ /template/ LayoutTransformControl#PART_StripTitle">
+        <Setter Property="LayoutTransform" Value="rotate(90deg)" />
+      </Style>
+    </Style>
+    <Style Selector="^:collapsed:top, ^:collapsed:bottom">
+      <Style Selector="^ /template/ Button#PART_Strip">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="12,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_StripPanel">
+        <Setter Property="Orientation" Value="Horizontal" />
+      </Style>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

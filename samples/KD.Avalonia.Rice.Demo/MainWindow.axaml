@@ -35,6 +35,12 @@
       <rice:RiceSideMenuItem Name="RibbonItem" Icon="{x:Static icons:MaterialIconKind.DockTop}" Header="Ribbon" />
       <rice:RiceSideMenuItem Name="PropertyGridItem" Icon="{x:Static icons:MaterialIconKind.FormatListBulletedType}" Header="Property grid" />
       <rice:RiceSideMenuItem Name="CommandPaletteItem" Icon="{x:Static icons:MaterialIconKind.ConsoleLine}" Header="Command palette" />
+      <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.BriefcaseOutline}" Header="Workspace" IsExpanded="True">
+        <rice:RiceSideMenuItem Name="TimelineItem" Icon="{x:Static icons:MaterialIconKind.TimelineClockOutline}" Header="Timeline" />
+        <rice:RiceSideMenuItem Name="KanbanItem" Icon="{x:Static icons:MaterialIconKind.ViewColumnOutline}" Header="Kanban board" />
+        <rice:RiceSideMenuItem Name="CodeEditorItem" Icon="{x:Static icons:MaterialIconKind.CodeBraces}" Header="Code editor" />
+        <rice:RiceSideMenuItem Name="DockLayoutItem" Icon="{x:Static icons:MaterialIconKind.ViewQuiltOutline}" Header="Dock layout" />
+      </rice:RiceSideMenuItem>
       <rice:RiceSideMenu.Footer>
         <StackPanel>
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Header="Settings"

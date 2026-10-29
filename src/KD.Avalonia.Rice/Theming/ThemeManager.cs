@@ -207,6 +207,15 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceCodeTagBrush"] = new SolidColorBrush(Syntax("#116329", "#7EE787"));
         target["RiceCodeAttributeBrush"] = new SolidColorBrush(Syntax("#0550AE", "#79C0FF"));
 
+        // Diff: tints of the success / danger colors for whole lines, stronger ones for the changed words.
+        target["RiceDiffAddedBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Success, p.IsDark ? 0.16 : 0.12));
+        target["RiceDiffRemovedBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Danger, p.IsDark ? 0.16 : 0.10));
+        target["RiceDiffAddedWordBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Success, p.IsDark ? 0.36 : 0.30));
+        target["RiceDiffRemovedWordBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Danger, p.IsDark ? 0.36 : 0.26));
+        target["RiceDiffAddedMarkBrush"] = new SolidColorBrush(p.Success);
+        target["RiceDiffRemovedMarkBrush"] = new SolidColorBrush(p.Danger);
+        target["RiceDiffEmptyBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x0C : (byte)0x08));
+
         // Chart colors (pie slices, gantt sections, mind map branches): the accent first, then fixed hues.
         string[] series = ["#4C9AFF", "#36B37E", "#FFAB00", "#FF5630", "#8B5CF6", "#00B8D9", "#E5892E"];
         target["RiceChartSeries0Brush"] = new SolidColorBrush(p.Accent);

@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:local="clr-namespace:KD.Avalonia.Rice.Demo"
+             x:Class="KD.Avalonia.Rice.Demo.KanbanPage">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,16">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Kanban board" />
+      <TextBlock TextWrapping="Wrap" MaxWidth="720" HorizontalAlignment="Left"
+                 Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="Drag the cards within and between the columns, or select one and use Ctrl+arrow keys. Double click (or Enter) opens a card. &quot;In progress&quot; has a WIP limit of 3." />
+      <StackPanel Orientation="Horizontal" Spacing="16">
+        <CheckBox Name="EnforceCheck" Content="Enforce WIP limits" />
+        <TextBlock Name="MoveResult" VerticalAlignment="Center" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+      </StackPanel>
+    </StackPanel>
+
+    <!-- Columns from data: the TreeDataTemplate gives the header and the cards (its ItemsSource) of a column. -->
+    <rice:RiceKanbanBoard Name="Board" ShowAddCardButton="True"
+                          EnforceWipLimits="{Binding #EnforceCheck.IsChecked}">
+      <rice:RiceKanbanBoard.Styles>
+        <Style Selector="rice|RiceKanbanColumn" x:DataType="local:KanbanColumnModel">
+          <Setter Property="WipLimit" Value="{Binding WipLimit}" />
+          <Setter Property="Accent" Value="{Binding Accent}" />
+        </Style>
+        <Style Selector="rice|RiceKanbanCard" x:DataType="local:KanbanTask">
+          <Setter Property="Accent" Value="{Binding PriorityBrush}" />
+        </Style>
+      </rice:RiceKanbanBoard.Styles>
+      <rice:RiceKanbanBoard.ItemTemplate>
+        <TreeDataTemplate x:DataType="local:KanbanColumnModel" ItemsSource="{Binding Cards}">
+          <TextBlock Text="{Binding Title}" />
+        </TreeDataTemplate>
+      </rice:RiceKanbanBoard.ItemTemplate>
+      <rice:RiceKanbanBoard.CardTemplate>
+        <DataTemplate x:DataType="local:KanbanTask">
+          <StackPanel Spacing="8">
+            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" FontWeight="Medium" />
+            <DockPanel>
+              <Border DockPanel.Dock="Right" Width="24" Height="24" CornerRadius="12"
+                      Background="{DynamicResource RiceAccentBrush}">
+                <TextBlock Text="{Binding Initials}" FontSize="10" FontWeight="SemiBold"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="{DynamicResource RiceAccentForegroundBrush}" />
+              </Border>
+              <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                <mi:MaterialIcon Kind="TagOutline" Width="14" Height="14"
+                                 Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+                <TextBlock Text="{Binding Tag}" FontSize="12" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+              </StackPanel>
+            </DockPanel>
+          </StackPanel>
+        </DataTemplate>
+      </rice:RiceKanbanBoard.CardTemplate>
+    </rice:RiceKanbanBoard>
+  </DockPanel>
+</UserControl>

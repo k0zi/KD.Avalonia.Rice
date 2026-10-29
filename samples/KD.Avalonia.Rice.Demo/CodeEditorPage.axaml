@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             x:Class="KD.Avalonia.Rice.Demo.CodeEditorPage">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,16">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Code editor" />
+      <TextBlock TextWrapping="Wrap" MaxWidth="720" HorizontalAlignment="Left"
+                 Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceCodeEditor: a text box with syntax colors, line numbers and the current line highlighted. Tab / Shift+Tab indent the selected lines, Enter keeps the indentation, Ctrl+/ comments the lines out, Ctrl+Z undoes each step." />
+      <StackPanel Orientation="Horizontal" Spacing="16">
+        <rice:RiceSegmentedControl Name="LanguageSwitch" SelectedIndex="0">
+          <rice:RiceSegmentedItem Content="C#" Tag="cs" />
+          <rice:RiceSegmentedItem Content="XAML" Tag="xaml" />
+          <rice:RiceSegmentedItem Content="JSON" Tag="json" />
+          <rice:RiceSegmentedItem Content="Python" Tag="py" />
+          <rice:RiceSegmentedItem Content="SQL" Tag="sql" />
+        </rice:RiceSegmentedControl>
+        <CheckBox Name="LineNumbersCheck" Content="Line numbers" IsChecked="True" />
+        <CheckBox Name="CurrentLineCheck" Content="Current line" IsChecked="True" />
+      </StackPanel>
+    </StackPanel>
+    <TextBlock Name="CaretInfo" DockPanel.Dock="Bottom" Margin="0,8,0,0" FontSize="12"
+               Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+    <rice:RiceCodeEditor Name="Editor" PlaceholderText="Type some code…"
+                         ShowLineNumbers="{Binding #LineNumbersCheck.IsChecked}"
+                         HighlightCurrentLine="{Binding #CurrentLineCheck.IsChecked}" />
+  </DockPanel>
+</UserControl>

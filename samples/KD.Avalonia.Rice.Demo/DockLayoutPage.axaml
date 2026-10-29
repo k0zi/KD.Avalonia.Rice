@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Demo.DockLayoutPage">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,16">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Dock layout" />
+      <TextBlock TextWrapping="Wrap" MaxWidth="720" HorizontalAlignment="Left"
+                 Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceDockLayout: side panes that are resized on their inner edge (double click: starting size) and collapse to a strip. The layout is saved (LayoutKey) and comes back at the next start." />
+      <StackPanel Orientation="Horizontal" Spacing="12">
+        <Button Name="ResetButton" Content="Reset the layout" />
+        <TextBlock Name="LayoutInfo" VerticalAlignment="Center" FontSize="12"
+                   Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+      </StackPanel>
+    </StackPanel>
+
+    <Border BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
+      <rice:RiceDockLayout Name="Layout" LayoutKey="demo-dock-layout">
+        <rice:RiceDockPane Name="Explorer" Dock="Left" Size="220" Header="EXPLORER"
+                           Icon="{x:Static icons:MaterialIconKind.FileTreeOutline}">
+          <rice:RiceDockPane.HeaderActions>
+            <Button Width="24" Height="24" Padding="0" Background="Transparent" BorderThickness="0">
+              <mi:MaterialIcon Kind="FilePlusOutline" Width="16" Height="16" />
+            </Button>
+          </rice:RiceDockPane.HeaderActions>
+          <TreeView Name="Files" Margin="4,0" />
+        </rice:RiceDockPane>
+        <rice:RiceDockPane Name="Output" Dock="Bottom" Size="140" MinSize="60" Header="OUTPUT"
+                           Icon="{x:Static icons:MaterialIconKind.Console}">
+          <SelectableTextBlock Name="OutputText" Margin="12,0,12,8" FontSize="12"
+                               FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, monospace"
+                               Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+        </rice:RiceDockPane>
+        <rice:RiceDockPane Name="Properties" Dock="Right" Size="300" Header="PROPERTIES"
+                           Icon="{x:Static icons:MaterialIconKind.TuneVariant}">
+          <rice:RicePropertyGrid Name="PropertyGrid" />
+        </rice:RiceDockPane>
+        <!-- Not a pane: fills the rest. -->
+        <rice:RiceCodeEditor Name="Editor" Language="cs" CornerRadius="0" BorderThickness="0" />
+      </rice:RiceDockLayout>
+    </Border>
+  </DockPanel>
+</UserControl>

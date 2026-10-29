@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             xmlns:local="clr-namespace:KD.Avalonia.Rice.Demo"
+             x:Class="KD.Avalonia.Rice.Demo.TimelinePage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="720" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Timeline" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceTimeline lists events along a line, grouped under day headers. The dot takes the color of the kind, or an icon replaces it." />
+
+      <rice:RiceGroupBox Header="Activity (from data)">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="12">
+            <Button Name="AddEventButton" Content="Add an event now" />
+            <CheckBox Name="GroupCheck" Content="Group by day" IsChecked="True" />
+          </StackPanel>
+          <!-- Data items get RiceTimelineItem containers: the style binds their properties. -->
+          <rice:RiceTimeline Name="Activity" GroupByDay="{Binding #GroupCheck.IsChecked}">
+            <rice:RiceTimeline.Styles>
+              <Style Selector="rice|RiceTimelineItem" x:DataType="local:TimelineEvent">
+                <Setter Property="Header" Value="{Binding Title}" />
+                <Setter Property="Content" Value="{Binding Details}" />
+                <Setter Property="Timestamp" Value="{Binding When}" />
+                <Setter Property="Kind" Value="{Binding Kind}" />
+                <Setter Property="Icon" Value="{Binding Icon}" />
+              </Style>
+            </rice:RiceTimeline.Styles>
+          </rice:RiceTimeline>
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Release steps (in XAML, not grouped)">
+        <rice:RiceTimeline GroupByDay="False" TimestampFormat="MMM d">
+          <rice:RiceTimelineItem Header="Planning" Kind="Success" Icon="{x:Static icons:MaterialIconKind.Check}"
+                                 Timestamp="2026-09-01" Content="Scope and milestones agreed." />
+          <rice:RiceTimelineItem Header="Development" Kind="Success" Icon="{x:Static icons:MaterialIconKind.Check}"
+                                 Timestamp="2026-09-15" Content="Four new controls." />
+          <rice:RiceTimelineItem Header="Beta" Kind="Info" Icon="{x:Static icons:MaterialIconKind.ProgressClock}"
+                                 Timestamp="2026-10-20">
+            <StackPanel Spacing="6">
+              <TextBlock TextWrapping="Wrap" Text="Testing on Ubuntu, Fedora and Windows 11." />
+              <rice:RiceProgressBar Value="60" Width="220" HorizontalAlignment="Left" />
+            </StackPanel>
+          </rice:RiceTimelineItem>
+          <rice:RiceTimelineItem Header="Release" Timestamp="2026-11-05" Content="Publish the NuGet package.">
+            <rice:RiceTimelineItem.Actions>
+              <Button Content="Notify me" Padding="8,2" FontSize="12" />
+            </rice:RiceTimelineItem.Actions>
+          </rice:RiceTimelineItem>
+        </rice:RiceTimeline>
+      </rice:RiceGroupBox>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

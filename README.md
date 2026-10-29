@@ -15,7 +15,9 @@ Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card 
 selector (`ThemeSelector`, `ThemeDialog`), info bar (`RiceInfoBar`), empty state (`RiceEmptyState`), skeleton
 placeholders (`RiceSkeleton`), breadcrumb (`RiceBreadcrumb`), segmented control (`RiceSegmentedControl`), tabs with close
 buttons and drag to reorder (`RiceTabView`), an Office like ribbon (`RiceRibbon`), a Ctrl+Shift+P command palette (`RiceCommandPalette`), a property grid
-(`RicePropertyGrid`), UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
+(`RicePropertyGrid`), an activity timeline (`RiceTimeline`), a kanban board with drag and drop (`RiceKanbanBoard`), a light
+code editor with syntax colors and line numbers (`RiceCodeEditor`), resizable and collapsible side panes that remember
+their layout (`RiceDockLayout`), UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
 PlantUML), dialogs with the system icons (`RiceDialog`), toast notifications (`RiceToast`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 23 chart
 controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, treemap, waterfall, gantt, gauge, …).
 

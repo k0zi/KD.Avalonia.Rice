@@ -26,6 +26,10 @@ themes that every control relies on.
 | [RiceRibbon](rice-ribbon.md) | Office like ribbon: tabs of command groups that collapse when narrow, minimizable, Alt key tips |
 | [RiceCommandPalette](rice-command-palette.md) | Ctrl+Shift+P search over the commands and pages of the window |
 | [RicePropertyGrid](rice-property-grid.md) | Edits the public properties of an object, grouped by category |
+| [RiceTimeline](rice-timeline.md) | Events along a line, grouped under day headers |
+| [RiceKanbanBoard](rice-kanban-board.md) | Columns of cards moved by drag and drop or the keyboard, with WIP limits |
+| [RiceCodeEditor](rice-code-editor.md) | Text box with syntax colors, line numbers and editor keys (indent, comment, auto indent) |
+| [RiceDockLayout](rice-dock-layout.md) | Resizable, collapsible side panes around the content; saves the layout |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
 | [UML diagrams](rice-uml.md) | `UmlDiagramView`: all 14 UML diagram types, read from and written to PlantUML (`.puml`) |
 | [Markdown and Mermaid](rice-markdown.md) | `MarkdownView`: CommonMark + GFM with colored code and diagrams; `MermaidView` for Mermaid diagrams |
