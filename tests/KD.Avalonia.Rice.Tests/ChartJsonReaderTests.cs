@@ -25,6 +25,8 @@ public class ChartJsonReaderTests
         { """{"type": "waterfall", "steps": [{"label": "A", "value": 5}, {"label": "T", "total": true}]}""", typeof(RiceWaterfallChart) },
         { """{"type": "gantt", "tasks": [{"name": "A", "start": "2026-01-05", "days": 3}, {"name": "B", "start": "2026-01-08", "end": "2026-01-10", "after": "A"}]}""", typeof(RiceGanttChart) },
         { """{"type": "histogram", "values": [1, 2, 2, 3], "bins": 3}""", typeof(RiceHistogramChart) },
+        { """{"type": "treemap", "nodes": [{"label": "A", "children": [{"label": "A1", "value": 3}, {"label": "A2", "value": 1}]}, {"label": "B", "value": 2, "color": "#00ff00"}]}""", typeof(RiceTreeMapChart) },
+        { """{"type": "Tree Map", "data": {"A": {"A1": 3, "A2": 1}, "B": 2}}""", typeof(RiceTreeMapChart) },
         { """{"type": "bullet", "items": [{"label": "A", "value": 5, "target": 7, "ranges": [3, 6, 9]}]}""", typeof(RiceBulletChart) },
         { """{"type": "gauge", "value": 42, "max": 50, "bands": [{"from": 0, "to": 40}, {"from": 40, "to": 50, "color": "red"}]}""", typeof(RiceGaugeChart) },
         { """{"type": "divergingBar", "categories": ["A"], "series": [{"name": "No", "values": [-1]}, {"name": "Yes", "values": [2]}]}""", typeof(RiceDivergingBarChart) },

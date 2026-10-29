@@ -13,8 +13,8 @@ light and dark variants.
 Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card (`RiceCard`), group box
 (`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`), a theme
 selector (`ThemeSelector`, `ThemeDialog`), UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
-PlantUML), dialogs with the system icons (`RiceDialog`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 22 chart
-controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, waterfall, gantt, gauge, …).
+PlantUML), dialogs with the system icons (`RiceDialog`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 23 chart
+controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, treemap, waterfall, gantt, gauge, …).
 
 ## Documentation
 

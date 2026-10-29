@@ -121,6 +121,18 @@ public static class ChartSamples
                 new("Sales", Around(random, 70)), new("Taxes", -Around(random, 40)), new("End", 0, isTotal: true),
             ]),
         }),
+        new("Treemap", "Nested shares as areas", random => new RiceTreeMapChart
+        {
+            Title = "Disk usage by folder", ValueFormat = "0 'GB'", ShowValues = true,
+            Nodes = new ChartCollection<TreeMapNode>(
+            [
+                new("Home", new TreeMapNode("Videos", Around(random, 140)), new TreeMapNode("Photos", Around(random, 64)),
+                    new TreeMapNode("Music", Around(random, 38)), new TreeMapNode("Documents", Around(random, 22)), new TreeMapNode("Downloads", Around(random, 30))),
+                new("System", new TreeMapNode("usr", Around(random, 42)), new TreeMapNode("var", Around(random, 18)), new TreeMapNode("opt", Around(random, 9))),
+                new("Games", new TreeMapNode("Steam", Around(random, 95)), new TreeMapNode("Flatpak", Around(random, 24))),
+                new TreeMapNode("Swap", Around(random, 16)),
+            ]),
+        }),
         new("Gantt", "Tasks on a time line", random => new RiceGanttChart
         {
             Title = "Release plan",

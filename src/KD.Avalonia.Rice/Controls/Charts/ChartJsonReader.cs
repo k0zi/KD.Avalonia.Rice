@@ -77,6 +77,7 @@ internal static class ChartJsonReader
         "heatmap" => new RiceHeatmapChart { Data = Heatmap(root) },
         "waterfall" => new RiceWaterfallChart { Steps = Steps(root) },
         "histogram" => Histogram(root),
+        "treemap" => new RiceTreeMapChart { Nodes = TreeMap(root) },
         "gantt" => new RiceGanttChart { Tasks = Tasks(root), ShowToday = Bool(root, "today") ?? true },
         "bullet" => new RiceBulletChart { Items = Bullets(root) },
         "gauge" => Gauge(root),
@@ -209,6 +210,30 @@ internal static class ChartJsonReader
         if (Number(root, "binWidth") is var width && double.IsFinite(width))
             chart.BinWidth = width;
         return chart;
+    }
+
+    private static ChartCollection<TreeMapNode> TreeMap(JsonElement root)
+    {
+        if (Get(root, "nodes") is { ValueKind: JsonValueKind.Array } nodes)
+            return new ChartCollection<TreeMapNode>(nodes.EnumerateArray().Select(Node));
+        if (Get(root, "data") is { ValueKind: JsonValueKind.Object } map)
+            return new ChartCollection<TreeMapNode>(Map(map));
+        throw new ChartJsonException("Missing \"nodes\" (or \"data\").");
+
+        static TreeMapNode Node(JsonElement n) =>
+            new(String(n, "label") ?? String(n, "name") ?? "", Number(n, "value") is var v && double.IsFinite(v) ? v : 0,
+                Get(n, "children") is { ValueKind: JsonValueKind.Array } children ? children.EnumerateArray().Select(Node) : [])
+            {
+                Color = Color(n),
+            };
+
+        // {"label": value} or {"group": {"label": value, …}}.
+        static IEnumerable<TreeMapNode> Map(JsonElement map) => map.EnumerateObject().Select(property => property.Value.ValueKind switch
+        {
+            JsonValueKind.Object => new TreeMapNode(property.Name, Map(property.Value)),
+            JsonValueKind.Number => new TreeMapNode(property.Name, property.Value.GetDouble()),
+            _ => new TreeMapNode(property.Name, 0),
+        });
     }
 
     private static ChartCollection<GanttTask> Tasks(JsonElement root)

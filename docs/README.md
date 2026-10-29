@@ -19,7 +19,7 @@ themes that every control relies on.
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
 | [UML diagrams](rice-uml.md) | `UmlDiagramView`: all 14 UML diagram types, read from and written to PlantUML (`.puml`) |
 | [Markdown and Mermaid](rice-markdown.md) | `MarkdownView`: CommonMark + GFM with colored code and diagrams; `MermaidView` for Mermaid diagrams |
-| [Charts](rice-charts.md) | 22 chart controls (column, bar, line, pie, gantt, gauge, …) from a typed model, also as Markdown `chart` blocks |
+| [Charts](rice-charts.md) | 23 chart controls (column, bar, line, pie, gantt, gauge, …) from a typed model, also as Markdown `chart` blocks |
 
 All examples use these XML namespaces:
 

@@ -234,6 +234,46 @@ public class ChartLayoutTests
     }
 
     [Fact]
+    public void Treemap_rectangles_fill_the_room_in_proportion_to_the_values()
+    {
+        var room = new Rect(10, 20, 400, 250);
+        double[] values = [6, 6, 4, 3, 2, 2, 1, 0];
+
+        var rects = TreeMapLayouts.Squarify(values, room);
+
+        Assert.Equal(0, rects[^1].Width * rects[^1].Height);
+        var scale = room.Width * room.Height / values.Sum();
+        for (var i = 0; i < values.Length; i++)
+        {
+            Assert.Equal(values[i] * scale, rects[i].Width * rects[i].Height, 6);
+            Assert.True(room.Inflate(1e-6).Contains(rects[i]), $"{rects[i]} is outside the room");
+            for (var j = i + 1; j < values.Length; j++)
+                Assert.False(rects[i].Intersect(rects[j]).Width * rects[i].Intersect(rects[j]).Height > 1e-6, $"{i} and {j} overlap");
+        }
+        // Squarified: no sliver thinner than 1 : 4 here.
+        Assert.All(rects[..^1], r => Assert.True(Math.Max(r.Width / r.Height, r.Height / r.Width) < 4));
+    }
+
+    [Fact]
+    public void Treemap_draws_groups_with_their_children_and_hides_top_level_nodes()
+    {
+        var home = new TreeMapNode("Home", new TreeMapNode("Videos", 30), new TreeMapNode("Music", 10));
+        var swap = new TreeMapNode("Swap", 20);
+        var chart = new RiceTreeMapChart { Nodes = [home, swap] };
+
+        var scene = chart.Layout(Size, Measurer);
+        Assert.Equal(60, home.Total + swap.Total);
+        Assert.Equal(["Home", "Videos", "Music", "Swap"], scene.Items.Select(i => ((TreeMapNode)i.Model).Label));
+        var videos = scene.Items.Single(i => i.Model == home.Children[0]).Bounds;
+        var music = scene.Items.Single(i => i.Model == home.Children[1]).Bounds;
+        // 3 : 1, apart from the gaps between the tiles.
+        Assert.InRange(videos.Width * videos.Height / (music.Width * music.Height), 2.7, 3.3);
+
+        chart.SetSeriesHidden(0, true);
+        Assert.Equal([swap], chart.Layout(Size, Measurer).Items.Select(i => i.Model));
+    }
+
+    [Fact]
     public void Gauge_needle_follows_the_value()
     {
         var low = ProgressLayouts.Gauge(Context(), 0, 0, 100, [new GaugeBand(0, 100)], null, null);
