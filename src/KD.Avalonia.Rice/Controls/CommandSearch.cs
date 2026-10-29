@@ -114,6 +114,46 @@ internal static class CommandSearch
     private const int SecondaryDivisor = 3;
     private const int RecentBonus = 5;
 
+    /// <summary>Typed first, lists the modes of the palette.</summary>
+    public const string HelpPrefix = "?";
+
+    /// <summary>
+    /// The results of a query and the mode it is in: "?" lists the <paramref name="providers"/> (choosing one types its
+    /// prefix through <paramref name="setQuery"/>), a provider's prefix searches the provider's entries with the rest of
+    /// the query, anything else searches <paramref name="commands"/>.
+    /// </summary>
+    public static (List<RiceCommandMatch> Matches, RiceCommandProvider? Mode) Run(IEnumerable<RiceCommandItem> commands,
+        IReadOnlyList<RiceCommandProvider> providers, string? query, IReadOnlyList<RiceCommandItem> recent, int maxResults,
+        Action<string> setQuery)
+    {
+        var text = (query ?? "").TrimStart();
+        var modes = providers.Where(p => !string.IsNullOrEmpty(p.Prefix)).ToList();
+        if (modes.Count > 0 && text.StartsWith(HelpPrefix, StringComparison.Ordinal)
+            && !modes.Any(p => text.StartsWith(p.Prefix, StringComparison.Ordinal)))
+        {
+            var help = modes.Select(p => new RiceCommandItem(p.Title, () => setQuery(p.Prefix + " "))
+            {
+                Icon = p.Icon,
+                Category = p.Prefix,
+                KeepOpen = true,
+            });
+            return (Search(help, text[HelpPrefix.Length..], [], maxResults), null);
+        }
+
+        // The longest prefix wins, so "@@" can be a mode next to "@".
+        var mode = modes.OrderByDescending(p => p.Prefix.Length)
+            .FirstOrDefault(p => text.StartsWith(p.Prefix, StringComparison.Ordinal));
+        if (mode is null)
+            return (Search(commands, text, recent, maxResults), null);
+
+        var rest = text[mode.Prefix.Length..].Trim();
+        var items = mode.GetCommands?.Invoke(rest) ?? mode.Commands;
+        var matches = mode.FilterResults
+            ? Search(items, rest, recent, maxResults)
+            : items.Take(maxResults).Select(c => new RiceCommandMatch(c, 0, [])).ToList();
+        return (matches, mode);
+    }
+
     public static List<RiceCommandMatch> Search(IEnumerable<RiceCommandItem> commands, string? query,
         IReadOnlyList<RiceCommandItem> recent, int maxResults)
     {

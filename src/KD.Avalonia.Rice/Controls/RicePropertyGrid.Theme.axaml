@@ -29,6 +29,24 @@
             <Style Selector="Button.rice-category:pointerover /template/ ContentPresenter#PART_ContentPresenter">
               <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
             </Style>
+            <!-- The chevron of objects and collections: a plain icon, also when checked (expanded). -->
+            <Style Selector="ToggleButton.rice-property-expander">
+              <Setter Property="Background" Value="Transparent" />
+              <Setter Property="BorderThickness" Value="0" />
+              <Setter Property="CornerRadius" Value="4" />
+              <Setter Property="VerticalAlignment" Value="Center" />
+              <Setter Property="HorizontalContentAlignment" Value="Center" />
+              <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            <Style Selector="ToggleButton.rice-property-expander:checked /template/ ContentPresenter#PART_ContentPresenter,
+                             ToggleButton.rice-property-expander:pressed /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="Transparent" />
+              <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+            </Style>
+            <Style Selector="ToggleButton.rice-property-expander:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
+              <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+            </Style>
             <Style Selector="Grid.rice-property-row:pointerover">
               <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
             </Style>

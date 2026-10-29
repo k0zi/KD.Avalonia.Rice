@@ -118,6 +118,90 @@ public class CommandPaletteTests
     }
 
     [Fact]
+    public void Prefix_searches_only_the_entries_of_its_provider()
+    {
+        var command = new RiceCommandItem("Charts settings", () => { });
+        var page = new RiceCommandItem("Charts", () => { });
+        var pages = new RiceCommandProvider("@", "Pages", [page]);
+
+        var (matches, mode) = CommandSearch.Run([command], [pages], "@ chr", [], 50, _ => { });
+
+        Assert.Same(pages, mode);
+        Assert.Equal([page], matches.Select(m => m.Command));
+        Assert.Equal([0, 1, 3], matches[0].Highlights);
+    }
+
+    [Fact]
+    public void Without_a_prefix_the_commands_are_searched()
+    {
+        var command = new RiceCommandItem("Charts settings", () => { });
+        var pages = new RiceCommandProvider("@", "Pages", [new RiceCommandItem("Charts", () => { })]);
+
+        var (matches, mode) = CommandSearch.Run([command], [pages], "chr", [], 50, _ => { });
+
+        Assert.Null(mode);
+        Assert.Equal([command], matches.Select(m => m.Command));
+    }
+
+    [Fact]
+    public void Longest_prefix_wins()
+    {
+        var short1 = new RiceCommandProvider("#", "Lines", [new RiceCommandItem("Line", () => { })]);
+        var long2 = new RiceCommandProvider("##", "Symbols", [new RiceCommandItem("Symbol", () => { })]);
+
+        Assert.Same(long2, CommandSearch.Run([], [short1, long2], "##sy", [], 50, _ => { }).Mode);
+        Assert.Same(short1, CommandSearch.Run([], [short1, long2], "#li", [], 50, _ => { }).Mode);
+    }
+
+    [Fact]
+    public void Dynamic_providers_get_the_text_after_the_prefix()
+    {
+        string? received = null;
+        var lines = new RiceCommandProvider
+        {
+            Prefix = "#",
+            Title = "Go to line",
+            FilterResults = false,
+            GetCommands = text =>
+            {
+                received = text;
+                return [new RiceCommandItem($"Go to line {text}", () => { })];
+            },
+        };
+
+        var (matches, _) = CommandSearch.Run([], [lines], "#  42 ", [], 50, _ => { });
+
+        Assert.Equal("42", received);
+        Assert.Equal("Go to line 42", Assert.Single(matches).Command.Title);
+    }
+
+    [Fact]
+    public void Question_mark_lists_the_modes_and_choosing_one_types_its_prefix()
+    {
+        string? typed = null;
+        var pages = new RiceCommandProvider("@", "Go to a page", []);
+        var commands = new RiceCommandProvider(">", "Commands", []);
+
+        var (matches, mode) = CommandSearch.Run([], [pages, commands], "?", [], 50, q => typed = q);
+
+        Assert.Null(mode);
+        Assert.Equal(["Go to a page", "Commands"], matches.Select(m => m.Command.Title));
+        Assert.All(matches, m => Assert.True(m.Command.KeepOpen));
+        matches[0].Command.Invoke();
+        Assert.Equal("@ ", typed);
+    }
+
+    [Fact]
+    public void Question_mark_is_a_plain_query_without_modes()
+    {
+        var help = new RiceCommandItem("Help?", () => { });
+
+        var (matches, _) = CommandSearch.Run([help], [], "?", [], 50, _ => { });
+
+        Assert.Equal([help], matches.Select(m => m.Command));
+    }
+
+    [Fact]
     public void Invoke_runs_the_action_and_the_command()
     {
         var calls = new List<string>();

@@ -53,6 +53,12 @@ public static class RiceStrings
     /// <summary>Tooltip of the close button of an info bar.</summary>
     public static string InfoBarClose { get; set; } = "Close";
     public static string CommandPalettePlaceholder { get; set; } = "Type a command…";
+    /// <summary>Placeholder of a palette with modes (prefixes).</summary>
+    public static string CommandPalettePlaceholderWithModes { get; set; } = "Type a command, or ? for the modes…";
+    /// <summary>Mode of the window's own commands in the command palette (prefix "&gt;").</summary>
+    public static string CommandPaletteCommandsMode { get; set; } = "Commands";
+    /// <summary>Mode of the side menu items in the command palette (prefix "@").</summary>
+    public static string CommandPaletteNavigationMode { get; set; } = "Go to a page";
     public static string CommandPaletteNoResults { get; set; } = "No matching commands";
     /// <summary>Category of the side menu items in the command palette.</summary>
     public static string CommandPaletteNavigation { get; set; } = "Go to";
@@ -63,4 +69,10 @@ public static class RiceStrings
     public static string PropertyGridMisc { get; set; } = "Misc";
     public static string PropertyGridCategorized { get; set; } = "Categorized";
     public static string PropertyGridAlphabetical { get; set; } = "Alphabetical";
+    /// <summary>Tooltip of the chevron that minimizes the ribbon to its tabs.</summary>
+    public static string RibbonCollapse { get; set; } = "Collapse the ribbon (Ctrl+F1)";
+    /// <summary>Tooltip of the chevron of a minimized ribbon.</summary>
+    public static string RibbonExpand { get; set; } = "Pin the ribbon (Ctrl+F1)";
+    /// <summary>Tooltip of the launcher button in the corner of a ribbon group.</summary>
+    public static string RibbonGroupLauncher { get; set; } = "More options";
 }

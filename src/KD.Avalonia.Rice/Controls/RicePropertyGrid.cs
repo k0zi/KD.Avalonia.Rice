@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
@@ -55,6 +57,7 @@ public class RicePropertyGrid : TemplatedControl
     private readonly List<(Control Header, Panel Body, string Category)> _groups = [];
     private readonly HashSet<string> _collapsedCategories = [];
     private RicePropertyEntry? _selectedEntry;
+    private Row? _selectedRow;
     private Panel? _rowsHost;
     private TextBlock? _descriptionTitle;
     private TextBlock? _descriptionText;
@@ -158,13 +161,17 @@ public class RicePropertyGrid : TemplatedControl
     {
         base.OnAttachedToVisualTree(e);
         Observe(SelectedObject);
+        foreach (var row in _rows)
+            row.SetObserving(true);
     }
 
-    // The grid must not be kept alive by the object it shows.
+    // The grid must not be kept alive by the objects it shows.
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
         Observe(null);
+        foreach (var row in _rows)
+            row.SetObserving(false);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -218,7 +225,7 @@ public class RicePropertyGrid : TemplatedControl
         }
         foreach (var row in _rows)
         {
-            if (string.IsNullOrEmpty(e.PropertyName) || row.Entry.Name == e.PropertyName)
+            if (string.IsNullOrEmpty(e.PropertyName) || row.Accessor.Name == e.PropertyName)
                 row.Refresh();
         }
     }
@@ -228,8 +235,11 @@ public class RicePropertyGrid : TemplatedControl
         if (_rowsHost is null)
             return;
         _rowsHost.Children.Clear();
+        foreach (var row in _rows)
+            row.SetObserving(false);
         _rows.Clear();
         _groups.Clear();
+        _selectedRow = null;
         if (SelectedObject is not { } target)
         {
             UpdateDescription();
@@ -246,9 +256,10 @@ public class RicePropertyGrid : TemplatedControl
             var body = new StackPanel();
             foreach (var entry in groupEntries)
             {
-                var row = new Row(this, entry, target);
+                var accessor = Accessor.ForProperty(entry, () => target, null, false, null);
+                var row = new Row(this, accessor, 0, new HashSet<object>(ReferenceEqualityComparer.Instance) { target });
                 _rows.Add(row);
-                body.Children.Add(row.Root);
+                body.Children.Add(row.Container);
             }
             if (IsCategorized)
             {
@@ -306,9 +317,9 @@ public class RicePropertyGrid : TemplatedControl
         var filter = Filter?.Trim();
         foreach (var row in _rows)
         {
-            row.Root.IsVisible = string.IsNullOrEmpty(filter)
-                                 || row.Entry.DisplayName.Contains(filter, StringComparison.CurrentCultureIgnoreCase)
-                                 || row.Entry.Name.Contains(filter, StringComparison.OrdinalIgnoreCase);
+            row.Container.IsVisible = string.IsNullOrEmpty(filter)
+                                      || row.Accessor.DisplayName.Contains(filter, StringComparison.CurrentCultureIgnoreCase)
+                                      || row.Accessor.Name.Contains(filter, StringComparison.OrdinalIgnoreCase);
         }
         foreach (var (header, body, _) in _groups)
         {
@@ -319,72 +330,181 @@ public class RicePropertyGrid : TemplatedControl
 
     private void Select(Row row)
     {
-        foreach (var other in _rows)
-            other.Root.Classes.Set("selected", other == row);
-        SelectedEntry = row.Entry;
+        _selectedRow?.Header.Classes.Set("selected", false);
+        _selectedRow = row;
+        row.Header.Classes.Set("selected", true);
+        SelectedEntry = row.Accessor.Entry;
+        UpdateDescription();
+    }
+
+    /// <summary>Expands or collapses every expandable row (objects and collections), at most a few levels deep.</summary>
+    public void ExpandAll(bool expanded = true, int depth = 1)
+    {
+        IEnumerable<Row> level = _rows;
+        for (var i = 0; i < depth; i++)
+        {
+            foreach (var row in level)
+                row.SetExpanded(expanded);
+            level = level.SelectMany(r => r.Descendants).ToList();
+        }
     }
 
     private void UpdateDescription()
     {
-        _descriptionTitle?.Text = SelectedEntry?.DisplayName;
-        _descriptionText?.Text = SelectedEntry?.Description;
-        _descriptionText?.IsVisible = !string.IsNullOrEmpty(SelectedEntry?.Description);
+        var accessor = _selectedRow?.Accessor;
+        _descriptionTitle?.Text = accessor is null ? null : accessor.Path.Contains('.') || accessor.Path.Contains('[') ? accessor.Path : accessor.DisplayName;
+        _descriptionText?.Text = accessor?.Description;
+        _descriptionText?.IsVisible = !string.IsNullOrEmpty(accessor?.Description);
     }
 
-    private void OnValueChanged(RicePropertyEntry entry, object? oldValue, object? newValue) =>
-        PropertyValueChanged?.Invoke(this, new RicePropertyValueChangedEventArgs(entry, oldValue, newValue));
+    private void OnValueChanged(Accessor accessor, object? oldValue, object? newValue) =>
+        PropertyValueChanged?.Invoke(this, new RicePropertyValueChangedEventArgs(accessor.Entry, accessor.Path, oldValue, newValue));
 
-    /// <summary>One property: the name on the left, the editor on the right.</summary>
+    /// <summary>
+    /// What a row shows and edits: a property of an object or an item of a list / dictionary. <see cref="Path"/> names it
+    /// from the selected object, e.g. "Font.Size" or "Tags[2]".
+    /// </summary>
+    private sealed record Accessor(string Name, string DisplayName, string? Description, Type Type, bool IsReadOnly,
+        double? Minimum, double? Maximum, RicePropertyEntry? Entry, string Path, Func<object?> Get, Action<object?> Set)
+    {
+        // A property of a value type is changed on a boxed copy, which is then written back to its owner.
+        public static Accessor ForProperty(RicePropertyEntry entry, Func<object?> owner, Action<object?>? writeBack,
+            bool ownerReadOnly, string? parentPath) => new(
+            entry.Name, entry.DisplayName, entry.Description, entry.PropertyType,
+            entry.IsReadOnly || ownerReadOnly, entry.Minimum, entry.Maximum, entry,
+            parentPath is null ? entry.Name : $"{parentPath}.{entry.Name}",
+            () => owner() is { } o ? entry.GetValue(o) : null,
+            value =>
+            {
+                if (owner() is not { } o)
+                    return;
+                entry.SetValue(o, value);
+                writeBack?.Invoke(o);
+            });
+
+        public static Accessor ForItem(string key, Type type, bool isReadOnly, string parentPath, Func<object?> get,
+            Action<object?> set) =>
+            new(key, key, null, type, isReadOnly, null, null, null, $"{parentPath}{key}", get, set);
+    }
+
+    /// <summary>
+    /// One property: the name on the left, the editor on the right. Objects and collections without an editor can be
+    /// expanded: their properties / items become child rows below.
+    /// </summary>
     private sealed class Row
     {
+        // Deeper levels and longer lists are not expanded: the grid is not meant to browse whole object graphs.
+        private const int MaxDepth = 6;
+        private const int MaxItems = 100;
+        private const double IndentStep = 16;
+
         private readonly RicePropertyGrid _grid;
-        private readonly object _target;
+        private readonly Row? _parent;
+        private readonly Accessor _accessor;
+        private readonly int _depth;
+        private readonly IReadOnlySet<object> _ancestors;
         private readonly Type _type;
         private readonly bool _isNullable;
         private readonly bool _isReadOnly;
+        private readonly bool _canExpand;
+        private readonly StackPanel _children = new() { IsVisible = false };
+        private readonly List<Row> _childRows = [];
         private Action _refresh = () => { };
         private bool _updating;
+        private ToggleButton? _expander;
+        private object? _expandedValue;
+        private int _expandedCount;
+        private INotifyPropertyChanged? _observedObject;
+        private INotifyCollectionChanged? _observedCollection;
+        private bool _observing = true;
 
-        public Row(RicePropertyGrid grid, RicePropertyEntry entry, object target)
+        public Row(RicePropertyGrid grid, Accessor accessor, int depth, IReadOnlySet<object> ancestors, Row? parent = null)
         {
             _grid = grid;
-            _target = target;
-            Entry = entry;
-            _type = Nullable.GetUnderlyingType(entry.PropertyType) ?? entry.PropertyType;
-            _isNullable = !entry.PropertyType.IsValueType || _type != entry.PropertyType;
-            _isReadOnly = entry.IsReadOnly || grid.IsReadOnly;
+            _parent = parent;
+            _accessor = accessor;
+            _depth = depth;
+            _ancestors = ancestors;
+            // An item declared as object (e.g. of a List<object>) is edited as what it holds.
+            var declared = accessor.Type == typeof(object) && SafeGet() is { } current ? current.GetType() : accessor.Type;
+            _type = Nullable.GetUnderlyingType(declared) ?? declared;
+            _isNullable = !declared.IsValueType || _type != declared;
+            _isReadOnly = accessor.IsReadOnly || grid.IsReadOnly;
 
             var name = new TextBlock
             {
                 Classes = { "rice-property-name" },
-                Text = entry.DisplayName,
+                Text = accessor.DisplayName,
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(grid.IsCategorized ? 22 : 8, 0, 8, 0),
             };
-            if (!string.IsNullOrEmpty(entry.Description))
-                ToolTip.SetTip(name, entry.Description);
-            var editor = CreateEditor();
+            if (!string.IsNullOrEmpty(accessor.Description))
+                ToolTip.SetTip(name, accessor.Description);
+            var editor = CreateEditor(out var isDisplayOnly);
             editor.Margin = new Thickness(0, 2, 4, 2);
             editor.VerticalAlignment = VerticalAlignment.Center;
             Grid.SetColumn(editor, 1);
 
-            Root = new Grid
+            _canExpand = isDisplayOnly && depth < MaxDepth && IsExpandableType(_type);
+            var nameCell = new DockPanel
+            {
+                Margin = new Thickness((grid.IsCategorized ? 22 : 8) + depth * IndentStep - (_canExpand ? 18 : 0), 0, 8, 0),
+            };
+            if (_canExpand)
+            {
+                _expander = new ToggleButton
+                {
+                    Classes = { "rice-property-expander" },
+                    Width = 18,
+                    Height = 18,
+                    Padding = new Thickness(0),
+                    Focusable = false,
+                    Content = new MaterialIcon { Kind = MaterialIconKind.ChevronRight, Width = 14, Height = 14 },
+                };
+                _expander.IsCheckedChanged += (_, _) => SetExpanded(_expander.IsChecked == true);
+                DockPanel.SetDock(_expander, Dock.Left);
+                nameCell.Children.Add(_expander);
+            }
+            nameCell.Children.Add(name);
+
+            Header = new Grid
             {
                 Classes = { "rice-property-row" },
                 ColumnDefinitions = new ColumnDefinitions($"{grid.NameColumnWidth.ToString(CultureInfo.InvariantCulture)},*"),
                 MinHeight = 32,
                 Background = Brushes.Transparent,
-                Children = { name, editor },
+                Children = { nameCell, editor },
             };
-            Root.AddHandler(InputElement.PointerPressedEvent, (_, _) => grid.Select(this), handledEventsToo: true);
-            Root.AddHandler(InputElement.GotFocusEvent, (_, _) => grid.Select(this));
+            Header.AddHandler(InputElement.PointerPressedEvent, (_, _) => grid.Select(this), handledEventsToo: true);
+            Header.AddHandler(InputElement.GotFocusEvent, (_, _) => grid.Select(this));
+            Container = new StackPanel { Children = { Header, _children } };
             Refresh();
         }
 
-        public RicePropertyEntry Entry { get; }
+        public Accessor Accessor => _accessor;
 
-        public Grid Root { get; }
+        public Grid Header { get; }
+
+        /// <summary>The row and its child rows.</summary>
+        public StackPanel Container { get; }
+
+        public bool IsExpanded => _expander?.IsChecked == true;
+
+        public void SetExpanded(bool expanded)
+        {
+            if (_expander is null)
+                return;
+            _expander.IsChecked = expanded;
+            ((MaterialIcon)_expander.Content!).Kind = expanded ? MaterialIconKind.ChevronDown : MaterialIconKind.ChevronRight;
+            _children.IsVisible = expanded;
+            if (expanded)
+                BuildChildren();
+            else
+                ClearChildren();
+        }
+
+        /// <summary>The expanded rows below this one, at any depth.</summary>
+        public IEnumerable<Row> Descendants => _childRows.SelectMany(r => r.Descendants.Prepend(r));
 
         public void Refresh()
         {
@@ -397,20 +517,179 @@ public class RicePropertyGrid : TemplatedControl
             {
                 _updating = false;
             }
+            var value = Value;
+            _expander?.IsVisible = value is not null && !_ancestors.Contains(value);
+            if (!IsExpanded)
+                return;
+            // A new object (or a list of another length) needs new child rows; else the values are read again.
+            if (!ReferenceEquals(value, _expandedValue) || CountOf(value) != _expandedCount)
+                BuildChildren();
+            else
+                foreach (var child in _childRows)
+                    child.Refresh();
         }
 
-        private object? Value
+        /// <summary>Follows the changes of the expanded objects and collections; off while the grid is not shown.</summary>
+        public void SetObserving(bool observing)
         {
-            get
+            _observing = observing;
+            Observe(observing && IsExpanded ? _expandedValue : null);
+            foreach (var child in _childRows)
+                child.SetObserving(observing);
+        }
+
+        private void BuildChildren()
+        {
+            ClearChildren();
+            var value = Value;
+            _expandedValue = value;
+            _expandedCount = CountOf(value);
+            if (value is null || _ancestors.Contains(value))
+                return;
+
+            var ancestors = value.GetType().IsValueType ? _ancestors : new HashSet<object>(_ancestors, ReferenceEqualityComparer.Instance) { value };
+            foreach (var accessor in ChildAccessors(value))
             {
-                try
+                var row = new Row(_grid, accessor, _depth + 1, ancestors, this);
+                _childRows.Add(row);
+                _children.Children.Add(row.Container);
+            }
+            Observe(_observing ? value : null);
+        }
+
+        private void ClearChildren()
+        {
+            Observe(null);
+            foreach (var child in _childRows)
+                child.SetObserving(false);
+            _childRows.Clear();
+            _children.Children.Clear();
+            _expandedValue = null;
+        }
+
+        private IEnumerable<Accessor> ChildAccessors(object value)
+        {
+            var path = _accessor.Path;
+            switch (value)
+            {
+                case IDictionary dictionary:
                 {
-                    return Entry.GetValue(_target);
+                    var keys = dictionary.Keys.Cast<object>().Take(MaxItems).ToList();
+                    var valueType = ElementType(value.GetType(), 1) ?? typeof(object);
+                    foreach (var key in keys)
+                    {
+                        var k = key;
+                        yield return Accessor.ForItem($"[{Convert.ToString(k, CultureInfo.InvariantCulture)}]", valueType,
+                            dictionary.IsReadOnly, path, () => dictionary.Contains(k) ? dictionary[k] : null, v => dictionary[k] = v);
+                    }
+                    break;
                 }
-                catch (TargetInvocationException)
+                case IList list:
                 {
-                    return null;
+                    var itemType = ElementType(value.GetType(), 0) ?? typeof(object);
+                    for (var i = 0; i < Math.Min(list.Count, MaxItems); i++)
+                    {
+                        var index = i;
+                        yield return Accessor.ForItem($"[{i}]", itemType, list.IsReadOnly, path,
+                            () => index < list.Count ? list[index] : null, v => list[index] = v);
+                    }
+                    break;
                 }
+                case IEnumerable enumerable:
+                {
+                    // Not indexable: a read-only snapshot.
+                    var items = enumerable.Cast<object?>().Take(MaxItems).ToList();
+                    var itemType = ElementType(value.GetType(), 0) ?? typeof(object);
+                    for (var i = 0; i < items.Count; i++)
+                    {
+                        var item = items[i];
+                        yield return Accessor.ForItem($"[{i}]", itemType, true, path, () => item, _ => { });
+                    }
+                    break;
+                }
+                default:
+                {
+                    // A struct is a copy: changing one of its properties means writing the whole struct back.
+                    var isStruct = value.GetType().IsValueType;
+                    Func<object?> owner = isStruct ? () => Value : () => value;
+                    Action<object?>? writeBack = isStruct ? v => TrySet(v) : null;
+                    foreach (var entry in Entries(value.GetType()))
+                        yield return Accessor.ForProperty(entry, owner, writeBack, isStruct && _isReadOnly, path);
+                    break;
+                }
+            }
+        }
+
+        private void Observe(object? target)
+        {
+            _observedObject?.PropertyChanged -= OnChildPropertyChanged;
+            _observedCollection?.CollectionChanged -= OnCollectionChanged;
+            _observedObject = target as INotifyPropertyChanged;
+            _observedCollection = target as INotifyCollectionChanged;
+            _observedObject?.PropertyChanged += OnChildPropertyChanged;
+            _observedCollection?.CollectionChanged += OnCollectionChanged;
+        }
+
+        private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e) => OnUiThread(() =>
+        {
+            foreach (var child in _childRows)
+            {
+                if (string.IsNullOrEmpty(e.PropertyName) || child.Accessor.Name == e.PropertyName)
+                    child.Refresh();
+            }
+            RefreshSummary();
+        });
+
+        // The summary of an object (its ToString) or a collection (its count) changes with its contents; so do the
+        // summaries of the rows above it.
+        private void RefreshSummary()
+        {
+            _updating = true;
+            try
+            {
+                _refresh();
+            }
+            finally
+            {
+                _updating = false;
+            }
+            _parent?.RefreshSummary();
+        }
+
+        // A replaced item keeps its row; added, removed or moved items need new rows (their keys / indexes change).
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => OnUiThread(() =>
+        {
+            if (IsExpanded && e.Action == NotifyCollectionChangedAction.Replace)
+            {
+                foreach (var child in _childRows)
+                    child.Refresh();
+            }
+            else if (IsExpanded)
+            {
+                BuildChildren();
+            }
+            RefreshSummary();
+        });
+
+        private static void OnUiThread(Action action)
+        {
+            if (Dispatcher.UIThread.CheckAccess())
+                action();
+            else
+                Dispatcher.UIThread.Post(action);
+        }
+
+        private object? Value => SafeGet();
+
+        private object? SafeGet()
+        {
+            try
+            {
+                return _accessor.Get();
+            }
+            catch (Exception e) when (e is TargetInvocationException or ArgumentException or InvalidOperationException)
+            {
+                return null;
             }
         }
 
@@ -420,21 +699,89 @@ public class RicePropertyGrid : TemplatedControl
             if (_updating)
                 return true;
             var old = Value;
+            // Editors may report the value they were just given (e.g. a deferred TextChanged): writing it back would
+            // only raise change notifications, and a collection would rebuild the rows that write again.
+            if (Equals(old, value))
+                return true;
             try
             {
-                Entry.SetValue(_target, value);
+                _accessor.Set(value);
             }
-            catch (Exception e) when (e is TargetInvocationException or ArgumentException or InvalidCastException)
+            catch (Exception e) when (e is TargetInvocationException or ArgumentException or InvalidCastException
+                                          or NotSupportedException or InvalidOperationException)
             {
                 return false;
             }
-            if (!Equals(old, value))
-                _grid.OnValueChanged(Entry, old, value);
+            _grid.OnValueChanged(_accessor, old, value);
+            _parent?.RefreshSummary();
             return true;
         }
 
-        private Control CreateEditor()
+        private static readonly Dictionary<Type, string> Aliases = new()
         {
+            [typeof(string)] = "string", [typeof(object)] = "object", [typeof(bool)] = "bool", [typeof(int)] = "int",
+            [typeof(long)] = "long", [typeof(double)] = "double", [typeof(float)] = "float", [typeof(decimal)] = "decimal",
+            [typeof(byte)] = "byte", [typeof(short)] = "short", [typeof(char)] = "char",
+        };
+
+        private static int CountOf(object? value) => value is ICollection collection ? collection.Count : -1;
+
+        // The type argument of IList<T> / IEnumerable<T> (index 0) or of IDictionary<K, V> (index 1 = V); arrays too.
+        private static Type? ElementType(Type type, int argument)
+        {
+            if (type.IsArray)
+                return type.GetElementType();
+            var generic = type.GetInterfaces().Prepend(type)
+                .Where(t => t.IsGenericType)
+                .FirstOrDefault(t => t.GetGenericTypeDefinition() == (argument == 1 ? typeof(IDictionary<,>) : typeof(IEnumerable<>)));
+            return generic?.GetGenericArguments()[argument];
+        }
+
+        private static bool IsExpandableType(Type type)
+        {
+            if (type.IsPrimitive || type.IsEnum || type.IsPointer || type == typeof(string) || type == typeof(object)
+                || typeof(Delegate).IsAssignableFrom(type) || typeof(MemberInfo).IsAssignableFrom(type)
+                || typeof(Task).IsAssignableFrom(type))
+                return false;
+            // Values written as text (Guid, TimeSpan, Uri, Version, …) are scalars, even if they have properties.
+            var converter = TypeDescriptor.GetConverter(type);
+            if (converter is not ExpandableObjectConverter && converter.CanConvertFrom(typeof(string)))
+                return false;
+            return typeof(IEnumerable).IsAssignableFrom(type) || Entries(type).Count > 0;
+        }
+
+        // "(3) List<string>" for collections (the count first, so trimming keeps it); the object's own text unless it
+        // is just its type name.
+        private static string? Summary(object? value)
+        {
+            switch (value)
+            {
+                case null:
+                    return null;
+                case ICollection collection:
+                    return $"({collection.Count}) {FriendlyName(value.GetType())}";
+                case IEnumerable when value is not string:
+                    return FriendlyName(value.GetType());
+            }
+            var text = value.ToString();
+            return text == value.GetType().ToString() ? FriendlyName(value.GetType()) : text;
+        }
+
+        private static string FriendlyName(Type type)
+        {
+            if (Aliases.TryGetValue(type, out var alias))
+                return alias;
+            if (type.IsArray)
+                return FriendlyName(type.GetElementType()!) + "[]";
+            if (!type.IsGenericType)
+                return type.Name;
+            var name = type.Name[..type.Name.IndexOf('`')];
+            return $"{name}<{string.Join(", ", type.GetGenericArguments().Select(FriendlyName))}>";
+        }
+
+        private Control CreateEditor(out bool isDisplayOnly)
+        {
+            isDisplayOnly = false;
             if (_type == typeof(bool))
                 return BoolEditor();
             if (_type.IsEnum && !_type.IsDefined(typeof(FlagsAttribute)))
@@ -474,7 +821,8 @@ public class RicePropertyGrid : TemplatedControl
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 Margin = new Thickness(0, 0, 8, 0),
             };
-            _refresh = () => display.Text = Value?.ToString();
+            _refresh = () => display.Text = Summary(Value);
+            isDisplayOnly = true;
             return display;
         }
 
@@ -516,8 +864,8 @@ public class RicePropertyGrid : TemplatedControl
                 ShowButtonSpinner = !_isReadOnly,
                 AllowSpin = !_isReadOnly,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Minimum = ToDecimal(Entry.Minimum) ?? MinOf(_type),
-                Maximum = ToDecimal(Entry.Maximum) ?? MaxOf(_type),
+                Minimum = ToDecimal(_accessor.Minimum) ?? MinOf(_type),
+                Maximum = ToDecimal(_accessor.Maximum) ?? MaxOf(_type),
             };
             box.ValueChanged += (_, e) =>
             {
@@ -648,9 +996,13 @@ public class RicePropertyGrid : TemplatedControl
     }
 }
 
-public class RicePropertyValueChangedEventArgs(RicePropertyEntry entry, object? oldValue, object? newValue) : EventArgs
+public class RicePropertyValueChangedEventArgs(RicePropertyEntry? entry, string path, object? oldValue, object? newValue) : EventArgs
 {
-    public RicePropertyEntry Entry { get; } = entry;
+    /// <summary>The changed property; null for an item of a list or dictionary.</summary>
+    public RicePropertyEntry? Entry { get; } = entry;
+
+    /// <summary>Where the value is, from the selected object: "FontSize", "Font.Size", "Tags[2]".</summary>
+    public string Path { get; } = path;
 
     public object? OldValue { get; } = oldValue;
 

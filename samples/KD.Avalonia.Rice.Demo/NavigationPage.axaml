@@ -51,8 +51,8 @@
       <rice:RiceGroupBox Header="Tab view">
         <StackPanel Spacing="8">
           <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                     Text="Drag the tabs to reorder them, close them with × , a middle click or Ctrl+W, add one with +. The first tab cannot be closed." />
-          <rice:RiceTabView Name="Tabs" Height="220" ShowAddButton="True" />
+                     Text="Drag the tabs to reorder them, close them with × , a middle click or Ctrl+W, add one with +. The first tab cannot be closed. Drag a tab down out of the strip to give it a window of its own; drag it back onto this strip to dock it again." />
+          <rice:RiceTabView Name="Tabs" Height="220" ShowAddButton="True" CanTearOffTabs="True" />
         </StackPanel>
       </rice:RiceGroupBox>
     </StackPanel>

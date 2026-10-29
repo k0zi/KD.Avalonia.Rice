@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using KD.Avalonia.Rice.Controls;
@@ -36,11 +37,17 @@ public partial class NavigationPage : UserControl
         _tabs.Add(CreateTab("App.axaml", MaterialIconKind.Xml, "<Application …>"));
         Tabs.ItemsSource = _tabs;
         Tabs.SelectedIndex = 0;
-        Tabs.AddTabRequested += (_, _) =>
-        {
-            _tabs.Add(CreateTab($"Untitled {++_tabCounter}", MaterialIconKind.FileOutline, "Empty document"));
-            Tabs.SelectedIndex = _tabs.Count - 1;
-        };
+        Tabs.AddTabRequested += OnAddTab;
+        // A torn off tab gets a new view in a new window: it adds tabs to its own collection.
+        Tabs.TearOffWindowCreated += (_, e) => e.View.AddTabRequested += OnAddTab;
+    }
+
+    private void OnAddTab(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not RiceTabView { ItemsSource: IList<RiceTabViewItem> tabs } view)
+            return;
+        tabs.Add(CreateTab($"Untitled {++_tabCounter}", MaterialIconKind.FileOutline, "Empty document"));
+        view.SelectedIndex = tabs.Count - 1;
     }
 
     private static RiceTabViewItem CreateTab(string header, MaterialIconKind icon, string text, bool closable = true) => new()

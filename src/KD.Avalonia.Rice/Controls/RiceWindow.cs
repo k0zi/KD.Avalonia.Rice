@@ -121,6 +121,12 @@ public class RiceWindow : Window
     /// </summary>
     public AvaloniaList<RiceCommandItem> Commands { get; } = [];
 
+    /// <summary>
+    /// Extra modes of the command palette, chosen by a prefix. Built in: "&gt;" searches only <see cref="Commands"/>,
+    /// "@" only the side menu items (with <see cref="IncludeNavigationCommands"/>).
+    /// </summary>
+    public AvaloniaList<RiceCommandProvider> CommandProviders { get; } = [];
+
     public KeyGesture? CommandPaletteGesture
     {
         get => GetValue(CommandPaletteGestureProperty);
@@ -154,16 +160,36 @@ public class RiceWindow : Window
     /// Opens the command palette over this window with <see cref="Commands"/> and, with
     /// <see cref="IncludeNavigationCommands"/>, the items of its side menu.
     /// </summary>
-    public void ShowCommandPalette(string? query = null) => RiceCommandPalette.Show(GetPaletteCommands(), this, query);
-
-    /// <summary>What the command palette lists: <see cref="Commands"/>, then the side menu items.</summary>
-    protected virtual IEnumerable<RiceCommandItem> GetPaletteCommands()
+    public void ShowCommandPalette(string? query = null)
     {
-        var navigation = IncludeNavigationCommands
-            ? this.GetVisualDescendants().OfType<RiceSideMenu>().SelectMany(menu => menu.GetNavigationCommands())
-            : [];
-        return Commands.Concat(navigation);
+        var navigation = GetNavigationCommands().ToList();
+        RiceCommandPalette.Show(GetPaletteCommands(navigation), GetPaletteProviders(navigation), this, query);
     }
+
+    /// <summary>What the command palette lists without a prefix: <see cref="Commands"/>, then the side menu items.</summary>
+    protected virtual IEnumerable<RiceCommandItem> GetPaletteCommands(IReadOnlyList<RiceCommandItem> navigation) =>
+        Commands.Concat(navigation);
+
+    /// <summary>The modes of the command palette: "&gt;" commands, "@" pages, then <see cref="CommandProviders"/>.</summary>
+    protected virtual IEnumerable<RiceCommandProvider> GetPaletteProviders(IReadOnlyList<RiceCommandItem> navigation)
+    {
+        if (Commands.Count > 0)
+            yield return new RiceCommandProvider(">", RiceStrings.CommandPaletteCommandsMode, Commands.ToList())
+            {
+                Icon = Material.Icons.MaterialIconKind.ConsoleLine,
+            };
+        if (navigation.Count > 0)
+            yield return new RiceCommandProvider("@", RiceStrings.CommandPaletteNavigationMode, navigation)
+            {
+                Icon = Material.Icons.MaterialIconKind.Compass,
+            };
+        foreach (var provider in CommandProviders)
+            yield return provider;
+    }
+
+    private IEnumerable<RiceCommandItem> GetNavigationCommands() => IncludeNavigationCommands
+        ? this.GetVisualDescendants().OfType<RiceSideMenu>().SelectMany(menu => menu.GetNavigationCommands())
+        : [];
 
     private void OnShortcutKeyDown(object? sender, KeyEventArgs e)
     {

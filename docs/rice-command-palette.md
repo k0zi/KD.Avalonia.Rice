@@ -25,13 +25,54 @@ Commands.Add(new RiceCommandItem { Title = "Save", Command = viewModel.SaveComma
 
 The `Gesture` of a command is shown in the palette **and** runs the command in the whole window, also while the palette
 is closed. Open the palette from code with `window.ShowCommandPalette()` or `ShowCommandPalette("theme")` (pre-filled).
-Change the shortcut with `CommandPaletteGesture` (`null` turns it off). Override `GetPaletteCommands()` in a subclass to
-build the list differently (e.g. context dependent commands).
+Change the shortcut with `CommandPaletteGesture` (`null` turns it off). Override `GetPaletteCommands(navigation)` or
+`GetPaletteProviders(navigation)` in a subclass to build the lists differently (e.g. context dependent commands).
+
+## Modes (prefixes)
+
+Typing a prefix first switches the palette to a mode that searches only its own entries; the mode is shown on the right
+of the search box. Typing `?` lists the modes, and choosing one types its prefix. A `RiceWindow` has two built in:
+
+| Prefix | Mode |
+|--------|------|
+| `>` | Only the window's `Commands` |
+| `@` | Only the side menu items (with `IncludeNavigationCommands`) |
+
+Add your own to `CommandProviders`, with a fixed list or entries computed from the text after the prefix:
+
+```csharp
+// "#42" → "Go to line 42"
+CommandProviders.Add(new RiceCommandProvider
+{
+    Prefix = "#",
+    Title = "Go to line",
+    Icon = MaterialIconKind.FormatListNumbered,
+    FilterResults = false,
+    GetCommands = text => int.TryParse(text, out var line)
+        ? [new RiceCommandItem($"Go to line {line}", () => editor.GoToLine(line))]
+        : [],
+});
+
+// "% ubuntu" → search a fixed list
+CommandProviders.Add(new RiceCommandProvider("%", "Recent files", recentFiles.Select(f => new RiceCommandItem(f, () => Open(f)))));
+```
+
+| `RiceCommandProvider` | Description |
+|-----------------------|-------------|
+| `Prefix` | Text that starts the mode (one or more characters, no spaces). The longest matching prefix wins. |
+| `Title`, `Icon` | Shown in the `?` list and as the mode label. |
+| `Commands` | The entries, when `GetCommands` is not set. |
+| `GetCommands` | `Func<string, IEnumerable<RiceCommandItem>>`: builds the entries from the text after the prefix (trimmed) on every change. |
+| `FilterResults` | `true` (default): rank the entries by the text after the prefix; `false`: list them as returned. |
+
+Without modes `?` is an ordinary search text. An entry with `KeepOpen = true` runs without closing the palette (the `?`
+list uses it to switch modes).
 
 ## Over any window
 
 ```csharp
 RiceCommandPalette.Show(commands, owner: this, query: null);
+RiceCommandPalette.Show(commands, providers, owner: this);   // with modes
 RiceCommandPalette.Hide(this);
 bool open = RiceCommandPalette.IsShown(this);
 ```
@@ -62,6 +103,7 @@ and runs it, but the palette stays where it is.
 | `Keywords` | Extra search terms that are not shown, e.g. synonyms. |
 | `Command`, `CommandParameter` | Run when chosen. While `Command.CanExecute` is false the entry is dimmed and cannot run. |
 | `Execute` | `Action` run when chosen (before `Command`); the `(title, execute)` constructor sets it. |
+| `KeepOpen` | Runs the entry without closing the palette. |
 
 Category, keywords and description are searched too, but count less than the title. Every word of the query must match
 somewhere ("theme set" finds "Theme settings").
@@ -71,6 +113,8 @@ somewhere ("theme set" finds "Theme settings").
 | Member | Default | Description |
 |--------|---------|-------------|
 | `Commands` | `null` | The entries. |
+| `Providers` | `null` | The modes (`RiceCommandProvider`s). |
+| `CurrentMode` | | The provider whose prefix the query starts with; `null` otherwise. |
 | `Query` | `""` | Text of the search box (two-way bindable). |
 | `Placeholder` | `RiceStrings.CommandPalettePlaceholder` | Shown in the empty search box. |
 | `MaxResults` | `50` | Number of entries listed at most. |
@@ -78,7 +122,7 @@ somewhere ("theme set" finds "Theme settings").
 | `SelectedMatch` | | The highlighted result. |
 | `RecentCommands` | | The commands run from this palette, most recent first. |
 | `Invoke(match)` | | Runs a result (default: the selected one). |
-| `FocusSearchBox()` | | Focuses the search box and selects its text. |
+| `FocusSearchBox(selectAll)` | | Focuses the search box and selects its text (or puts the caret after it). |
 | `CommandInvoked` event | | A command was chosen, before it runs. |
 | `CloseRequested` event | | A command was chosen or Escape was pressed. |
 
@@ -88,4 +132,5 @@ PageUp / PageDown move by a page; Up on the first entry wraps to the last one.
 
 Brushes: `RiceBackdropBrush` (dimmed window), `RicePopupShadow`, `RiceHoverBrush`, `RiceSelectedRowBrush`. The palette is
 600 px wide and at most 460 px high by default (`Width`, `MaxHeight`). Texts: `RiceStrings.CommandPalettePlaceholder`,
-`CommandPaletteNoResults`, `CommandPaletteNavigation`.
+`CommandPalettePlaceholderWithModes`, `CommandPaletteNoResults`, `CommandPaletteNavigation`, `CommandPaletteCommandsMode`,
+`CommandPaletteNavigationMode`.

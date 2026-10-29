@@ -20,7 +20,7 @@
                 CornerRadius="{TemplateBinding CornerRadius}"
                 BoxShadow="{DynamicResource RicePopupShadow}">
           <DockPanel>
-            <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,*" Margin="14,6">
+            <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto" Margin="14,6">
               <mi:MaterialIcon Kind="Magnify" Width="20" Height="20" VerticalAlignment="Center"
                                Foreground="{DynamicResource RiceForegroundMutedBrush}" />
               <!-- A plain text field: the palette's own frame is the box. -->
@@ -34,6 +34,12 @@
                   </Style>
                 </TextBox.Styles>
               </TextBox>
+              <!-- The mode the prefix chose, e.g. "Go to a page" for "@". -->
+              <Border Grid.Column="2" Margin="8,0,0,0" Padding="8,2" CornerRadius="4" VerticalAlignment="Center"
+                      Background="{DynamicResource RiceSelectedRowBrush}"
+                      IsVisible="{Binding #PART_ModeLabel.IsVisible}">
+                <TextBlock Name="PART_ModeLabel" FontSize="12" IsVisible="False" />
+              </Border>
             </Grid>
             <Border DockPanel.Dock="Top" Height="1" Background="{TemplateBinding BorderBrush}" />
 

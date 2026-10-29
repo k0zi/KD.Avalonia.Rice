@@ -42,6 +42,7 @@ can be set per window; the title bar icon is `AppInfo.Icon`, so set `AppInfo` to
 | `Commands` | empty | Entries of the [command palette](rice-command-palette.md); their `Gesture`s work in the whole window. |
 | `CommandPaletteGesture` | `Ctrl+Shift+P` | Opens / closes the command palette; `null` turns the shortcut off. |
 | `IncludeNavigationCommands` | `true` | Lists the items of the window's `RiceSideMenu` in the command palette too. |
+| `CommandProviders` | empty | Extra [modes](rice-command-palette.md#modes-prefixes) of the palette (`>` commands and `@` pages are built in). |
 
 Inherited `Window` properties (`CanResize`, `CanMinimize`, `CanMaximize`, `WindowState`, `MinWidth`, …) work as usual:
 a non-resizable window has no resize grips, `CanMinimize="False"` / `CanMaximize="False"` hide the matching title bar

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -26,6 +27,7 @@ public partial class MainWindow : RiceWindow
     }
 
     // Ctrl+Shift+P lists these and the side menu items; the gestures work without opening the palette too.
+    // "?" lists the modes: ">" commands, "@" pages (built in) and "=" the calculator below.
     private void AddPaletteCommands()
     {
         Commands.Add(new RiceCommandItem(RiceStrings.ToggleTheme, ThemeManager.Instance.ToggleVariant)
@@ -60,6 +62,37 @@ public partial class MainWindow : RiceWindow
             Category = "Help",
             Gesture = new KeyGesture(Key.F1),
         });
+
+        // A dynamic mode: the entry is computed from the text after the prefix.
+        CommandProviders.Add(new RiceCommandProvider
+        {
+            Prefix = "=",
+            Title = "Calculator",
+            Icon = MaterialIconKind.Calculator,
+            FilterResults = false,
+            GetCommands = Calculate,
+        });
+    }
+
+    private static IEnumerable<RiceCommandItem> Calculate(string expression)
+    {
+        if (expression.Length == 0)
+            yield break;
+        string result;
+        try
+        {
+            result = Convert.ToString(new System.Data.DataTable().Compute(expression, null), CultureInfo.InvariantCulture) ?? "";
+        }
+        catch (Exception e) when (e is System.Data.EvaluateException or System.Data.SyntaxErrorException or FormatException
+                                      or OverflowException or InvalidCastException or IndexOutOfRangeException)
+        {
+            yield break;
+        }
+        yield return new RiceCommandItem($"{expression} = {result}", () => RiceToast.ShowInfo(result, "Result"))
+        {
+            Icon = MaterialIconKind.EqualBox,
+            Description = "Enter shows the result as a toast",
+        };
     }
 
     // Footer items are not selectable, so the menu selection is cleared while the settings page is shown.
@@ -88,6 +121,7 @@ public partial class MainWindow : RiceWindow
                 _ when key == ToastsItem => new ToastsPage(),
                 _ when key == FeedbackItem => new FeedbackPage(),
                 _ when key == NavigationItem => new NavigationPage(),
+                _ when key == RibbonItem => new RibbonPage(),
                 _ when key == PropertyGridItem => new PropertyGridPage(),
                 _ when key == CommandPaletteItem => new CommandPalettePage(),
                 nameof(SettingsPage) => new SettingsPage(),

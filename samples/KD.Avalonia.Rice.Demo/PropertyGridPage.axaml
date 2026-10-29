@@ -16,7 +16,10 @@
       </rice:RiceCard>
       <TextBlock Name="ChangeLog" TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
                  Text="Changes are listed here." />
-      <Button Name="ResetButton" Content="Reset from code" />
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Name="ResetButton" Content="Reset from code" />
+        <Button Name="AddTagButton" Content="Add a tag from code" />
+      </StackPanel>
     </StackPanel>
   </Grid>
 </UserControl>
