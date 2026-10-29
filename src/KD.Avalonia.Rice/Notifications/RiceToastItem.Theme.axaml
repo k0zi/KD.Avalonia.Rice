@@ -1,0 +1,112 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:toast="clr-namespace:KD.Avalonia.Rice.Notifications">
+  <ControlTheme x:Key="{x:Type toast:RiceToastItem}" TargetType="toast:RiceToastItem">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceToastInfoBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceToastInfoBorderBrush}" />
+    <Setter Property="KindBrush" Value="{DynamicResource RiceToastInfoBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Margin" Value="0,4" />
+    <!-- Templated controls clip by default, which would cut the shadow off at the toast's edge. -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <!-- Start values; :shown slides and fades the toast in. -->
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="RenderTransform" Value="translateX(32px)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="CubicEaseOut" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!-- The outer border draws the shadow, the inner one clips the stripe and the countdown to the corners. -->
+        <Border Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                BoxShadow="{DynamicResource RiceToastShadow}">
+          <Border BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  ClipToBounds="True">
+            <Grid ColumnDefinitions="4,*" RowDefinitions="*,Auto">
+              <Border Grid.RowSpan="2" Background="{TemplateBinding KindBrush}" />
+              <Grid Grid.Column="1" ColumnDefinitions="Auto,*,Auto" Margin="12,12,6,12">
+                <mi:MaterialIcon Name="PART_Icon" Kind="Information" Width="22" Height="22"
+                                 VerticalAlignment="Top" Foreground="{TemplateBinding KindBrush}" />
+                <StackPanel Grid.Column="1" Margin="12,1,8,0" Spacing="2" VerticalAlignment="Top">
+                  <TextBlock Name="PART_Title" FontWeight="SemiBold" TextWrapping="Wrap"
+                             Text="{TemplateBinding Title}"
+                             IsVisible="{TemplateBinding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                  <TextBlock Name="PART_Message" TextWrapping="Wrap"
+                             Text="{TemplateBinding Message}"
+                             IsVisible="{TemplateBinding Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                  <ContentPresenter Name="PART_ContentPresenter" Margin="0,4,0,0"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  <Button Name="PART_ActionButton" Margin="0,6,0,0" Padding="10,4" HorizontalAlignment="Left"
+                          Background="Transparent" BorderThickness="1" BorderBrush="{TemplateBinding KindBrush}"
+                          IsVisible="False" />
+                </StackPanel>
+                <Button Name="PART_CloseButton" Grid.Column="2" Width="26" Height="26" Padding="0"
+                        VerticalAlignment="Top" Background="Transparent" BorderThickness="0"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                        IsVisible="{TemplateBinding ShowCloseButton}">
+                  <mi:MaterialIcon Kind="Close" Width="16" Height="16" />
+                </Button>
+              </Grid>
+              <Border Name="PART_Progress" Grid.Row="1" Grid.Column="1" Height="3"
+                      Background="{TemplateBinding KindBrush}" Opacity="0.7" />
+            </Grid>
+          </Border>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:from-left">
+      <Setter Property="RenderTransform" Value="translateX(-32px)" />
+    </Style>
+    <Style Selector="^:from-top">
+      <Setter Property="RenderTransform" Value="translateY(-24px)" />
+    </Style>
+    <Style Selector="^:from-bottom">
+      <Setter Property="RenderTransform" Value="translateY(24px)" />
+    </Style>
+    <Style Selector="^:shown">
+      <Setter Property="Opacity" Value="1" />
+      <Setter Property="RenderTransform" Value="none" />
+    </Style>
+    <Style Selector="^:closing">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+
+    <Style Selector="^:success">
+      <Setter Property="Background" Value="{DynamicResource RiceToastSuccessBackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceToastSuccessBorderBrush}" />
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastSuccessBrush}" />
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Icon">
+        <Setter Property="Kind" Value="CheckCircle" />
+      </Style>
+    </Style>
+    <Style Selector="^:warning">
+      <Setter Property="Background" Value="{DynamicResource RiceToastWarningBackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceToastWarningBorderBrush}" />
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastWarningBrush}" />
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Icon">
+        <Setter Property="Kind" Value="Alert" />
+      </Style>
+    </Style>
+    <Style Selector="^:error">
+      <Setter Property="Background" Value="{DynamicResource RiceToastErrorBackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceToastErrorBorderBrush}" />
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastErrorBrush}" />
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Icon">
+        <Setter Property="Kind" Value="AlertCircle" />
+      </Style>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

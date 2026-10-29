@@ -154,6 +154,10 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceTitleBarHoverBrush"] = new SolidColorBrush(ColorMath.Blend(p.TitleBarBackground, p.TitleBarForeground, 0.12));
         target["RiceDangerBrush"] = new SolidColorBrush(p.Danger);
         target["RiceDangerForegroundBrush"] = new SolidColorBrush(p.DangerForeground);
+        target["RiceSuccessBrush"] = new SolidColorBrush(p.Success);
+        target["RiceSuccessForegroundBrush"] = new SolidColorBrush(p.SuccessForeground);
+        target["RiceWarningBrush"] = new SolidColorBrush(p.Warning);
+        target["RiceWarningForegroundBrush"] = new SolidColorBrush(p.WarningForeground);
         // Loading overlay: the background color, translucent, so the content stays recognizable but recedes.
         target["RiceOverlayBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Background, 0xB8));
         // Side menu states are accent tints of the title bar color. The idle brush is the same color fully
@@ -216,6 +220,15 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceChartNegativeBrush"] = new SolidColorBrush(ColorMath.Blend(Color.Parse("#FF5630"), p.Surface, p.IsDark ? 0.18 : 0.08));
         target["RiceChartHeatLowBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Accent, p.IsDark ? 0.10 : 0.06));
         target["RiceChartHeatHighBrush"] = new SolidColorBrush(p.Accent);
+
+        // Toasts: the kind's color for the stripe, icon and countdown, a tint of it as the background.
+        foreach (var (kind, color) in new[] { ("Info", p.Accent), ("Success", p.Success), ("Warning", p.Warning), ("Error", p.Danger) })
+        {
+            target[$"RiceToast{kind}Brush"] = new SolidColorBrush(color);
+            target[$"RiceToast{kind}BackgroundBrush"] = new SolidColorBrush(ColorMath.Blend(p.Surface, color, p.IsDark ? 0.16 : 0.09));
+            target[$"RiceToast{kind}BorderBrush"] = new SolidColorBrush(ColorMath.Blend(p.Surface, color, p.IsDark ? 0.38 : 0.32));
+        }
+        target["RiceToastShadow"] = Shadow(4, 16, p.IsDark ? 0.45 : 0.14);
 
         // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
         target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);

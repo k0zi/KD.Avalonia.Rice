@@ -6,6 +6,7 @@
                  xmlns:theming="clr-namespace:KD.Avalonia.Rice.Theming;assembly=KD.Avalonia.Rice"
                  xmlns:media="clr-namespace:Avalonia.Media;assembly=Avalonia.Base"
                  xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+                 xmlns:toast="clr-namespace:KD.Avalonia.Rice.Notifications;assembly=KD.Avalonia.Rice"
                  xmlns:local="clr-namespace:KD.Avalonia.Rice.ThemeEditor"
                  x:Class="KD.Avalonia.Rice.ThemeEditor.MainWindow"
                  Width="1320" Height="840" MinWidth="960" MinHeight="560"
@@ -173,6 +174,13 @@
             <TextBlock Foreground="{DynamicResource RiceDangerForegroundBrush}" TextWrapping="Wrap"
                        Text="Danger: errors and the title bar close button use this color." />
           </Border>
+
+          <WrapPanel ItemSpacing="12" LineSpacing="4">
+            <toast:RiceToastItem Width="300" Kind="Info" Title="Info toast" Message="Accent colored." />
+            <toast:RiceToastItem Width="300" Kind="Success" Title="Success toast" Message="Success color." />
+            <toast:RiceToastItem Width="300" Kind="Warning" Title="Warning toast" Message="Warning color." />
+            <toast:RiceToastItem Width="300" Kind="Error" Title="Error toast" Message="Danger color." />
+          </WrapPanel>
 
           <WrapPanel ItemSpacing="16" LineSpacing="16">
             <rice:RiceCard Width="300" Header="Card" Subtitle="Surface, border and shadow"

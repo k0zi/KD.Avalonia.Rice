@@ -58,4 +58,22 @@ public class ThemeManagerTests
             ThemeManager.Instance.SetTheme(original);
         }
     }
+
+    [Fact]
+    public void ProvidesTintedToastBrushesForEveryKind()
+    {
+        var resources = new ResourceDictionary();
+        ThemeManager.Instance.Attach(resources, new FluentTheme());
+        var brushes = Brushes(resources, ThemeVariant.Light);
+        var palette = ThemeManager.Instance.CurrentTheme.Light;
+
+        foreach (var (kind, color) in new[] { ("Info", palette.Accent), ("Success", palette.Success), ("Warning", palette.Warning), ("Error", palette.Danger) })
+        {
+            Assert.Equal(color, ((SolidColorBrush)brushes[$"RiceToast{kind}Brush"]!).Color);
+            Assert.NotEqual(color, ((SolidColorBrush)brushes[$"RiceToast{kind}BackgroundBrush"]!).Color);
+            Assert.True(brushes.ContainsKey($"RiceToast{kind}BorderBrush"));
+        }
+        Assert.Equal(palette.Success, ((SolidColorBrush)brushes["RiceSuccessBrush"]!).Color);
+        Assert.Equal(palette.Warning, ((SolidColorBrush)brushes["RiceWarningBrush"]!).Color);
+    }
 }

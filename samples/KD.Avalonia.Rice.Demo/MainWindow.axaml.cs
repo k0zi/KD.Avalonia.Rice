@@ -43,6 +43,7 @@ public partial class MainWindow : RiceWindow
                 _ when key == MarkdownItem => new MarkdownPage(),
                 _ when key == ChartsItem => new ChartsPage(),
                 _ when key == DialogsItem => new DialogsPage(),
+                _ when key == ToastsItem => new ToastsPage(),
                 nameof(SettingsPage) => new SettingsPage(),
                 _ => new HomePage(),
             };

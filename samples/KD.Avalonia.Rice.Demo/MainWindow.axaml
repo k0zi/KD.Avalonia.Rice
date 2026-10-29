@@ -29,6 +29,7 @@
       <rice:RiceSideMenuItem Name="MarkdownItem" Icon="{x:Static icons:MaterialIconKind.LanguageMarkdownOutline}" Header="Markdown" />
       <rice:RiceSideMenuItem Name="ChartsItem" Icon="{x:Static icons:MaterialIconKind.ChartBar}" Header="Charts" />
       <rice:RiceSideMenuItem Name="DialogsItem" Icon="{x:Static icons:MaterialIconKind.MessageAlertOutline}" Header="Dialogs" />
+      <rice:RiceSideMenuItem Name="ToastsItem" Icon="{x:Static icons:MaterialIconKind.BellOutline}" Header="Toasts" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Header="Settings"

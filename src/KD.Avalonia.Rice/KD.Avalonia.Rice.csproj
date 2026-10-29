@@ -4,7 +4,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <!-- LibraryImport (Windows system dialog icons). -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Description>Frameless Avalonia window with a custom title bar and Linux distro inspired themes, plus themed controls: side menu, card, group box, chat, progress ring, progress bar, spinner, loading overlay, UML diagrams (all 14 kinds, read from and written to PlantUML), message / question dialogs with the system icons, a Markdown view (CommonMark + GFM) with syntax colored code and Mermaid diagrams, and 23 chart controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, pyramid, funnel, treemap, waterfall, gantt, histogram, bullet, gauge, diverging bar).</Description>
+    <Description>Frameless Avalonia window with a custom title bar and Linux distro inspired themes, plus themed controls: side menu, card, group box, chat, progress ring, progress bar, spinner, loading overlay, UML diagrams (all 14 kinds, read from and written to PlantUML), message / question dialogs with the system icons, toast notifications (info, success, warning, error), a Markdown view (CommonMark + GFM) with syntax colored code and Mermaid diagrams, and 23 chart controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, pyramid, funnel, treemap, waterfall, gantt, histogram, bullet, gauge, diverging bar).</Description>
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
@@ -12,7 +12,7 @@
     <PackageId>KD.Avalonia.Rice</PackageId>
     <Authors>k0zi</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula;sidemenu;navigation;card;groupbox;chat;progress;progressring;spinner;loading;overlay;uml;plantuml;diagram;markdown;commonmark;gfm;mermaid;chart;charts;graph;pie;gantt;heatmap;gauge;dialog;messagebox</PackageTags>
+    <PackageTags>avalonia;theme;titlebar;frameless;linux;ubuntu;fedora;nord;dracula;sidemenu;navigation;card;groupbox;chat;progress;progressring;spinner;loading;overlay;uml;plantuml;diagram;markdown;commonmark;gfm;mermaid;chart;charts;graph;pie;gantt;heatmap;gauge;dialog;messagebox;toast;notification</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

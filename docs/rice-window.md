@@ -38,6 +38,7 @@ can be set per window; the title bar icon is `AppInfo.Icon`, so set `AppInfo` to
 | `TitleBarContent` | `null` | Extra content in the title bar, between the title and the buttons. |
 | `AppInfo` | `RiceOptions.AppInfo` | Metadata shown by the about dialog. |
 | `CornerRadius` | `RiceOptions.WindowCornerRadius` (8) | Window corners; `0` = square. |
+| `ToastPosition` | `BottomRight` | Corner of the built-in host of the [toasts](rice-toast.md), below the title bar. |
 
 Inherited `Window` properties (`CanResize`, `CanMinimize`, `CanMaximize`, `WindowState`, `MinWidth`, …) work as usual:
 a non-resizable window has no resize grips, `CanMinimize="False"` / `CanMaximize="False"` hide the matching title bar

@@ -64,7 +64,7 @@ public static class RiceDialog
             Title = title,
         }, owner);
 
-    private static Window? ActiveWindow() =>
+    internal static Window? ActiveWindow() =>
         Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.Windows.FirstOrDefault(w => w.IsActive) ?? desktop.MainWindow
             : null;
