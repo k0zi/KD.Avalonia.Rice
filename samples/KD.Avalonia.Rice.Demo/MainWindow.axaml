@@ -28,6 +28,7 @@
       <rice:RiceSideMenuItem Name="UmlItem" Icon="{x:Static icons:MaterialIconKind.SitemapOutline}" Header="UML" />
       <rice:RiceSideMenuItem Name="MarkdownItem" Icon="{x:Static icons:MaterialIconKind.LanguageMarkdownOutline}" Header="Markdown" />
       <rice:RiceSideMenuItem Name="ChartsItem" Icon="{x:Static icons:MaterialIconKind.ChartBar}" Header="Charts" />
+      <rice:RiceSideMenuItem Name="DialogsItem" Icon="{x:Static icons:MaterialIconKind.MessageAlertOutline}" Header="Dialogs" />
       <rice:RiceSideMenu.Footer>
         <StackPanel>
           <rice:RiceSideMenuItem Icon="{x:Static icons:MaterialIconKind.Cog}" Header="Settings"

@@ -13,7 +13,7 @@ light and dark variants.
 Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card (`RiceCard`), group box
 (`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`), a theme
 selector (`ThemeSelector`, `ThemeDialog`), UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
-PlantUML), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 22 chart
+PlantUML), dialogs with the system icons (`RiceDialog`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 22 chart
 controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, waterfall, gantt, gauge, …).
 
 ## Documentation
@@ -197,10 +197,36 @@ private void OnMessageSent(object? sender, RiceChatMessageSentEventArgs e) =>
 - `RiceLoadingOverlay`: while `IsActive`, covers its content with a translucent layer, a ring (indeterminate or
   `Value`) and a `Message`, and blocks pointer and keyboard input to it. See the [overlay docs](docs/rice-loading-overlay.md).
 
+### Dialogs
+
+```csharp
+using KD.Avalonia.Rice.Dialogs;
+
+await RiceDialog.ShowErrorAsync("Could not open the file.");
+if (await RiceDialog.AskAsync("Delete the selected files?"))
+    DeleteFiles();
+var result = await RiceDialog.ShowAsync<RenameView>(viewModel,
+    [new DialogButton("Rename", "ok") { IsAccent = true, IsDefault = true }, DialogButton.For(DialogResult.Cancel)]);
+```
+
+- Frameless, without a title bar; the icon comes from the OS (Windows stock icons, Linux icon theme PNGs, else
+  Material icons), `DialogIcon.None` hides it.
+- Standard button sets (`DialogButtons.YesNoCancel`, …) or custom `DialogButton`s with caption, `ICommand` and result.
+- Custom view + view model; `IDialogContent` lets the view model close the dialog. See the [dialog docs](docs/rice-dialog.md).
+
 ## Demo
 
 ```sh
 dotnet run --project samples/KD.Avalonia.Rice.Demo
+```
+
+## Theme editor
+
+A development tool (not part of the package): pick the colors of a theme with live preview, save it under a name and
+copy it as C#. See [tools/KD.Avalonia.Rice.ThemeEditor](tools/KD.Avalonia.Rice.ThemeEditor/README.md).
+
+```sh
+dotnet run --project tools/KD.Avalonia.Rice.ThemeEditor
 ```
 
 ## Versioning & NuGet package

@@ -14,6 +14,12 @@ public static class RiceStrings
     public static string Author { get; set; } = "Author";
     public static string Version { get; set; } = "Version";
     public static string Ok { get; set; } = "OK";
+    public static string Cancel { get; set; } = "Cancel";
+    public static string Yes { get; set; } = "Yes";
+    public static string No { get; set; } = "No";
+    public static string Retry { get; set; } = "Retry";
+    public static string Abort { get; set; } = "Abort";
+    public static string Ignore { get; set; } = "Ignore";
     public static string LightVariant { get; set; } = "Light";
     public static string DarkVariant { get; set; } = "Dark";
     public static string CollapseMenu { get; set; } = "Collapse menu";

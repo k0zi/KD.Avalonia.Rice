@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:demo="clr-namespace:KD.Avalonia.Rice.Demo"
+             x:Class="KD.Avalonia.Rice.Demo.RenameDialogView"
+             x:DataType="demo:RenameDialogViewModel">
+  <StackPanel Spacing="6">
+    <TextBlock FontWeight="SemiBold" Text="Rename the file" />
+    <TextBox Name="NameBox" Text="{Binding Name}" />
+    <TextBlock Text="{Binding Error}" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}"
+               Foreground="{DynamicResource RiceDangerBrush}" TextWrapping="Wrap" />
+  </StackPanel>
+</UserControl>
