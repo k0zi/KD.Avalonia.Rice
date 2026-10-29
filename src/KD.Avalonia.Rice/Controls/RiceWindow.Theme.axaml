@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                    xmlns:toast="clr-namespace:KD.Avalonia.Rice.Notifications">
   <ControlTheme x:Key="{x:Type rice:RiceWindow}" TargetType="rice:RiceWindow">
     <Setter Property="WindowDecorations" Value="None" />
     <Setter Property="Background" Value="{DynamicResource RiceBackgroundBrush}" />
@@ -22,12 +23,16 @@
             <VisualLayerManager Margin="{TemplateBinding BorderThickness}">
               <DockPanel>
                 <rice:RiceTitleBar Name="PART_TitleBar" DockPanel.Dock="Top" />
-                <ContentPresenter Name="PART_ContentPresenter"
-                                  Content="{TemplateBinding Content}"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                  Margin="{TemplateBinding Padding}"
-                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <!-- Toasts float over the content, below the title bar. -->
+                <Panel>
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                  <toast:RiceToastHost Name="PART_ToastHost" Position="{TemplateBinding ToastPosition}" />
+                </Panel>
               </DockPanel>
             </VisualLayerManager>
           </Border>

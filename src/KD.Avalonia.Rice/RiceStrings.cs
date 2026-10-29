@@ -48,4 +48,6 @@ public static class RiceStrings
     public static string ChartTotal { get; set; } = "Total";
     /// <summary>Chart reading problem (Markdown <c>chart</c> blocks); {0} is the line number, {1} the message.</summary>
     public static string ChartParseError { get; set; } = "Line {0}: {1}";
+    /// <summary>Tooltip of the close button of a toast.</summary>
+    public static string ToastClose { get; set; } = "Close notification";
 }

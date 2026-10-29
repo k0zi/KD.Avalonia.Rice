@@ -13,7 +13,7 @@ light and dark variants.
 Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card (`RiceCard`), group box
 (`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`), a theme
 selector (`ThemeSelector`, `ThemeDialog`), UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
-PlantUML), dialogs with the system icons (`RiceDialog`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 23 chart
+PlantUML), dialogs with the system icons (`RiceDialog`), toast notifications (`RiceToast`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 23 chart
 controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, treemap, waterfall, gantt, gauge, …).
 
 ## Documentation
@@ -213,6 +213,20 @@ var result = await RiceDialog.ShowAsync<RenameView>(viewModel,
   Material icons), `DialogIcon.None` hides it.
 - Standard button sets (`DialogButtons.YesNoCancel`, …) or custom `DialogButton`s with caption, `ICommand` and result.
 - Custom view + view model; `IDialogContent` lets the view model close the dialog. See the [dialog docs](docs/rice-dialog.md).
+
+### Toasts
+
+```csharp
+using KD.Avalonia.Rice.Notifications;
+
+RiceToast.ShowSuccess("report.md was saved.");
+RiceToast.ShowError("The server did not respond.", "Upload failed");
+RiceToast.ShowInfo("3 files were moved to the trash.", "Deleted", new ToastAction("Undo", RestoreFiles));
+```
+
+- Info (accent color), success (green), warning (amber) and error (red) toasts in the theme's own colors.
+- Close themselves (5 s, errors 8 s, or never) with a countdown bar that pauses on hover; close and action buttons.
+- Stacked in a corner of the window (`RiceWindow.ToastPosition`), at most 5. See the [toast docs](docs/rice-toast.md).
 
 ## Demo
 

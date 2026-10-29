@@ -28,6 +28,10 @@ public static class PaletteFields
         new(nameof(RicePalette.TitleBarForeground), "Title bar text", p => p.TitleBarForeground, (p, c) => p with { TitleBarForeground = c }),
         new(nameof(RicePalette.Danger), "Danger", p => p.Danger, (p, c) => p with { Danger = c }),
         new(nameof(RicePalette.DangerForeground), "Text on danger", p => p.DangerForeground, (p, c) => p with { DangerForeground = c }),
+        new(nameof(RicePalette.Success), "Success", p => p.Success, (p, c) => p with { Success = c }),
+        new(nameof(RicePalette.SuccessForeground), "Text on success", p => p.SuccessForeground, (p, c) => p with { SuccessForeground = c }),
+        new(nameof(RicePalette.Warning), "Warning", p => p.Warning, (p, c) => p with { Warning = c }),
+        new(nameof(RicePalette.WarningForeground), "Text on warning", p => p.WarningForeground, (p, c) => p with { WarningForeground = c }),
     ];
 
     /// <summary>Builds a palette; <paramref name="valueOf"/> returns null for optional colors that stay derived.</summary>
@@ -52,9 +56,11 @@ public static class PaletteFields
         if (field.IsCore)
             return value;
 
-        // Text on danger is derived from the danger color, which may be set itself.
+        // Text on danger / success / warning is derived from that color, which may be set itself.
         var plain = new RicePalette(palette.Accent, palette.Background, palette.Surface, palette.Foreground);
-        var reference = field.Name == nameof(RicePalette.Danger) ? plain : plain with { Danger = palette.Danger };
+        var reference = field.Name is nameof(RicePalette.Danger) or nameof(RicePalette.Success) or nameof(RicePalette.Warning)
+            ? plain
+            : plain with { Danger = palette.Danger, Success = palette.Success, Warning = palette.Warning };
         return value == field.Get(reference) ? null : value;
     }
 

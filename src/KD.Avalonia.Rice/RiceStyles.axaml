@@ -21,6 +21,7 @@
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/Markdowns/MarkdownView.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/Markdowns/MermaidView.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/Charts/RiceCharts.Theme.axaml" />
+        <ResourceInclude Source="avares://KD.Avalonia.Rice/Notifications/RiceToastItem.Theme.axaml" />
       </ResourceDictionary.MergedDictionaries>
       <!-- Fluent's corner radius for buttons, text boxes, combo boxes, ... -->
       <CornerRadius x:Key="ControlCornerRadius">6</CornerRadius>

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using KD.Avalonia.Rice.Notifications;
 using KD.Avalonia.Rice.Options;
 using KD.Avalonia.Rice.Theming;
 
@@ -31,6 +32,9 @@ public class RiceWindow : Window
 
     public static readonly StyledProperty<RiceAppInfo> AppInfoProperty =
         AvaloniaProperty.Register<RiceWindow, RiceAppInfo>(nameof(AppInfo));
+
+    public static readonly StyledProperty<ToastPosition> ToastPositionProperty =
+        RiceToastHost.PositionProperty.AddOwner<RiceWindow>();
 
     public static readonly RoutedEvent<RoutedEventArgs> AboutRequestedEvent =
         RoutedEvent.Register<RiceWindow, RoutedEventArgs>(nameof(AboutRequested), RoutingStrategies.Direct);
@@ -92,6 +96,16 @@ public class RiceWindow : Window
         set => SetValue(AppInfoProperty, value);
     }
 
+    /// <summary>Where <see cref="RiceToast"/> stacks the toasts of this window, below the title bar.</summary>
+    public ToastPosition ToastPosition
+    {
+        get => GetValue(ToastPositionProperty);
+        set => SetValue(ToastPositionProperty, value);
+    }
+
+    /// <summary>The built-in toast host, once the template is applied.</summary>
+    public RiceToastHost? ToastHost { get; private set; }
+
     /// <summary>Raised before the built-in about dialog opens; set <c>Handled</c> to replace it.</summary>
     public event EventHandler<RoutedEventArgs>? AboutRequested
     {
@@ -137,6 +151,7 @@ public class RiceWindow : Window
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        ToastHost = e.NameScope.Find<RiceToastHost>("PART_ToastHost");
         foreach (var (name, edge) in ResizeGrips)
         {
             if (e.NameScope.Find<Control>(name) is { } grip)

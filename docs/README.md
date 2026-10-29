@@ -16,6 +16,7 @@ themes that every control relies on.
 | [RiceSpinner](rice-spinner.md) | Small busy indicator for buttons and status lines |
 | [RiceLoadingOverlay](rice-loading-overlay.md) | Covers and blocks content while it loads, with ring and message |
 | [Dialogs](rice-dialog.md) | `RiceDialog`: frameless message, question and custom view dialogs with the system icons |
+| [Toasts](rice-toast.md) | `RiceToast`: self-closing info / success / warning / error notifications in a corner of the window |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
 | [UML diagrams](rice-uml.md) | `UmlDiagramView`: all 14 UML diagram types, read from and written to PlantUML (`.puml`) |
 | [Markdown and Mermaid](rice-markdown.md) | `MarkdownView`: CommonMark + GFM with colored code and diagrams; `MermaidView` for Mermaid diagrams |
@@ -36,7 +37,8 @@ xmlns:md="clr-namespace:KD.Avalonia.Rice.Controls.Markdowns;assembly=KD.Avalonia
 xmlns:charts="clr-namespace:KD.Avalonia.Rice.Controls.Charts;assembly=KD.Avalonia.Rice"
 ```
 
-The dialogs are used from code, namespace `KD.Avalonia.Rice.Dialogs`.
+The dialogs are used from code, namespace `KD.Avalonia.Rice.Dialogs`; the toasts too, namespace
+`KD.Avalonia.Rice.Notifications`.
 
 The [demo app](../samples/KD.Avalonia.Rice.Demo) shows every control:
 

@@ -11,11 +11,15 @@ public static class BuiltInThemes
         {
             TitleBarBackground = C("#EBEBEB"),
             Danger = C("#C7162B"),
+            Success = C("#0E8420"),
+            Warning = C("#F99B11"),
         },
         Dark: new(C("#E95420"), C("#2C2C2C"), C("#3D3D3D"), C("#F7F7F7"))
         {
             TitleBarBackground = C("#300A24"),
             Danger = C("#C7162B"),
+            Success = C("#0E8420"),
+            Warning = C("#F99B11"),
         });
 
     public static RiceTheme Fedora { get; } = new("fedora", "Fedora",
@@ -53,11 +57,15 @@ public static class BuiltInThemes
         {
             TitleBarBackground = C("#D8DEE9"),
             Danger = C("#BF616A"),
+            Success = C("#A3BE8C"),
+            Warning = C("#EBCB8B"),
         },
         Dark: new(C("#88C0D0"), C("#2E3440"), C("#3B4252"), C("#ECEFF4"))
         {
             TitleBarBackground = C("#272C36"),
             Danger = C("#BF616A"),
+            Success = C("#A3BE8C"),
+            Warning = C("#EBCB8B"),
         });
 
     public static RiceTheme Solarized { get; } = new("solarized", "Solarized",
@@ -65,11 +73,15 @@ public static class BuiltInThemes
         {
             TitleBarBackground = C("#EEE8D5"),
             Danger = C("#DC322F"),
+            Success = C("#859900"),
+            Warning = C("#B58900"),
         },
         Dark: new(C("#268BD2"), C("#002B36"), C("#073642"), C("#93A1A1"))
         {
             TitleBarBackground = C("#073642"),
             Danger = C("#DC322F"),
+            Success = C("#859900"),
+            Warning = C("#B58900"),
         });
 
     public static RiceTheme Dracula { get; } = new("dracula", "Dracula",
@@ -77,11 +89,15 @@ public static class BuiltInThemes
         {
             TitleBarBackground = C("#ECE7CF"),
             Danger = C("#CB3A2A"),
+            Success = C("#14710A"),
+            Warning = C("#846E15"),
         },
         Dark: new(C("#BD93F9"), C("#282A36"), C("#44475A"), C("#F8F8F2"))
         {
             TitleBarBackground = C("#21222C"),
             Danger = C("#FF5555"),
+            Success = C("#50FA7B"),
+            Warning = C("#F1FA8C"),
         });
 
     public static RiceTheme Gruvbox { get; } = new("gruvbox", "Gruvbox",
@@ -89,11 +105,15 @@ public static class BuiltInThemes
         {
             TitleBarBackground = C("#EBDBB2"),
             Danger = C("#CC241D"),
+            Success = C("#98971A"),
+            Warning = C("#D79921"),
         },
         Dark: new(C("#FE8019"), C("#282828"), C("#3C3836"), C("#EBDBB2"))
         {
             TitleBarBackground = C("#1D2021"),
             Danger = C("#FB4934"),
+            Success = C("#B8BB26"),
+            Warning = C("#FABD2F"),
         });
 
     public static RiceTheme Catppuccin { get; } = new("catppuccin", "Catppuccin",
@@ -101,11 +121,15 @@ public static class BuiltInThemes
         {
             TitleBarBackground = C("#DCE0E8"),
             Danger = C("#D20F39"),
+            Success = C("#40A02B"),
+            Warning = C("#DF8E1D"),
         },
         Dark: new(C("#CBA6F7"), C("#1E1E2E"), C("#313244"), C("#CDD6F4"))
         {
             TitleBarBackground = C("#181825"),
             Danger = C("#F38BA8"),
+            Success = C("#A6E3A1"),
+            Warning = C("#F9E2AF"),
         });
 
     // Fluent 2 colors: default accent, Mica window background, card surface.
@@ -115,12 +139,15 @@ public static class BuiltInThemes
             TitleBarBackground = C("#F3F3F3"),
             Border = C("#E5E5E5"),
             Danger = C("#C42B1C"),
+            Success = C("#0F7B0F"),
         },
         Dark: new(C("#60CDFF"), C("#202020"), C("#2B2B2B"), C("#FFFFFF"))
         {
             TitleBarBackground = C("#202020"),
             Border = C("#3A3A3A"),
             Danger = C("#C42B1C"),
+            Success = C("#6CCB5F"),
+            Warning = C("#FCE100"),
         });
 
     public static IReadOnlyList<RiceTheme> All { get; } =

@@ -26,6 +26,30 @@ public sealed record RicePalette(Color Accent, Color Background, Color Surface, 
 
     private readonly Color? _dangerForeground;
 
+    /// <summary>Success color, e.g. of success toasts.</summary>
+    public Color Success { get; init; } = Color.Parse("#2E9E5B");
+
+    /// <summary>Text on <see cref="Success"/>; derived from it unless set.</summary>
+    public Color SuccessForeground
+    {
+        get => _successForeground ?? ColorMath.ContrastingForeground(Success);
+        init => _successForeground = value;
+    }
+
+    private readonly Color? _successForeground;
+
+    /// <summary>Warning color, e.g. of warning toasts.</summary>
+    public Color Warning { get; init; } = Color.Parse("#E0A100");
+
+    /// <summary>Text on <see cref="Warning"/>; derived from it unless set.</summary>
+    public Color WarningForeground
+    {
+        get => _warningForeground ?? ColorMath.ContrastingForeground(Warning);
+        init => _warningForeground = value;
+    }
+
+    private readonly Color? _warningForeground;
+
     public bool IsDark => ColorMath.Luminance(Background) < 0.5;
 
     /// <summary>Background, surface, accent and foreground brushes for previews.</summary>

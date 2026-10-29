@@ -89,7 +89,7 @@ options.SupportedThemes = [ocean, .. BuiltInThemes.All];
 ```
 
 `RicePalette` derived colors: `AccentForeground`, `SurfaceAlt`, `ForegroundMuted`, `Border`, `TitleBarBackground`,
-`TitleBarForeground`, `Danger`, `DangerForeground`.
+`TitleBarForeground`, `Danger`, `DangerForeground`, `Success`, `SuccessForeground`, `Warning`, `WarningForeground`.
 
 ## Brushes for your own controls
 
@@ -104,6 +104,8 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceBorderBrush` | Separators and frames |
 | `RiceTitleBarBackgroundBrush`, `RiceTitleBarForegroundBrush`, `RiceTitleBarHoverBrush` | Title bar and side menu |
 | `RiceDangerBrush`, `RiceDangerForegroundBrush` | Destructive actions, errors, and the text on them |
+| `RiceSuccessBrush`, `RiceSuccessForegroundBrush` | Success states and the text on them |
+| `RiceWarningBrush`, `RiceWarningForegroundBrush` | Warnings and the text on them |
 | `RiceOverlayBrush` | Translucent background color for layers over content (loading overlay) |
 
 ```xml
