@@ -107,6 +107,10 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceSuccessBrush`, `RiceSuccessForegroundBrush` | Success states and the text on them |
 | `RiceWarningBrush`, `RiceWarningForegroundBrush` | Warnings and the text on them |
 | `RiceOverlayBrush` | Translucent background color for layers over content (loading overlay) |
+| `RiceBackdropBrush` | Dark translucent layer that dims the window behind a popup (command palette) |
+| `RiceTrackBrush` | Recessed strips: tab strip, segmented control, property grid description |
+| `RiceHoverBrush`, `RiceSelectedRowBrush` | Row under the pointer, selected row (lists, property grid, command palette) |
+| `RiceSkeletonBrush`, `RiceSkeletonHighlightBrush` | Loading placeholders and the band sweeping over them |
 
 ```xml
 <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="1">

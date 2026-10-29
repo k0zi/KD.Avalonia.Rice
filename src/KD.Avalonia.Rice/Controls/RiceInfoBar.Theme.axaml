@@ -1,0 +1,96 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <!-- Shares the tints of the toasts, so an info bar and a toast of the same kind look alike. -->
+  <ControlTheme x:Key="{x:Type rice:RiceInfoBar}" TargetType="rice:RiceInfoBar">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceToastInfoBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceToastInfoBorderBrush}" />
+    <Setter Property="KindBrush" Value="{DynamicResource RiceToastInfoBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12,10,6,10" />
+    <Setter Property="IsVisible" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <Grid ColumnDefinitions="4,*">
+            <Border Background="{TemplateBinding KindBrush}" />
+            <Grid Grid.Column="1" ColumnDefinitions="Auto,*,Auto,Auto" Margin="{TemplateBinding Padding}">
+              <Panel Name="PART_IconHost" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Top"
+                     IsVisible="{TemplateBinding ShowIcon}">
+                <mi:MaterialIcon Name="PART_Icon" Kind="Information" Width="20" Height="20"
+                                 Foreground="{TemplateBinding KindBrush}" />
+                <rice:RiceIconPresenter Name="PART_CustomIcon" Width="20" Height="20" IsVisible="False"
+                                        Foreground="{TemplateBinding KindBrush}"
+                                        Content="{TemplateBinding Icon}" />
+              </Panel>
+              <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                <!-- Title and message flow as one wrapped paragraph, like a sentence with a bold lead (filled in code). -->
+                <TextBlock Name="PART_Text" TextWrapping="Wrap" />
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              </StackPanel>
+              <ContentPresenter Name="PART_ActionPresenter" Grid.Column="2" Margin="12,0,0,0"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Action}"
+                                IsVisible="{TemplateBinding Action, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <Button Name="PART_CloseButton" Grid.Column="3" Width="26" Height="26" Padding="0" Margin="6,0,0,0"
+                      VerticalAlignment="Top" Background="Transparent" BorderThickness="0"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                      IsVisible="{TemplateBinding IsClosable}">
+                <mi:MaterialIcon Kind="Close" Width="16" Height="16" />
+              </Button>
+            </Grid>
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:open">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:custom-icon">
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Icon">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <!-- RiceIconPresenter is styled as a ContentPresenter. -->
+      <Style Selector="^ /template/ ContentPresenter#PART_CustomIcon">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+
+    <Style Selector="^:success">
+      <Setter Property="Background" Value="{DynamicResource RiceToastSuccessBackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceToastSuccessBorderBrush}" />
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastSuccessBrush}" />
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Icon">
+        <Setter Property="Kind" Value="CheckCircle" />
+      </Style>
+    </Style>
+    <Style Selector="^:warning">
+      <Setter Property="Background" Value="{DynamicResource RiceToastWarningBackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceToastWarningBorderBrush}" />
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastWarningBrush}" />
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Icon">
+        <Setter Property="Kind" Value="Alert" />
+      </Style>
+    </Style>
+    <Style Selector="^:error">
+      <Setter Property="Background" Value="{DynamicResource RiceToastErrorBackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceToastErrorBorderBrush}" />
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastErrorBrush}" />
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_Icon">
+        <Setter Property="Kind" Value="AlertCircle" />
+      </Style>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

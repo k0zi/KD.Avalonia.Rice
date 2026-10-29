@@ -20,7 +20,8 @@
                   Background="{TemplateBinding Background}"
                   CornerRadius="{TemplateBinding CornerRadius}"
                   ClipToBounds="True">
-            <VisualLayerManager Margin="{TemplateBinding BorderThickness}">
+            <!-- The overlay layer hosts the command palette (and the toasts of windows without a built-in host). -->
+            <VisualLayerManager Margin="{TemplateBinding BorderThickness}" EnableOverlayLayer="True">
               <DockPanel>
                 <rice:RiceTitleBar Name="PART_TitleBar" DockPanel.Dock="Top" />
                 <!-- Toasts float over the content, below the title bar. -->

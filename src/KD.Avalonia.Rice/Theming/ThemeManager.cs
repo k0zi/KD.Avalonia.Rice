@@ -230,6 +230,19 @@ public sealed class ThemeManager : INotifyPropertyChanged
         }
         target["RiceToastShadow"] = Shadow(4, 16, p.IsDark ? 0.45 : 0.14);
 
+        // Skeleton placeholders: a faint block of the text color, a lighter band sweeping over it.
+        target["RiceSkeletonBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x1C : (byte)0x14));
+        target["RiceSkeletonHighlightBrush"] = new SolidColorBrush(p.IsDark
+            ? ColorMath.WithAlpha(p.Foreground, 0x14)
+            : ColorMath.WithAlpha(Colors.White, 0xA0));
+
+        // Command palette: a dimmed window behind it; tab strip and segmented control tracks.
+        target["RiceBackdropBrush"] = new SolidColorBrush(Color.FromArgb(p.IsDark ? (byte)0x80 : (byte)0x40, 0, 0, 0));
+        target["RicePopupShadow"] = Shadow(8, 32, p.IsDark ? 0.55 : 0.22);
+        target["RiceTrackBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Foreground, p.IsDark ? 0.08 : 0.06));
+        target["RiceHoverBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x18 : (byte)0x10));
+        target["RiceSelectedRowBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Accent, p.IsDark ? (byte)0x38 : (byte)0x24));
+
         // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
         target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);
         target["RiceCardShadow2"] = Shadow(3, 10, p.IsDark ? 0.45 : 0.12);

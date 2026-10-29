@@ -50,4 +50,17 @@ public static class RiceStrings
     public static string ChartParseError { get; set; } = "Line {0}: {1}";
     /// <summary>Tooltip of the close button of a toast.</summary>
     public static string ToastClose { get; set; } = "Close notification";
+    /// <summary>Tooltip of the close button of an info bar.</summary>
+    public static string InfoBarClose { get; set; } = "Close";
+    public static string CommandPalettePlaceholder { get; set; } = "Type a command…";
+    public static string CommandPaletteNoResults { get; set; } = "No matching commands";
+    /// <summary>Category of the side menu items in the command palette.</summary>
+    public static string CommandPaletteNavigation { get; set; } = "Go to";
+    public static string TabClose { get; set; } = "Close tab";
+    public static string TabAdd { get; set; } = "New tab";
+    public static string PropertyGridSearch { get; set; } = "Search properties…";
+    /// <summary>Category of the properties without a <c>[Category]</c>.</summary>
+    public static string PropertyGridMisc { get; set; } = "Misc";
+    public static string PropertyGridCategorized { get; set; } = "Categorized";
+    public static string PropertyGridAlphabetical { get; set; } = "Alphabetical";
 }

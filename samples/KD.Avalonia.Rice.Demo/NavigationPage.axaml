@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             x:Class="KD.Avalonia.Rice.Demo.NavigationPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="720" HorizontalAlignment="Left">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Navigation" />
+      <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceBreadcrumb shows where you are, RiceSegmentedControl switches between a few views, RiceTabView holds documents." />
+
+      <rice:RiceGroupBox Header="Breadcrumb">
+        <StackPanel Spacing="12">
+          <!-- TrimOnClick: clicking a parent removes the levels after it. -->
+          <rice:RiceBreadcrumb Name="Breadcrumb" TrimOnClick="True">
+            <rice:RiceBreadcrumbItem Icon="{x:Static icons:MaterialIconKind.HomeOutline}" Content="Home" />
+            <rice:RiceBreadcrumbItem Content="Settings" />
+            <rice:RiceBreadcrumbItem Content="Appearance" />
+            <rice:RiceBreadcrumbItem Content="Colors" />
+          </rice:RiceBreadcrumb>
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Name="AddLevelButton" Content="Go deeper" />
+            <TextBlock Name="BreadcrumbResult" VerticalAlignment="Center"
+                       Foreground="{DynamicResource RiceForegroundMutedBrush}" Text="Click a parent level." />
+          </StackPanel>
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Segmented control">
+        <StackPanel Spacing="12">
+          <rice:RiceSegmentedControl Name="ViewSwitch" SelectedIndex="0">
+            <rice:RiceSegmentedItem Content="Day" />
+            <rice:RiceSegmentedItem Content="Week" />
+            <rice:RiceSegmentedItem Content="Month" />
+            <rice:RiceSegmentedItem Content="Year" />
+          </rice:RiceSegmentedControl>
+          <rice:RiceSegmentedControl SelectedIndex="1">
+            <rice:RiceSegmentedItem Icon="{x:Static icons:MaterialIconKind.ViewList}" Content="List" />
+            <rice:RiceSegmentedItem Icon="{x:Static icons:MaterialIconKind.ViewGrid}" Content="Grid" />
+            <rice:RiceSegmentedItem Icon="{x:Static icons:MaterialIconKind.ViewColumn}" Content="Columns" />
+          </rice:RiceSegmentedControl>
+          <rice:RiceSegmentedControl IsEqualWidth="True" SelectedIndex="0" Width="300">
+            <rice:RiceSegmentedItem Content="°C" />
+            <rice:RiceSegmentedItem Content="°F" />
+            <rice:RiceSegmentedItem Content="K" />
+          </rice:RiceSegmentedControl>
+          <TextBlock Name="SegmentResult" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+
+      <rice:RiceGroupBox Header="Tab view">
+        <StackPanel Spacing="8">
+          <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                     Text="Drag the tabs to reorder them, close them with × , a middle click or Ctrl+W, add one with +. The first tab cannot be closed." />
+          <rice:RiceTabView Name="Tabs" Height="220" ShowAddButton="True" />
+        </StackPanel>
+      </rice:RiceGroupBox>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

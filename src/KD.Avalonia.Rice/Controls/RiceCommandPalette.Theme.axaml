@@ -1,0 +1,118 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceCommandPalette}" TargetType="rice:RiceCommandPalette">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Width" Value="600" />
+    <Setter Property="MaxHeight" Value="460" />
+    <!-- Templated controls clip by default, which would cut the shadow off. -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                BoxShadow="{DynamicResource RicePopupShadow}">
+          <DockPanel>
+            <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,*" Margin="14,6">
+              <mi:MaterialIcon Kind="Magnify" Width="20" Height="20" VerticalAlignment="Center"
+                               Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+              <!-- A plain text field: the palette's own frame is the box. -->
+              <TextBox Name="PART_SearchBox" Grid.Column="1" Margin="6,0,0,0" FontSize="15"
+                       Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center"
+                       Text="{TemplateBinding Query, Mode=TwoWay}">
+                <TextBox.Styles>
+                  <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement, TextBox:focus /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                  </Style>
+                </TextBox.Styles>
+              </TextBox>
+            </Grid>
+            <Border DockPanel.Dock="Top" Height="1" Background="{TemplateBinding BorderBrush}" />
+
+            <TextBlock Name="PART_Empty" DockPanel.Dock="Top" Margin="16,14" IsVisible="False"
+                       Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+
+            <ListBox Name="PART_List" Margin="0,4" Background="Transparent" Padding="6,0"
+                     ItemsSource="{TemplateBinding Matches}"
+                     SelectedItem="{TemplateBinding SelectedMatch, Mode=TwoWay}"
+                     Focusable="False">
+              <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                  <Setter Property="Padding" Value="10,6" />
+                  <Setter Property="CornerRadius" Value="6" />
+                  <Setter Property="Margin" Value="0,1" />
+                  <Setter Property="Cursor" Value="Hand" />
+                  <Setter Property="Focusable" Value="False" />
+                </Style>
+                <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                  <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
+                </Style>
+                <Style Selector="Grid.disabled">
+                  <Setter Property="Opacity" Value="0.5" />
+                </Style>
+                <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+                  <Setter Property="Background" Value="{DynamicResource RiceSelectedRowBrush}" />
+                </Style>
+              </ListBox.Styles>
+              <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="rice:RiceCommandMatch">
+                  <Grid ColumnDefinitions="Auto,*,Auto,Auto" Classes.disabled="{Binding !IsEnabled}">
+                    <!-- A presenter takes its content as DataContext, so the binding sits on a wrapper. -->
+                    <ContentControl Width="18" Height="18" Margin="0,0,10,0" VerticalAlignment="Center"
+                                    Foreground="{DynamicResource RiceAccentBrush}"
+                                    Content="{Binding Command.Icon}"
+                                    IsVisible="{Binding Command.Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
+                      <ContentControl.Template>
+                        <ControlTemplate>
+                          <rice:RiceIconPresenter Content="{TemplateBinding Content}" />
+                        </ControlTemplate>
+                      </ContentControl.Template>
+                    </ContentControl>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                      <rice:RiceHighlightedText TextTrimming="CharacterEllipsis"
+                                                SourceText="{Binding Command.Title}"
+                                                Highlights="{Binding Highlights}"
+                                                HighlightBrush="{DynamicResource RiceAccentBrush}" />
+                      <TextBlock FontSize="12" TextTrimming="CharacterEllipsis"
+                                 Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                 Text="{Binding Command.Description}"
+                                 IsVisible="{Binding Command.Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="2" Margin="12,0,0,0" FontSize="12" VerticalAlignment="Center"
+                               Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                               Text="{Binding Command.Category}" />
+                    <Border Grid.Column="3" Margin="10,0,0,0" Padding="6,1" CornerRadius="4" VerticalAlignment="Center"
+                            Background="{DynamicResource RiceTrackBrush}"
+                            BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="1"
+                            IsVisible="{Binding Command.GestureText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                      <TextBlock FontSize="11" FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Noto Sans Mono, monospace"
+                                 Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                 Text="{Binding Command.GestureText}" />
+                    </Border>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:empty">
+      <Style Selector="^ /template/ TextBlock#PART_Empty">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ ListBox#PART_List">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

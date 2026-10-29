@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -6,6 +7,7 @@ using Avalonia.Interactivity;
 using KD.Avalonia.Rice.Notifications;
 using KD.Avalonia.Rice.Options;
 using KD.Avalonia.Rice.Theming;
+using Avalonia.VisualTree;
 
 namespace KD.Avalonia.Rice.Controls;
 
@@ -36,6 +38,14 @@ public class RiceWindow : Window
     public static readonly StyledProperty<ToastPosition> ToastPositionProperty =
         RiceToastHost.PositionProperty.AddOwner<RiceWindow>();
 
+    /// <summary>Opens the command palette; null turns the shortcut off. Default Ctrl+Shift+P.</summary>
+    public static readonly StyledProperty<KeyGesture?> CommandPaletteGestureProperty =
+        AvaloniaProperty.Register<RiceWindow, KeyGesture?>(nameof(CommandPaletteGesture),
+            new KeyGesture(Key.P, KeyModifiers.Control | KeyModifiers.Shift));
+
+    public static readonly StyledProperty<bool> IncludeNavigationCommandsProperty =
+        AvaloniaProperty.Register<RiceWindow, bool>(nameof(IncludeNavigationCommands), true);
+
     public static readonly RoutedEvent<RoutedEventArgs> AboutRequestedEvent =
         RoutedEvent.Register<RiceWindow, RoutedEventArgs>(nameof(AboutRequested), RoutingStrategies.Direct);
 
@@ -55,6 +65,8 @@ public class RiceWindow : Window
             Icon = new WindowIcon(icon);
         // The platform may report its transparency level up front without a change notification.
         UpdateRoundedPseudoClass();
+        // Tunnel: the shortcuts work wherever the focus is, even in a text box.
+        AddHandler(KeyDownEvent, OnShortcutKeyDown, RoutingStrategies.Tunnel);
     }
 
     /// <summary>Hides the whole title bar, e.g. for dialogs that only show their content.</summary>
@@ -103,6 +115,25 @@ public class RiceWindow : Window
         set => SetValue(ToastPositionProperty, value);
     }
 
+    /// <summary>
+    /// The commands of the command palette (<see cref="ShowCommandPalette"/>). Their <see cref="RiceCommandItem.Gesture"/>s
+    /// work in the whole window, also while the palette is closed.
+    /// </summary>
+    public AvaloniaList<RiceCommandItem> Commands { get; } = [];
+
+    public KeyGesture? CommandPaletteGesture
+    {
+        get => GetValue(CommandPaletteGestureProperty);
+        set => SetValue(CommandPaletteGestureProperty, value);
+    }
+
+    /// <summary>Lists the items of the window's <see cref="RiceSideMenu"/> in the command palette too. Default true.</summary>
+    public bool IncludeNavigationCommands
+    {
+        get => GetValue(IncludeNavigationCommandsProperty);
+        set => SetValue(IncludeNavigationCommandsProperty, value);
+    }
+
     /// <summary>The built-in toast host, once the template is applied.</summary>
     public RiceToastHost? ToastHost { get; private set; }
 
@@ -118,6 +149,39 @@ public class RiceWindow : Window
 
     /// <summary>Opens the theme selector as a modal dialog of this window.</summary>
     public Task ShowThemeDialog() => new ThemeDialog().ShowDialog(this);
+
+    /// <summary>
+    /// Opens the command palette over this window with <see cref="Commands"/> and, with
+    /// <see cref="IncludeNavigationCommands"/>, the items of its side menu.
+    /// </summary>
+    public void ShowCommandPalette(string? query = null) => RiceCommandPalette.Show(GetPaletteCommands(), this, query);
+
+    /// <summary>What the command palette lists: <see cref="Commands"/>, then the side menu items.</summary>
+    protected virtual IEnumerable<RiceCommandItem> GetPaletteCommands()
+    {
+        var navigation = IncludeNavigationCommands
+            ? this.GetVisualDescendants().OfType<RiceSideMenu>().SelectMany(menu => menu.GetNavigationCommands())
+            : [];
+        return Commands.Concat(navigation);
+    }
+
+    private void OnShortcutKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (CommandPaletteGesture?.Matches(e) == true)
+        {
+            if (RiceCommandPalette.IsShown(this))
+                RiceCommandPalette.Hide(this);
+            else
+                ShowCommandPalette();
+            e.Handled = true;
+        }
+        else if (!RiceCommandPalette.IsShown(this)
+                 && Commands.FirstOrDefault(c => c.Gesture?.Matches(e) == true && c.CanInvoke()) is { } command)
+        {
+            command.Invoke();
+            e.Handled = true;
+        }
+    }
 
     public async void RequestAbout()
     {

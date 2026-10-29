@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             x:Class="KD.Avalonia.Rice.Demo.PropertyGridPage">
+  <Grid Margin="24" RowDefinitions="Auto,Auto,*" ColumnDefinitions="380,*">
+    <TextBlock Grid.ColumnSpan="2" FontSize="24" FontWeight="SemiBold" Text="Property grid" />
+    <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,8,0,16" TextWrapping="Wrap"
+               Foreground="{DynamicResource RiceForegroundMutedBrush}"
+               Text="RicePropertyGrid edits the public properties of any object. Names, groups and descriptions come from [Category], [DisplayName], [Description] and [Display]; [Range] limits the numbers. The preview on the right follows the object." />
+
+    <rice:RicePropertyGrid Name="PropertyGrid" Grid.Row="2" />
+
+    <StackPanel Grid.Row="2" Grid.Column="1" Margin="16,0,0,0" Spacing="12">
+      <rice:RiceCard Name="Preview" Header="Preview">
+        <TextBlock Name="PreviewText" TextWrapping="Wrap" />
+      </rice:RiceCard>
+      <TextBlock Name="ChangeLog" TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="Changes are listed here." />
+      <Button Name="ResetButton" Content="Reset from code" />
+    </StackPanel>
+  </Grid>
+</UserControl>

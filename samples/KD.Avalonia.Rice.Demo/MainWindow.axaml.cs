@@ -1,6 +1,10 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using KD.Avalonia.Rice.Controls;
+using KD.Avalonia.Rice.Notifications;
+using KD.Avalonia.Rice.Theming;
+using Material.Icons;
 
 namespace KD.Avalonia.Rice.Demo;
 
@@ -18,6 +22,44 @@ public partial class MainWindow : RiceWindow
                 ShowPage(item);
         };
         ShowPage(HomeItem);
+        AddPaletteCommands();
+    }
+
+    // Ctrl+Shift+P lists these and the side menu items; the gestures work without opening the palette too.
+    private void AddPaletteCommands()
+    {
+        Commands.Add(new RiceCommandItem(RiceStrings.ToggleTheme, ThemeManager.Instance.ToggleVariant)
+        {
+            Icon = MaterialIconKind.LightbulbOutline,
+            Category = "View",
+            Keywords = "dark light mode variant",
+            Gesture = new KeyGesture(Key.T, KeyModifiers.Control | KeyModifiers.Shift),
+        });
+        Commands.Add(new RiceCommandItem(RiceStrings.ThemeSettings, () => _ = ShowThemeDialog())
+        {
+            Icon = MaterialIconKind.Palette,
+            Category = "View",
+            Keywords = "color ubuntu fedora nord dracula",
+            Gesture = new KeyGesture(Key.OemComma, KeyModifiers.Control),
+        });
+        Commands.Add(new RiceCommandItem("Collapse / expand the menu", SideMenu.ToggleCollapsed)
+        {
+            Icon = MaterialIconKind.MenuOpen,
+            Category = "View",
+            Gesture = new KeyGesture(Key.B, KeyModifiers.Control),
+        });
+        Commands.Add(new RiceCommandItem("Say hello", () => RiceToast.ShowSuccess("Hello from the command palette!"))
+        {
+            Icon = MaterialIconKind.HandWave,
+            Description = "Shows a toast",
+            Category = "Demo",
+        });
+        Commands.Add(new RiceCommandItem(RiceStrings.About, RequestAbout)
+        {
+            Icon = MaterialIconKind.InformationOutline,
+            Category = "Help",
+            Gesture = new KeyGesture(Key.F1),
+        });
     }
 
     // Footer items are not selectable, so the menu selection is cleared while the settings page is shown.
@@ -44,6 +86,10 @@ public partial class MainWindow : RiceWindow
                 _ when key == ChartsItem => new ChartsPage(),
                 _ when key == DialogsItem => new DialogsPage(),
                 _ when key == ToastsItem => new ToastsPage(),
+                _ when key == FeedbackItem => new FeedbackPage(),
+                _ when key == NavigationItem => new NavigationPage(),
+                _ when key == PropertyGridItem => new PropertyGridPage(),
+                _ when key == CommandPaletteItem => new CommandPalettePage(),
                 nameof(SettingsPage) => new SettingsPage(),
                 _ => new HomePage(),
             };
