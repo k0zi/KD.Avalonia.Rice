@@ -8,7 +8,7 @@ namespace KD.Avalonia.Rice.Controls;
 /// <summary>
 /// One tab of a <see cref="RiceTabView"/>: optional <c>Icon</c> (an <c>IImage</c>, a <c>MaterialIconKind</c>, a string or
 /// any control), the <c>Header</c> and a close button.
-/// Pseudo classes: <c>:closable</c>, <c>:dragging</c> (while being reordered).
+/// Pseudo classes: <c>:closable</c>, <c>:dragging</c> (while being reordered), <c>:tearing</c> (dragged out of the strip).
 /// </summary>
 public class RiceTabViewItem : TabItem
 {
@@ -30,6 +30,8 @@ public class RiceTabViewItem : TabItem
     public void Close() => (ItemsControl.ItemsControlFromItemContainer(this) as RiceTabView)?.OnCloseRequested(this);
 
     internal void SetDragging(bool dragging) => PseudoClasses.Set(":dragging", dragging);
+
+    internal void SetTearing(bool tearing) => PseudoClasses.Set(":tearing", tearing);
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {

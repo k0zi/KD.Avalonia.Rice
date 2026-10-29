@@ -1,6 +1,8 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 
@@ -14,8 +16,11 @@ public partial class PropertyGridPage : UserControl
     {
         InitializeComponent();
         PropertyGrid.SelectedObject = _settings;
-        PropertyGrid.PropertyValueChanged += (_, e) => ChangeLog.Text = $"{e.Entry.DisplayName}: {e.OldValue} → {e.NewValue}";
+        AddTagButton.Click += (_, _) => _settings.Tags.Add($"tag{_settings.Tags.Count + 1}");
+        PropertyGrid.PropertyValueChanged += (_, e) => ChangeLog.Text = $"{e.Path}: {e.OldValue} → {e.NewValue}";
         _settings.PropertyChanged += (_, _) => UpdatePreview();
+        _settings.Author.PropertyChanged += (_, _) => UpdatePreview();
+        _settings.Tags.CollectionChanged += (_, _) => UpdatePreview();
         // The grid listens to PropertyChanged too, so changes from code show up in it.
         ResetButton.Click += (_, _) => _settings.Reset();
         UpdatePreview();
@@ -30,6 +35,8 @@ public partial class PropertyGridPage : UserControl
         PreviewText.Foreground = new SolidColorBrush(_settings.TextColor);
         PreviewText.TextAlignment = _settings.Alignment;
         Preview.Elevation = _settings.Elevation;
+        Preview.Padding = new Thickness(_settings.Spacing.Horizontal, _settings.Spacing.Vertical);
+        Preview.Footer = $"{_settings.Author.Name} <{_settings.Author.Email}> · {string.Join(", ", _settings.Tags)}";
         Preview.IsEnabled = _settings.IsEnabled;
     }
 }
@@ -72,6 +79,18 @@ public sealed class EditorSettings : INotifyPropertyChanged
     [Category("Meta"), Description("A date without the time part.")]
     public DateTime Created { get => field; set => Set(ref field, value); } = DateTime.Today;
 
+    [Category("Nested"), Description("A nested object: expand it to edit its properties.")]
+    public AuthorInfo Author { get; } = new();
+
+    [Category("Nested"), Description("A struct: a change writes the whole value back to the property.")]
+    public CardSpacing Spacing { get => field; set => Set(ref field, value); } = new() { Horizontal = 16, Vertical = 16 };
+
+    [Category("Nested"), Description("A collection: its items can be edited in place; it follows Add / Remove.")]
+    public ObservableCollection<string> Tags { get; } = ["linux", "avalonia"];
+
+    [Category("Nested"), Description("A dictionary: one row per key.")]
+    public Dictionary<string, int> Limits { get; } = new() { ["Width"] = 640, ["Height"] = 480 };
+
     [Browsable(false)]
     public string Hidden { get; set; } = "not shown";
 
@@ -93,4 +112,26 @@ public sealed class EditorSettings : INotifyPropertyChanged
         field = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+}
+
+public sealed class AuthorInfo : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public string Name { get => field; set { field = value; PropertyChanged?.Invoke(this, new(nameof(Name))); } } = "k0zi";
+
+    public string Email { get => field; set { field = value; PropertyChanged?.Invoke(this, new(nameof(Email))); } } = "k0zi@example.com";
+
+    public override string ToString() => Name;
+}
+
+public struct CardSpacing
+{
+    [Range(0, 48)]
+    public int Horizontal { get; set; }
+
+    [Range(0, 48)]
+    public int Vertical { get; set; }
+
+    public override readonly string ToString() => $"{Horizontal} × {Vertical}";
 }

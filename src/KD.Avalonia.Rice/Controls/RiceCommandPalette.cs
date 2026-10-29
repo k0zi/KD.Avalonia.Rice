@@ -21,13 +21,20 @@ public sealed record RiceCommandMatch(RiceCommandItem Command, int Score, IReadO
 /// Search box over a list of <see cref="RiceCommandItem"/>s, like the command palette of code editors: typing filters
 /// and ranks the commands (fuzzy, matched characters highlighted), the arrow keys move the selection, Enter runs the
 /// selected command and Escape closes. Recently used commands come first.
-/// Usually shown over a window with <see cref="Show"/> (a <see cref="RiceWindow"/> opens it with Ctrl+Shift+P),
+/// Usually shown over a window with <see cref="Show(IEnumerable{RiceCommandItem}, TopLevel, string)"/> (a <see cref="RiceWindow"/> opens it with Ctrl+Shift+P),
 /// but it can also be placed in a layout.
 /// </summary>
 public class RiceCommandPalette : TemplatedControl
 {
     public static readonly StyledProperty<IEnumerable<RiceCommandItem>?> CommandsProperty =
         AvaloniaProperty.Register<RiceCommandPalette, IEnumerable<RiceCommandItem>?>(nameof(Commands));
+
+    /// <summary>Modes chosen by a prefix (e.g. "@" for pages); "?" lists them.</summary>
+    public static readonly StyledProperty<IEnumerable<RiceCommandProvider>?> ProvidersProperty =
+        AvaloniaProperty.Register<RiceCommandPalette, IEnumerable<RiceCommandProvider>?>(nameof(Providers));
+
+    public static readonly DirectProperty<RiceCommandPalette, RiceCommandProvider?> CurrentModeProperty =
+        AvaloniaProperty.RegisterDirect<RiceCommandPalette, RiceCommandProvider?>(nameof(CurrentMode), p => p.CurrentMode);
 
     public static readonly StyledProperty<string?> QueryProperty =
         AvaloniaProperty.Register<RiceCommandPalette, string?>(nameof(Query),
@@ -52,6 +59,8 @@ public class RiceCommandPalette : TemplatedControl
     private readonly List<RiceCommandItem> _recent = [];
     private IReadOnlyList<RiceCommandMatch> _matches = [];
     private RiceCommandMatch? _selectedMatch;
+    private RiceCommandProvider? _currentMode;
+    private TextBlock? _modeLabel;
     private TextBox? _searchBox;
     private ListBox? _list;
 
@@ -65,6 +74,19 @@ public class RiceCommandPalette : TemplatedControl
     {
         get => GetValue(CommandsProperty);
         set => SetValue(CommandsProperty, value);
+    }
+
+    public IEnumerable<RiceCommandProvider>? Providers
+    {
+        get => GetValue(ProvidersProperty);
+        set => SetValue(ProvidersProperty, value);
+    }
+
+    /// <summary>The provider whose prefix the query starts with; null for the plain search and the "?" list.</summary>
+    public RiceCommandProvider? CurrentMode
+    {
+        get => _currentMode;
+        private set => SetAndRaise(CurrentModeProperty, ref _currentMode, value);
     }
 
     /// <summary>Text of the search box.</summary>
@@ -113,7 +135,12 @@ public class RiceCommandPalette : TemplatedControl
     /// Shows the palette over the window (default: the active one) and focuses its search box. Each window keeps its
     /// palette, so the recently used commands are remembered while the application runs.
     /// </summary>
-    public static void Show(IEnumerable<RiceCommandItem> commands, TopLevel? owner = null, string? query = null)
+    public static void Show(IEnumerable<RiceCommandItem> commands, TopLevel? owner = null, string? query = null) =>
+        Show(commands, [], owner, query);
+
+    /// <summary>Shows the palette with modes: typing a provider's prefix searches the provider's entries.</summary>
+    public static void Show(IEnumerable<RiceCommandItem> commands, IEnumerable<RiceCommandProvider> providers,
+        TopLevel? owner = null, string? query = null)
     {
         if ((owner ?? RiceDialog.ActiveWindow()) is not { } topLevel)
             return;
@@ -122,7 +149,7 @@ public class RiceCommandPalette : TemplatedControl
             overlay = new Overlay(topLevel);
             Overlays.Add(topLevel, overlay);
         }
-        overlay.Show(commands, query);
+        overlay.Show(commands, providers, query);
     }
 
     /// <summary>Closes the palette of the window (default: the active one) and gives the focus back.</summary>
@@ -134,11 +161,21 @@ public class RiceCommandPalette : TemplatedControl
 
     public static bool IsShown(TopLevel owner) => Overlays.TryGetValue(owner, out var overlay) && overlay.IsShown;
 
-    /// <summary>Focuses the search box and selects its text.</summary>
-    public void FocusSearchBox()
+    /// <summary>Focuses the search box and selects its text, or puts the caret after it.</summary>
+    public void FocusSearchBox(bool selectAll = true)
     {
-        _searchBox?.Focus();
-        _searchBox?.SelectAll();
+        if (_searchBox is null)
+            return;
+        _searchBox.Focus();
+        if (selectAll)
+        {
+            _searchBox.SelectAll();
+        }
+        else
+        {
+            _searchBox.ClearSelection();
+            _searchBox.CaretIndex = _searchBox.Text?.Length ?? 0;
+        }
     }
 
     /// <summary>Runs the command of <paramref name="match"/> (default: the selected one) unless it is disabled.</summary>
@@ -146,6 +183,12 @@ public class RiceCommandPalette : TemplatedControl
     {
         if ((match ?? SelectedMatch) is not { IsEnabled: true, Command: var command })
             return;
+        if (command.KeepOpen)
+        {
+            command.Invoke();
+            FocusSearchBox(selectAll: false);
+            return;
+        }
         _recent.Remove(command);
         _recent.Insert(0, command);
         if (_recent.Count > MaxRecent)
@@ -166,6 +209,7 @@ public class RiceCommandPalette : TemplatedControl
         _searchBox = e.NameScope.Find<TextBox>("PART_SearchBox");
         _list = e.NameScope.Find<ListBox>("PART_List");
         _list?.Tapped += OnListTapped;
+        _modeLabel = e.NameScope.Find<TextBlock>("PART_ModeLabel");
         if (e.NameScope.Find<TextBlock>("PART_Empty") is { } empty)
             empty.Text = RiceStrings.CommandPaletteNoResults;
         UpdatePlaceholder();
@@ -175,19 +219,25 @@ public class RiceCommandPalette : TemplatedControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == CommandsProperty || change.Property == QueryProperty || change.Property == MaxResultsProperty)
+        if (change.Property == CommandsProperty || change.Property == QueryProperty || change.Property == MaxResultsProperty
+            || change.Property == ProvidersProperty)
             Refresh();
         else if (change.Property == SelectedMatchProperty && SelectedMatch is not null)
             _list?.ScrollIntoView(SelectedMatch);
-        else if (change.Property == PlaceholderProperty)
+        else if (change.Property == PlaceholderProperty || change.Property == ProvidersProperty)
             UpdatePlaceholder();
     }
 
-    private void UpdatePlaceholder() => _searchBox?.PlaceholderText = Placeholder ?? RiceStrings.CommandPalettePlaceholder;
+    // With modes the default placeholder mentions the "?" list.
+    private void UpdatePlaceholder() => _searchBox?.PlaceholderText = Placeholder
+        ?? (Providers?.Any() == true ? RiceStrings.CommandPalettePlaceholderWithModes : RiceStrings.CommandPalettePlaceholder);
 
     private void Refresh()
     {
-        Matches = CommandSearch.Search(Commands ?? [], Query, _recent, Math.Max(MaxResults, 1));
+        (Matches, CurrentMode) = CommandSearch.Run(Commands ?? [], Providers?.ToList() ?? [], Query, _recent,
+            Math.Max(MaxResults, 1), query => Query = query);
+        _modeLabel?.Text = CurrentMode?.Title;
+        _modeLabel?.IsVisible = CurrentMode is not null;
         SelectedMatch = Matches.FirstOrDefault(m => m.IsEnabled) ?? Matches.FirstOrDefault();
         PseudoClasses.Set(":empty", Matches.Count == 0);
     }
@@ -274,7 +324,7 @@ public class RiceCommandPalette : TemplatedControl
 
         public bool IsShown => _container.Parent is not null;
 
-        public void Show(IEnumerable<RiceCommandItem> commands, string? query)
+        public void Show(IEnumerable<RiceCommandItem> commands, IEnumerable<RiceCommandProvider> providers, string? query)
         {
             if (OverlayLayer.GetOverlayLayer(_topLevel) is not { } layer)
                 return;
@@ -286,9 +336,12 @@ public class RiceCommandPalette : TemplatedControl
                 layer.Children.Add(_container);
             }
             _palette.Commands = commands.ToList();
+            _palette.Providers = providers.ToList();
             _palette.Query = query ?? "";
             // The template is applied on the next layout pass.
-            Dispatcher.UIThread.Post(_palette.FocusSearchBox, DispatcherPriority.Loaded);
+            // Preset text (e.g. a mode prefix) is continued, not replaced.
+            var selectAll = string.IsNullOrEmpty(query);
+            Dispatcher.UIThread.Post(() => _palette.FocusSearchBox(selectAll), DispatcherPriority.Loaded);
         }
 
         public void Hide()

@@ -23,6 +23,7 @@ themes that every control relies on.
 | [RiceBreadcrumb](rice-breadcrumb.md) | Path of the current location with clickable parent levels |
 | [RiceSegmentedControl](rice-segmented-control.md) | Row of linked buttons, one of them selected |
 | [RiceTabView](rice-tab-view.md) | Tabs with icons, close buttons, drag to reorder and a "+" button |
+| [RiceRibbon](rice-ribbon.md) | Office like ribbon: tabs of command groups that collapse when narrow, minimizable, Alt key tips |
 | [RiceCommandPalette](rice-command-palette.md) | Ctrl+Shift+P search over the commands and pages of the window |
 | [RicePropertyGrid](rice-property-grid.md) | Edits the public properties of an object, grouped by category |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |

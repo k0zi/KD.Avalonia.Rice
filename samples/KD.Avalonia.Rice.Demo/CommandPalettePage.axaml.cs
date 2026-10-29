@@ -19,6 +19,7 @@ public partial class CommandPalettePage : UserControl
         InitializeComponent();
         OpenButton.Click += (_, _) => (TopLevel.GetTopLevel(this) as RiceWindow)?.ShowCommandPalette();
         OpenWithQueryButton.Click += (_, _) => (TopLevel.GetTopLevel(this) as RiceWindow)?.ShowCommandPalette("theme");
+        OpenModesButton.Click += (_, _) => (TopLevel.GetTopLevel(this) as RiceWindow)?.ShowCommandPalette("?");
 
         EmbeddedPalette.Commands = Distros
             .Select(d => new RiceCommandItem(d.Name, () => { }) { Category = d.Family })

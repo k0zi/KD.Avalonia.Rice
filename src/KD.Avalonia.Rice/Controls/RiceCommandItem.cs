@@ -47,6 +47,12 @@ public class RiceCommandItem
     /// <summary>Run when the entry is chosen, before <see cref="Command"/>.</summary>
     public Action? Execute { get; set; }
 
+    /// <summary>
+    /// Runs the entry without closing the palette, e.g. one that switches the palette to another mode or list.
+    /// The palette keeps its search box focused.
+    /// </summary>
+    public bool KeepOpen { get; set; }
+
     /// <summary>The <see cref="Gesture"/> as shown on this platform, e.g. "Ctrl+Shift+P".</summary>
     public string? GestureText => Gesture?.ToString("p", null);
 

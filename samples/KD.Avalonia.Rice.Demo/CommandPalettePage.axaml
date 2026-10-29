@@ -6,11 +6,12 @@
     <StackPanel Margin="24" Spacing="16" MaxWidth="640" HorizontalAlignment="Left">
       <TextBlock FontSize="24" FontWeight="SemiBold" Text="Command palette" />
       <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                 Text="Press Ctrl+Shift+P anywhere in the window. RiceWindow lists its Commands and every item of its side menu; type a few letters (e.g. “ld” for Light / Dark, “chr” for Charts), move with the arrows, run with Enter. Recently used commands come first. The shortcuts of the commands (e.g. Ctrl+Shift+T, Ctrl+B, F1) work without opening the palette." />
+                 Text="Press Ctrl+Shift+P anywhere in the window. RiceWindow lists its Commands and every item of its side menu; type a few letters (e.g. “ld” for Light / Dark, “chr” for Charts), move with the arrows, run with Enter. Recently used commands come first. The shortcuts of the commands (e.g. Ctrl+Shift+T, Ctrl+B, F1) work without opening the palette. Type ? for the modes: &gt; only the commands, @ only the pages, = a calculator (e.g. “= 6*7”)." />
 
       <StackPanel Orientation="Horizontal" Spacing="8">
         <Button Name="OpenButton" Classes="accent" Content="Open the palette" />
         <Button Name="OpenWithQueryButton" Content="Open with “theme”" />
+        <Button Name="OpenModesButton" Content="Show the modes (?)" />
       </StackPanel>
 
       <rice:RiceGroupBox Header="Embedded in a page">

@@ -32,6 +32,7 @@
       <rice:RiceSideMenuItem Name="ToastsItem" Icon="{x:Static icons:MaterialIconKind.BellOutline}" Header="Toasts" />
       <rice:RiceSideMenuItem Name="FeedbackItem" Icon="{x:Static icons:MaterialIconKind.InformationSlabCircleOutline}" Header="Feedback" />
       <rice:RiceSideMenuItem Name="NavigationItem" Icon="{x:Static icons:MaterialIconKind.Tab}" Header="Navigation" />
+      <rice:RiceSideMenuItem Name="RibbonItem" Icon="{x:Static icons:MaterialIconKind.DockTop}" Header="Ribbon" />
       <rice:RiceSideMenuItem Name="PropertyGridItem" Icon="{x:Static icons:MaterialIconKind.FormatListBulletedType}" Header="Property grid" />
       <rice:RiceSideMenuItem Name="CommandPaletteItem" Icon="{x:Static icons:MaterialIconKind.ConsoleLine}" Header="Command palette" />
       <rice:RiceSideMenu.Footer>

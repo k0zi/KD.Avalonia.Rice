@@ -1,0 +1,161 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
+             x:Class="KD.Avalonia.Rice.Demo.RibbonPage">
+  <DockPanel>
+    <!-- Make the window narrower: the groups collapse into buttons from the right.
+         Double click a tab, click the chevron or press Ctrl+F1 to minimize the ribbon.
+         Alt (or F10) shows the key tips; most are chosen from the labels, a few are set with rice:RiceRibbon.KeyTip. -->
+    <rice:RiceRibbon Name="Ribbon" DockPanel.Dock="Top" ApplicationButtonContent="File">
+      <rice:RiceRibbon.ApplicationMenu>
+        <MenuFlyout Placement="BottomEdgeAlignedLeft">
+          <MenuItem Header="New" Icon="{x:Static icons:MaterialIconKind.FileOutline}" />
+          <MenuItem Header="Open…" Icon="{x:Static icons:MaterialIconKind.FolderOpenOutline}" />
+          <MenuItem Header="Save" Icon="{x:Static icons:MaterialIconKind.ContentSaveOutline}" />
+          <Separator />
+          <MenuItem Header="Print…" Icon="{x:Static icons:MaterialIconKind.PrinterOutline}" />
+        </MenuFlyout>
+      </rice:RiceRibbon.ApplicationMenu>
+      <rice:RiceRibbon.TabStripFooter>
+        <CheckBox Name="ShowTableTab" Content="Table selected" />
+      </rice:RiceRibbon.TabStripFooter>
+
+      <rice:RiceRibbonTab Header="Home">
+        <rice:RiceRibbonGroup Header="Clipboard" Icon="{x:Static icons:MaterialIconKind.ClipboardOutline}"
+                              ShowLauncher="True" LauncherClick="OnLauncherClick">
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.ContentPaste}" Content="Paste" rice:RiceRibbon.KeyTip="V">
+            <rice:RiceRibbonButton.Flyout>
+              <MenuFlyout>
+                <MenuItem Header="Paste" />
+                <MenuItem Header="Paste as plain text" />
+                <MenuItem Header="Paste special…" />
+              </MenuFlyout>
+            </rice:RiceRibbonButton.Flyout>
+          </rice:RiceRibbonButton>
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.ContentCut}" Content="Cut" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.ContentCopy}" Content="Copy" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.FormatPaint}" Content="Format painter" />
+        </rice:RiceRibbonGroup>
+
+        <rice:RiceRibbonGroup Header="Font" Icon="{x:Static icons:MaterialIconKind.FormatFont}" ShowLauncher="True"
+                              rice:RiceRibbon.KeyTip="ZF" LauncherKeyTip="FN"
+                              LauncherClick="OnLauncherClick">
+          <ComboBox Name="FontFamilyBox" rice:RiceRibbon.KeyTip="FF" Width="150" MinHeight="26" Padding="8,2" SelectedIndex="0">
+            <ComboBoxItem Content="Inter" />
+            <ComboBoxItem Content="Noto Serif" />
+            <ComboBoxItem Content="JetBrains Mono" />
+          </ComboBox>
+          <StackPanel Orientation="Horizontal" Spacing="1">
+            <rice:RiceRibbonToggleButton Name="BoldButton" Size="Small" Icon="{x:Static icons:MaterialIconKind.FormatBold}"
+                                         ToolTip.Tip="Bold (Ctrl+B)" />
+            <rice:RiceRibbonToggleButton Name="ItalicButton" Size="Small" Icon="{x:Static icons:MaterialIconKind.FormatItalic}"
+                                         ToolTip.Tip="Italic (Ctrl+I)" />
+            <rice:RiceRibbonToggleButton Size="Small" Icon="{x:Static icons:MaterialIconKind.FormatUnderline}"
+                                         ToolTip.Tip="Underline (Ctrl+U)" />
+            <rice:RiceRibbonToggleButton Size="Small" Icon="{x:Static icons:MaterialIconKind.FormatStrikethrough}"
+                                         ToolTip.Tip="Strikethrough" />
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Spacing="1">
+            <rice:RiceRibbonButton Size="Small" Icon="{x:Static icons:MaterialIconKind.FormatFontSizeIncrease}"
+                                   ToolTip.Tip="Grow font" Click="OnGrowFont" />
+            <rice:RiceRibbonButton Size="Small" Icon="{x:Static icons:MaterialIconKind.FormatFontSizeDecrease}"
+                                   ToolTip.Tip="Shrink font" Click="OnShrinkFont" />
+            <rice:RiceRibbonButton Size="Small" Icon="{x:Static icons:MaterialIconKind.FormatColorText}"
+                                   ToolTip.Tip="Font color">
+              <rice:RiceRibbonButton.Flyout>
+                <MenuFlyout>
+                  <MenuItem Header="Automatic" />
+                  <MenuItem Header="Accent" />
+                  <MenuItem Header="Red" />
+                </MenuFlyout>
+              </rice:RiceRibbonButton.Flyout>
+            </rice:RiceRibbonButton>
+          </StackPanel>
+        </rice:RiceRibbonGroup>
+
+        <rice:RiceRibbonGroup Header="Paragraph" Icon="{x:Static icons:MaterialIconKind.FormatParagraph}">
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.FormatListBulleted}" Content="Bullets" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.FormatListNumbered}" Content="Numbering" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.FormatIndentIncrease}" Content="Indent" />
+          <rice:RiceRibbonSeparator />
+          <!-- Same GroupName: they work as radio buttons. -->
+          <rice:RiceRibbonToggleButton Name="AlignLeft" Size="Small" GroupName="align" IsChecked="True"
+                                       Icon="{x:Static icons:MaterialIconKind.FormatAlignLeft}" ToolTip.Tip="Align left" />
+          <rice:RiceRibbonToggleButton Name="AlignCenter" Size="Small" GroupName="align"
+                                       Icon="{x:Static icons:MaterialIconKind.FormatAlignCenter}" ToolTip.Tip="Center" />
+          <rice:RiceRibbonToggleButton Name="AlignRight" Size="Small" GroupName="align"
+                                       Icon="{x:Static icons:MaterialIconKind.FormatAlignRight}" ToolTip.Tip="Align right" />
+        </rice:RiceRibbonGroup>
+
+        <rice:RiceRibbonGroup Header="Styles" Icon="{x:Static icons:MaterialIconKind.FormatHeaderPound}">
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.FormatText}" Content="Normal" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.FormatHeader1}" Content="Heading 1" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.FormatHeader2}" Content="Heading 2" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.FormatQuoteOpen}" Content="Quote" />
+        </rice:RiceRibbonGroup>
+
+        <!-- Never collapses. -->
+        <rice:RiceRibbonGroup Header="Editing" CanCollapse="False">
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.Magnify}" Content="Find" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.FindReplace}" Content="Replace" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.SelectAll}" Content="Select all" />
+        </rice:RiceRibbonGroup>
+      </rice:RiceRibbonTab>
+
+      <rice:RiceRibbonTab Header="Insert" rice:RiceRibbon.KeyTip="N">
+        <rice:RiceRibbonGroup Header="Tables" Icon="{x:Static icons:MaterialIconKind.Table}">
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.TablePlus}" Content="Table" />
+        </rice:RiceRibbonGroup>
+        <rice:RiceRibbonGroup Header="Illustrations" Icon="{x:Static icons:MaterialIconKind.ImageOutline}">
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.ImageOutline}" Content="Pictures" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.Shape}" Content="Shapes" />
+          <rice:RiceRibbonButton Icon="📊" Content="Chart" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.SitemapOutline}" Content="Diagram" />
+        </rice:RiceRibbonGroup>
+        <rice:RiceRibbonGroup Header="Links" Icon="{x:Static icons:MaterialIconKind.Link}">
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.Link}" Content="Link" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.BookmarkOutline}" Content="Bookmark" />
+        </rice:RiceRibbonGroup>
+      </rice:RiceRibbonTab>
+
+      <rice:RiceRibbonTab Header="View">
+        <rice:RiceRibbonGroup Header="Show">
+          <CheckBox Content="Ruler" IsChecked="True" />
+          <CheckBox Content="Gridlines" />
+          <CheckBox Content="Navigation pane" />
+        </rice:RiceRibbonGroup>
+        <rice:RiceRibbonGroup Header="Zoom" Icon="{x:Static icons:MaterialIconKind.MagnifyPlusOutline}">
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.MagnifyPlusOutline}" Content="Zoom in" Click="OnGrowFont" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.MagnifyMinusOutline}" Content="Zoom out" Click="OnShrinkFont" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.Numeric1BoxOutline}" Content="100 %" Click="OnResetFont" />
+        </rice:RiceRibbonGroup>
+        <rice:RiceRibbonGroup Header="Ribbon">
+          <rice:RiceRibbonToggleButton Icon="{x:Static icons:MaterialIconKind.ArrowCollapseUp}" Content="Minimized"
+                                       IsChecked="{Binding #Ribbon.IsMinimized}" />
+        </rice:RiceRibbonGroup>
+      </rice:RiceRibbonTab>
+
+      <!-- A contextual tab: shown while "Table selected" is checked. -->
+      <rice:RiceRibbonTab Header="Table design" IsContextual="True" IsVisible="{Binding #ShowTableTab.IsChecked}">
+        <rice:RiceRibbonGroup Header="Table styles" Icon="{x:Static icons:MaterialIconKind.TableLarge}">
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.TableLarge}" Content="Plain" />
+          <rice:RiceRibbonButton Icon="{x:Static icons:MaterialIconKind.TableHeadersEye}" Content="Header row" />
+        </rice:RiceRibbonGroup>
+        <rice:RiceRibbonGroup Header="Rows &amp; columns">
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.TableRowPlusAfter}" Content="Insert row" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.TableColumnPlusAfter}" Content="Insert column" />
+          <rice:RiceRibbonButton Size="Medium" Icon="{x:Static icons:MaterialIconKind.TableRemove}" Content="Delete table" />
+        </rice:RiceRibbonGroup>
+      </rice:RiceRibbonTab>
+    </rice:RiceRibbon>
+
+    <Border DockPanel.Dock="Bottom" Padding="12,4" Background="{DynamicResource RiceSurfaceBrush}">
+      <TextBlock Name="StatusText" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="Click a command, or press Alt for the key tips; make the window narrower to see the groups collapse." />
+    </Border>
+
+    <TextBox Name="Editor" Margin="16" AcceptsReturn="True" TextWrapping="Wrap" FontSize="14"
+             Text="RiceRibbon: tabs of command groups, like in office apps.&#10;&#10;The Bold, Italic, alignment and zoom buttons change this text." />
+  </DockPanel>
+</UserControl>

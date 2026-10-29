@@ -1,0 +1,298 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <!-- The tabs sit on the window; the selected tab's groups are on a surface below them. -->
+  <ControlTheme x:Key="{x:Type rice:RiceRibbon}" TargetType="rice:RiceRibbon">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="0,1" />
+    <Setter Property="Padding" Value="4,4,4,2" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="2" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DockPanel>
+          <DockPanel Name="PART_TabStrip" DockPanel.Dock="Top" Margin="4,4,4,0">
+            <Button Name="PART_ApplicationButton" DockPanel.Dock="Left" Classes="accent"
+                    Margin="0,0,6,4" Padding="14,4" VerticalAlignment="Center"
+                    Content="{TemplateBinding ApplicationButtonContent}"
+                    Command="{TemplateBinding ApplicationButtonCommand}"
+                    Flyout="{TemplateBinding ApplicationMenu}"
+                    IsVisible="{TemplateBinding ApplicationButtonContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <Button Name="PART_MinimizeButton" DockPanel.Dock="Right" Width="28" Height="28" Padding="0"
+                    Margin="2,0,0,4" VerticalAlignment="Center"
+                    Background="Transparent" BorderThickness="0"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                    IsVisible="{TemplateBinding ShowMinimizeButton}">
+              <mi:MaterialIcon Name="PART_MinimizeIcon" Kind="ChevronUp" Width="18" Height="18" />
+            </Button>
+            <ContentPresenter Name="PART_TabStripFooter" DockPanel.Dock="Right" VerticalAlignment="Center"
+                              Margin="4,0,0,4"
+                              Content="{TemplateBinding TabStripFooter}"
+                              IsVisible="{TemplateBinding TabStripFooter, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <!-- The groups of a minimized ribbon open here, over the content below. -->
+            <Popup Name="PART_Popup" DockPanel.Dock="Bottom"
+                   PlacementTarget="{Binding #PART_TabStrip}" Placement="BottomEdgeAlignedLeft"
+                   IsLightDismissEnabled="True" OverlayDismissEventPassThrough="True">
+              <Decorator Name="PART_PopupHost" Margin="0,0,0,8">
+                <Decorator.Effect>
+                  <DropShadowEffect BlurRadius="12" OffsetX="0" OffsetY="3" Opacity="0.25" />
+                </Decorator.Effect>
+              </Decorator>
+            </Popup>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </ScrollViewer>
+          </DockPanel>
+          <Decorator Name="PART_ContentHost">
+            <Border Name="PART_ContentBorder"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}"
+                    ClipToBounds="True">
+              <ContentPresenter Name="PART_SelectedContentHost"
+                                HorizontalContentAlignment="Left"
+                                Content="{TemplateBinding SelectedContent}"
+                                ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+            </Border>
+          </Decorator>
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:minimized">
+      <Style Selector="^ /template/ Decorator#PART_ContentHost">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ mi|MaterialIcon#PART_MinimizeIcon">
+        <Setter Property="Kind" Value="ChevronDown" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceRibbonTab}" TargetType="rice:RiceRibbonTab">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="12,6" />
+    <Setter Property="CornerRadius" Value="6,6,0,0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_LayoutRoot"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Padding="{TemplateBinding Padding}">
+            <ContentPresenter Name="PART_ContentPresenter" VerticalAlignment="Center"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}" />
+          </Border>
+          <!-- Accent line under the selected tab. -->
+          <Border Name="PART_SelectedPipe" Height="3" VerticalAlignment="Bottom" Margin="10,0"
+                  CornerRadius="1.5" Background="{DynamicResource RiceAccentBrush}" IsVisible="False" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:pointerover">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+      <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+      <Style Selector="^ /template/ Border#PART_SelectedPipe">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:contextual">
+      <Setter Property="Foreground" Value="{DynamicResource RiceAccentBrush}" />
+      <Setter Property="Background" Value="{DynamicResource RiceSelectedRowBrush}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_LayoutRoot">
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.5" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Items above, header (and launcher) below, a line on the right separates the groups. -->
+  <ControlTheme x:Key="{x:Type rice:RiceRibbonGroup}" TargetType="rice:RiceRibbonGroup">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="Padding" Value="4,0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="*,Auto">
+          <Panel Margin="{TemplateBinding Padding}">
+            <Decorator Name="PART_ExpandedHost">
+              <DockPanel>
+                <Grid DockPanel.Dock="Bottom" ColumnDefinitions="*,Auto" Height="20">
+                  <ContentPresenter Name="PART_HeaderPresenter" Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12,0"
+                                    FontSize="11" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                  <Button Name="PART_LauncherButton" Grid.Column="1" Width="18" Height="18" Padding="0"
+                          VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CornerRadius="4"
+                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                          Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                          IsVisible="{TemplateBinding ShowLauncher}">
+                    <mi:MaterialIcon Kind="ArrowBottomRight" Width="12" Height="12" />
+                  </Button>
+                </Grid>
+                <ItemsPresenter Name="PART_ItemsPresenter" Height="78" Margin="0,2,0,0"
+                                ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </DockPanel>
+            </Decorator>
+            <rice:RiceRibbonButton Name="PART_CollapsedButton" Size="Large" IsVisible="False" Margin="0,2"
+                                   Icon="{TemplateBinding Icon}" Content="{TemplateBinding Header}" />
+          </Panel>
+          <Border Grid.Column="1" Width="1" Margin="0,6" Background="{TemplateBinding BorderBrush}" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:collapsed">
+      <Style Selector="^ /template/ Decorator#PART_ExpandedHost">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ rice|RiceRibbonButton#PART_CollapsedButton">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.5" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceRibbonButton}" TargetType="rice:RiceRibbonButton">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Padding" Value="5,1" />
+    <Setter Property="MinHeight" Value="24" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Root"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}">
+          <StackPanel Name="PART_Layout" Orientation="Horizontal" Spacing="6"
+                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+            <rice:RiceIconPresenter Name="PART_IconPresenter" Width="16" Height="16"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Content="{TemplateBinding Icon}"
+                                    IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <ContentPresenter Name="PART_ContentPresenter" VerticalAlignment="Center"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <mi:MaterialIcon Name="PART_DropDownArrow" Kind="ChevronDown" Width="12" Height="12"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False" />
+          </StackPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- Large: big icon above a label of up to two lines. -->
+    <Style Selector="^:large">
+      <Setter Property="Padding" Value="6,4" />
+      <Setter Property="MinWidth" Value="48" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Top" />
+      <Style Selector="^ /template/ StackPanel#PART_Layout">
+        <Setter Property="Orientation" Value="Vertical" />
+        <Setter Property="Spacing" Value="2" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Margin" Value="0,0,0,2" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="MaxWidth" Value="80" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+      </Style>
+    </Style>
+    <Style Selector="^:small /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:dropdown /template/ mi|MaterialIcon#PART_DropDownArrow">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="^:pointerover">
+      <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
+    </Style>
+    <Style Selector="^:pressed">
+      <Setter Property="Background" Value="{DynamicResource RiceTrackBrush}" />
+    </Style>
+    <Style Selector="^:flyout-open">
+      <Setter Property="Background" Value="{DynamicResource RiceTrackBrush}" />
+    </Style>
+    <Style Selector="^:focus-visible">
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.45" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceRibbonToggleButton}" TargetType="rice:RiceRibbonToggleButton"
+                BasedOn="{StaticResource {x:Type rice:RiceRibbonButton}}">
+    <Style Selector="^:checked">
+      <Setter Property="Background" Value="{DynamicResource RiceSelectedRowBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Inverted colors, so the badges stand out on any background. -->
+  <ControlTheme x:Key="{x:Type rice:RiceKeyTip}" TargetType="rice:RiceKeyTip">
+    <Setter Property="Foreground" Value="{DynamicResource RiceBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="CornerRadius" Value="3" />
+    <Setter Property="Padding" Value="4,0" />
+    <Setter Property="MinWidth" Value="16" />
+    <Setter Property="Height" Value="17" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}" BoxShadow="0 1 3 0 #40000000">
+          <TextBlock Text="{TemplateBinding Text}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceRibbonSeparator}" TargetType="rice:RiceRibbonSeparator">
+    <Setter Property="Background" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="Width" Value="1" />
+    <Setter Property="Margin" Value="3,4" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>
