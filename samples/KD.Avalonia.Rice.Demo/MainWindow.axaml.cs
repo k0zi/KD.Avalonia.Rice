@@ -124,6 +124,10 @@ public partial class MainWindow : RiceWindow
                 _ when key == RibbonItem => new RibbonPage(),
                 _ when key == PropertyGridItem => new PropertyGridPage(),
                 _ when key == CommandPaletteItem => new CommandPalettePage(),
+                _ when key == TimelineItem => new TimelinePage(),
+                _ when key == KanbanItem => new KanbanPage(),
+                _ when key == CodeEditorItem => new CodeEditorPage(),
+                _ when key == DockLayoutItem => new DockLayoutPage(),
                 nameof(SettingsPage) => new SettingsPage(),
                 _ => new HomePage(),
             };

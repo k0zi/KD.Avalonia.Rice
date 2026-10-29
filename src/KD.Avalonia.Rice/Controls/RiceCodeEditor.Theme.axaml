@@ -1,0 +1,81 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <!-- The background of the Markdown code blocks, so a snippet and its editor look alike. -->
+  <ControlTheme x:Key="{x:Type rice:RiceCodeEditor}" TargetType="rice:RiceCodeEditor">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceMarkdownCodeBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="8,8,12,8" />
+    <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, JetBrains Mono, DejaVu Sans Mono, Liberation Mono, Noto Sans Mono, monospace" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="AcceptsReturn" Value="True" />
+    <Setter Property="AcceptsTab" Value="True" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource RiceSelectedRowBrush}" />
+    <!-- Selected text keeps its syntax colors. -->
+    <Setter Property="SelectionForegroundBrush" Value="{x:Null}" />
+    <Setter Property="CaretBrush" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_BorderElement"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <DockPanel>
+            <Border DockPanel.Dock="Left" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,1,0"
+                    IsVisible="{TemplateBinding ShowLineNumbers}">
+              <rice:RiceCodeGutter Name="PART_Gutter" Padding="12,0,10,0"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   NumberBrush="{DynamicResource RiceForegroundMutedBrush}" />
+            </Border>
+            <ScrollViewer Name="PART_ScrollViewer"
+                          HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                          VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+              <Panel Margin="{TemplateBinding Padding}">
+                <rice:RiceCodeLineHighlight Name="PART_LineHighlight" Margin="-8,0,-12,0"
+                                            Fill="{DynamicResource RiceHoverBrush}"
+                                            IsVisible="{TemplateBinding HighlightCurrentLine}" />
+                <TextBlock Name="PART_Placeholder" Opacity="0.5" IsHitTestVisible="False"
+                           Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                           Text="{TemplateBinding PlaceholderText}"
+                           IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                <rice:RiceCodeTextPresenter Name="PART_TextPresenter"
+                                            Language="{TemplateBinding Language}"
+                                            Text="{TemplateBinding Text, Mode=TwoWay}"
+                                            CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                            CaretIndex="{TemplateBinding CaretIndex}"
+                                            SelectionStart="{TemplateBinding SelectionStart}"
+                                            SelectionEnd="{TemplateBinding SelectionEnd}"
+                                            TextAlignment="{TemplateBinding TextAlignment}"
+                                            TextWrapping="{TemplateBinding TextWrapping}"
+                                            LineHeight="{TemplateBinding LineHeight}"
+                                            PasswordChar="{TemplateBinding PasswordChar}"
+                                            RevealPassword="{TemplateBinding RevealPassword}"
+                                            SelectionBrush="{TemplateBinding SelectionBrush}"
+                                            SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                            CaretBrush="{TemplateBinding CaretBrush}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top" />
+              </Panel>
+            </ScrollViewer>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+      <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.6" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

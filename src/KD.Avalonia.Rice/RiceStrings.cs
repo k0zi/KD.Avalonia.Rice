@@ -75,4 +75,17 @@ public static class RiceStrings
     public static string RibbonExpand { get; set; } = "Pin the ribbon (Ctrl+F1)";
     /// <summary>Tooltip of the launcher button in the corner of a ribbon group.</summary>
     public static string RibbonGroupLauncher { get; set; } = "More options";
+    /// <summary>Day header of today's items in a timeline.</summary>
+    public static string TimelineToday { get; set; } = "Today";
+    public static string TimelineYesterday { get; set; } = "Yesterday";
+    /// <summary>Button at the bottom of a kanban column.</summary>
+    public static string KanbanAddCard { get; set; } = "Add card";
+    /// <summary>Shown in a kanban column without cards.</summary>
+    public static string KanbanEmptyColumn { get; set; } = "No cards";
+    /// <summary>Tooltip of the button that collapses a dock pane.</summary>
+    public static string DockCollapse { get; set; } = "Collapse";
+    /// <summary>Tooltip of the strip of a collapsed dock pane.</summary>
+    public static string DockExpand { get; set; } = "Open";
+    /// <summary>Accessible name of the splitter of a dock pane.</summary>
+    public static string DockResize { get; set; } = "Resize";
 }

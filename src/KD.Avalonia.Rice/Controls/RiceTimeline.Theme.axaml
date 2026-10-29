@@ -1,0 +1,100 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceTimeline}" TargetType="rice:RiceTimeline">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}">
+          <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- The rail is drawn per item: a line above the dot (hidden on the first item of a day) and one below it
+       (hidden on the last), so the days read as separate strands. -->
+  <ControlTheme x:Key="{x:Type rice:RiceTimelineItem}" TargetType="rice:RiceTimelineItem">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="KindBrush" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    <Setter Property="Padding" Value="0,0,0,16" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid RowDefinitions="Auto,*">
+          <TextBlock Name="PART_DayHeader" Margin="0,8,0,10" FontSize="12" FontWeight="SemiBold"
+                     Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                     Text="{TemplateBinding DayHeader}"
+                     IsVisible="{TemplateBinding DayHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <Grid Grid.Row="1" ColumnDefinitions="28,*">
+            <Panel Width="28">
+              <Border Name="PART_LineAbove" Width="2" Height="12" VerticalAlignment="Top"
+                      Background="{TemplateBinding BorderBrush}" />
+              <Border Name="PART_LineBelow" Width="2" Margin="0,12,0,0"
+                      Background="{TemplateBinding BorderBrush}" />
+              <Ellipse Name="PART_Dot" Width="12" Height="12" Margin="0,6,0,0" VerticalAlignment="Top"
+                       Fill="{TemplateBinding KindBrush}" />
+              <!-- Filled with the kind's color, the icon in the surface color: readable in light and dark themes. -->
+              <Border Name="PART_IconCircle" Width="24" Height="24" VerticalAlignment="Top" CornerRadius="12"
+                      Background="{TemplateBinding KindBrush}" IsVisible="False">
+                <rice:RiceIconPresenter Width="14" Height="14" Foreground="{DynamicResource RiceSurfaceBrush}"
+                                        Content="{TemplateBinding Icon}" />
+              </Border>
+            </Panel>
+            <StackPanel Grid.Column="1" Margin="10,3,0,0" Spacing="4">
+              <Grid ColumnDefinitions="*,Auto,Auto">
+                <ContentPresenter Name="PART_HeaderPresenter" FontWeight="SemiBold" VerticalAlignment="Center"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                <TextBlock Name="PART_Timestamp" Grid.Column="1" Margin="12,0,0,0" FontSize="12"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                           Text="{TemplateBinding TimestampText}" />
+                <ContentPresenter Grid.Column="2" Margin="8,0,0,0" VerticalAlignment="Center"
+                                  Content="{TemplateBinding Actions}"
+                                  IsVisible="{TemplateBinding Actions, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              </Grid>
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+            </StackPanel>
+          </Grid>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:first /template/ Border#PART_LineAbove">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:last /template/ Border#PART_LineBelow">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:has-icon">
+      <Style Selector="^ /template/ Ellipse#PART_Dot">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_IconCircle">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:info">
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastInfoBrush}" />
+    </Style>
+    <Style Selector="^:success">
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastSuccessBrush}" />
+    </Style>
+    <Style Selector="^:warning">
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastWarningBrush}" />
+    </Style>
+    <Style Selector="^:error">
+      <Setter Property="KindBrush" Value="{DynamicResource RiceToastErrorBrush}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>
