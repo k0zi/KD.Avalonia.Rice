@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using KD.Avalonia.Rice.Controls.Charts;
 using KD.Avalonia.Rice.Controls.Uml;
 using Material.Icons;
 using Material.Icons.Avalonia;
@@ -24,8 +25,8 @@ public class MarkdownLinkClickedEventArgs(RoutedEvent routedEvent, string url, U
 
 /// <summary>
 /// Shows Markdown text (CommonMark with the GitHub extensions) in the colors of the current Rice theme: headings,
-/// lists, task lists, quotes, tables, syntax highlighted code, images, footnotes, and <c>mermaid</c> and
-/// <c>plantuml</c> code blocks as diagrams.
+/// lists, task lists, quotes, tables, syntax highlighted code, images, footnotes, <c>mermaid</c> and <c>plantuml</c>
+/// code blocks as diagrams, and <c>chart</c> code blocks (JSON) as charts.
 /// </summary>
 [TemplatePart(PartScrollViewer, typeof(ScrollViewer))]
 [TemplatePart(PartHost, typeof(Decorator))]
@@ -101,7 +102,7 @@ public class MarkdownView : TemplatedControl
         set => SetValue(IsTextSelectionEnabledProperty, value);
     }
 
-    /// <summary>Draws <c>mermaid</c> and <c>plantuml</c> code blocks as diagrams; false shows them as code.</summary>
+    /// <summary>Draws <c>mermaid</c>, <c>plantuml</c> and <c>chart</c> code blocks as diagrams; false shows them as code.</summary>
     public bool RenderDiagrams
     {
         get => GetValue(RenderDiagramsProperty);
@@ -263,25 +264,43 @@ public class MarkdownView : TemplatedControl
             {
                 var document = MermaidDocument.Parse(code.Code);
                 if (document.Diagram is null)
-                    return ErrorBlock(code, document.Diagnostics.FirstOrDefault());
+                    return ErrorBlock(code, document.Diagnostics.FirstOrDefault() is { } problem
+                        ? string.Format(RiceStrings.MermaidParseError, problem.Line, problem.Message)
+                        : null);
                 var canvas = new UmlDiagramCanvas();
                 MermaidView.ApplyTo(canvas, document.Diagram);
                 return DiagramBlock(canvas, code.Code, () => new MermaidView { Source = code.Code });
+            }
+            case "chart":
+            {
+                var result = ChartJsonReader.Read(code.Code);
+                if (result.Chart is not { } chart)
+                    return ErrorBlock(code, result.Line > 0 ? string.Format(RiceStrings.ChartParseError, result.Line, result.Error) : result.Error);
+                chart.Height = Math.Min(result.Height ?? 320, MaxDiagramHeight);
+                chart.Margin = new Thickness(8);
+                return Block(chart, code.Code, () => ChartJsonReader.Read(code.Code).Chart is { } full ? Padded(full) : new Panel());
             }
             default:
                 return null;
         }
     }
 
+    // The full size chart keeps a distance from the edges (and the close button).
+    private static Control Padded(Control chart)
+    {
+        chart.Margin = new Thickness(24, 48, 24, 24);
+        return chart;
+    }
+
     /// <summary>A diagram that cannot be read: its code with the first problem above it.</summary>
-    private Control ErrorBlock(MdCodeBlock code, MermaidDiagnostic? problem)
+    private Control ErrorBlock(MdCodeBlock code, string? problem)
     {
         var codeBlock = new MarkdownRenderer(_context!).CodeBlock(code);
         if (problem is null)
             return codeBlock;
         var message = new TextBlock
         {
-            Text = string.Format(RiceStrings.MermaidParseError, problem.Line, problem.Message),
+            Text = problem,
             TextWrapping = TextWrapping.Wrap,
             FontSize = Math.Round(_context!.FontSize * 0.85),
         };
@@ -306,7 +325,12 @@ public class MarkdownView : TemplatedControl
         canvas.MaxHeight = MaxDiagramHeight;
         canvas.HorizontalAlignment = HorizontalAlignment.Center;
         MarkdownRenderer.Resource(canvas, UmlDiagramCanvas.BackgroundProperty, "RiceBackgroundBrush");
+        return Block(canvas, source, fullView);
+    }
 
+    /// <summary>A diagram or chart card in the text, with buttons (shown on hover) to copy its source and to open it in full size.</summary>
+    private Control Block(Control content, string source, Func<Control> fullView)
+    {
         var renderer = new MarkdownRenderer(_context!);
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 2, HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(4), Opacity = 0 };
         var expand = new Button
@@ -323,7 +347,7 @@ public class MarkdownView : TemplatedControl
         buttons.Children.Add(renderer.CopyButton(source));
         buttons.Children.Add(expand);
 
-        var panel = new Panel { Children = { canvas, buttons } };
+        var panel = new Panel { Children = { content, buttons } };
         var card = new Border
         {
             Child = panel,
@@ -336,7 +360,7 @@ public class MarkdownView : TemplatedControl
         MarkdownRenderer.Resource(card, Border.BorderBrushProperty, "RiceBorderBrush");
         card.PointerEntered += (_, _) => buttons.Opacity = 1;
         card.PointerExited += (_, _) => buttons.Opacity = 0;
-        canvas.DoubleTapped += (_, _) => OpenOverlay(fullView());
+        content.DoubleTapped += (_, _) => OpenOverlay(fullView());
         return card;
     }
 

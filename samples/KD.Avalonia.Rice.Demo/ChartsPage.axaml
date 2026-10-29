@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="KD.Avalonia.Rice.Demo.ChartsPage">
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top" Margin="24,16,24,12">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <ToggleSwitch Name="AnimateSwitch" IsChecked="True" OnContent="Animated" OffContent="Animated" />
+        <Button Click="OnRandomizeClicked" ToolTip.Tip="New random data for every chart">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <mi:MaterialIcon Kind="DiceMultipleOutline" Width="16" Height="16" />
+            <TextBlock Text="Randomize" />
+          </StackPanel>
+        </Button>
+      </StackPanel>
+      <StackPanel Spacing="2">
+        <TextBlock FontSize="24" FontWeight="SemiBold" Text="Charts" />
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                   Text="22 chart controls drawn from a typed data model. Hover for values, click to select, click a legend entry to hide a series." />
+      </StackPanel>
+    </DockPanel>
+
+    <TextBlock Name="StatusText" DockPanel.Dock="Bottom" Margin="24,6,24,10" FontSize="12"
+               Foreground="{DynamicResource RiceForegroundMutedBrush}" TextTrimming="CharacterEllipsis" />
+
+    <ScrollViewer>
+      <WrapPanel Name="Gallery" Margin="24,0,24,24" ItemSpacing="16" LineSpacing="16" />
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

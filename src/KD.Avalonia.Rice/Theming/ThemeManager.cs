@@ -208,6 +208,14 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceChartSeries0Brush"] = new SolidColorBrush(p.Accent);
         for (var i = 0; i < series.Length; i++)
             target[$"RiceChartSeries{i + 1}Brush"] = new SolidColorBrush(ColorMath.Blend(Color.Parse(series[i]), p.Surface, p.IsDark ? 0.18 : 0.08));
+        // Chart controls: faint grid, muted axes, green / red for up and down, heatmaps from a tinted background to the accent.
+        target["RiceChartGridBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x1C : (byte)0x16));
+        target["RiceChartAxisBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Foreground, 0.42));
+        target["RiceChartTrackBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x1A : (byte)0x12));
+        target["RiceChartPositiveBrush"] = new SolidColorBrush(ColorMath.Blend(Color.Parse("#36B37E"), p.Surface, p.IsDark ? 0.18 : 0.08));
+        target["RiceChartNegativeBrush"] = new SolidColorBrush(ColorMath.Blend(Color.Parse("#FF5630"), p.Surface, p.IsDark ? 0.18 : 0.08));
+        target["RiceChartHeatLowBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Accent, p.IsDark ? 0.10 : 0.06));
+        target["RiceChartHeatHighBrush"] = new SolidColorBrush(p.Accent);
 
         // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
         target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);

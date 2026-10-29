@@ -47,7 +47,7 @@ foreach (var heading in DocView.Document!.Headings)
 | `Document` | – | Read-only, the `MarkdownDocument` parsed from `Markdown`. |
 | `BaseUri` | `null` | Base of relative image paths and links, e.g. the path of the file or `avares://MyApp/Docs/`. |
 | `IsTextSelectionEnabled` | `true` | Text can be selected and copied (within a paragraph, cell or code block). |
-| `RenderDiagrams` | `true` | `mermaid` and `plantuml` code blocks as diagrams; `false` shows them as code. |
+| `RenderDiagrams` | `true` | `mermaid` and `plantuml` code blocks as diagrams, `chart` blocks as [charts](rice-charts.md#charts-in-markdown); `false` shows them as code. |
 | `MaxDiagramHeight` | `560` | Diagrams are scaled down to fit this height and the width of the text. |
 | `ContentMaxWidth` | `900` | Width of the text column; a wider view centers it. |
 | `CodeFontFamily` | Cascadia Mono, Consolas, … | Font of code blocks and code spans. |

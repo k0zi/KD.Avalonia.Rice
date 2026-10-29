@@ -15,6 +15,7 @@
     <!-- The demo's samples cover every diagram type. -->
     <Compile Include="..\..\samples\KD.Avalonia.Rice.Demo\UmlSamples.cs" Link="UmlSamples.cs" />
     <Compile Include="..\..\samples\KD.Avalonia.Rice.Demo\MarkdownSamples.cs" Link="MarkdownSamples.cs" />
+    <Compile Include="..\..\samples\KD.Avalonia.Rice.Demo\ChartSamples.cs" Link="ChartSamples.cs" />
   </ItemGroup>
 
   <ItemGroup>

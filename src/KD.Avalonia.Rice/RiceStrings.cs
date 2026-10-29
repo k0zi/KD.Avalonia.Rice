@@ -36,4 +36,10 @@ public static class RiceStrings
     public static string MarkdownBackToReference { get; set; } = "Back to the reference";
     /// <summary>Mermaid reading problem; {0} is the line number, {1} the message.</summary>
     public static string MermaidParseError { get; set; } = "Line {0}: {1}";
+    /// <summary>Shown by a chart without data.</summary>
+    public static string ChartNoData { get; set; } = "No data";
+    /// <summary>Label under the total in the middle of a donut chart.</summary>
+    public static string ChartTotal { get; set; } = "Total";
+    /// <summary>Chart reading problem (Markdown <c>chart</c> blocks); {0} is the line number, {1} the message.</summary>
+    public static string ChartParseError { get; set; } = "Line {0}: {1}";
 }

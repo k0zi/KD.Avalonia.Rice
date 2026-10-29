@@ -13,7 +13,8 @@ light and dark variants.
 Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card (`RiceCard`), group box
 (`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`), a theme
 selector (`ThemeSelector`, `ThemeDialog`), UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
-PlantUML) and a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`).
+PlantUML), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 22 chart
+controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, waterfall, gantt, gauge, …).
 
 ## Documentation
 
@@ -62,6 +63,9 @@ AppBuilder.Configure<App>()
 - Markdown: `<md:MarkdownView Markdown="{Binding Text}" />` (namespace `KD.Avalonia.Rice.Controls.Markdowns`): CommonMark
   with tables, task lists and footnotes, colored code, `mermaid` and `plantuml` blocks as diagrams, see
   [Markdown and Mermaid](docs/rice-markdown.md).
+- Charts: `<charts:RiceLineChart Data="{Binding Traffic}" />` and 21 more (namespace `KD.Avalonia.Rice.Controls.Charts`)
+  with tooltips, legend toggles, selection and load animation; also as `chart` blocks in Markdown, see
+  [Charts](docs/rice-charts.md).
 - Brushes for your own controls: `RiceAccentBrush`, `RiceBackgroundBrush`, `RiceSurfaceBrush`, `RiceForegroundBrush`, `RiceForegroundMutedBrush`, `RiceBorderBrush`, … (use `DynamicResource`).
 - Custom themes: `new RiceTheme("id", "Name", Light: new RicePalette(accent, bg, surface, fg), Dark: ...)`.
 - Texts can be localized via `RiceStrings`.

@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace KD.Avalonia.Rice.Demo;
 
-/// <summary>Markdown samples of the demo: every Markdown feature, every Mermaid diagram type, the repository README.</summary>
+/// <summary>Markdown samples of the demo: every Markdown feature, every Mermaid diagram type, charts, the repository README.</summary>
 public static class MarkdownSamples
 {
     public sealed record Sample(string Name, string Markdown)
@@ -15,6 +15,7 @@ public static class MarkdownSamples
         new("Feature tour", FeatureTour),
         new("Mermaid gallery", MermaidGallery),
         new("PlantUML in Markdown", PlantUmlInMarkdown),
+        new("Charts in Markdown", ChartsInMarkdown),
         new("README.md", Readme()),
     ];
 
@@ -283,6 +284,64 @@ public static class MarkdownSamples
         ```plantuml
         Alice -> Bob : Hello
         Bob --> Alice : Hi!
+        ```
+        """;
+
+    public const string ChartsInMarkdown = """
+        # Charts in Markdown
+
+        A `chart` code block holds a JSON object: the `type` of the chart and its data. It is drawn with the chart
+        controls of the library; hover for values, click a legend entry to hide a series.
+
+        ```chart
+        {
+          "type": "clusteredColumn",
+          "title": "Sales by region",
+          "categories": ["Q1", "Q2", "Q3", "Q4"],
+          "series": [
+            { "name": "Europe", "values": [42, 51, 48, 63] },
+            { "name": "Americas", "values": [35, 39, 46, 52] },
+            { "name": "Asia", "values": [22, 30, 37, 41] }
+          ]
+        }
+        ```
+
+        Slices take a label and a value; `height` sets the height in the text:
+
+        ```chart
+        {
+          "type": "donut", "title": "Disk usage", "format": "0 'GB'", "centerLabel": "used", "height": 260,
+          "slices": [
+            { "label": "System", "value": 28 },
+            { "label": "Apps", "value": 64 },
+            { "label": "Media", "value": 120, "color": "#8B5CF6" }
+          ]
+        }
+        ```
+
+        Tasks take dates (`yyyy-MM-dd`) and either an end or a number of days:
+
+        ```chart
+        {
+          "type": "gantt", "title": "Release plan", "today": false,
+          "tasks": [
+            { "name": "Design", "group": "Plan", "start": "2026-11-02", "days": 5, "progress": 1 },
+            { "name": "Build", "group": "Work", "start": "2026-11-09", "end": "2026-11-20", "progress": 0.4, "dependsOn": "Design" },
+            { "name": "Release", "group": "Work", "start": "2026-11-23", "days": 0, "dependsOn": "Build" }
+          ]
+        }
+        ```
+
+        A gauge shows one value:
+
+        ```chart
+        { "type": "gauge", "value": 72, "format": "0'%'", "label": "Battery", "height": 200 }
+        ```
+
+        A block that cannot be read shows its problem above the code:
+
+        ```chart
+        { "type": "column", "values": [1, 2, 3] }
         ```
         """;
 }
