@@ -59,17 +59,6 @@ public class WorkspaceControlTests
         Assert.Equal(full, RiceKanbanBoard.IsFull(count, limit, enforce));
     }
 
-    [Theory]
-    [InlineData(240, 100, double.PositiveInfinity, 1000, 240)]
-    [InlineData(50, 100, double.PositiveInfinity, 1000, 100)]
-    [InlineData(900, 100, 400, 1000, 400)]
-    [InlineData(240, 100, double.PositiveInfinity, 300, 180)]
-    [InlineData(240, 100, double.PositiveInfinity, 50, 0)]
-    public void Dock_pane_takes_its_size_but_leaves_the_content_its_minimum(double size, double min, double max, double available, double expected)
-    {
-        Assert.Equal(expected, RiceDockLayout.PaneExtent(size, min, max, available, contentMin: 120));
-    }
-
     [Fact]
     public void Dock_layout_state_survives_json()
     {

@@ -16,8 +16,8 @@ selector (`ThemeSelector`, `ThemeDialog`), info bar (`RiceInfoBar`), empty state
 placeholders (`RiceSkeleton`), breadcrumb (`RiceBreadcrumb`), segmented control (`RiceSegmentedControl`), tabs with close
 buttons and drag to reorder (`RiceTabView`), an Office like ribbon (`RiceRibbon`), a Ctrl+Shift+P command palette (`RiceCommandPalette`), a property grid
 (`RicePropertyGrid`), an activity timeline (`RiceTimeline`), a kanban board with drag and drop (`RiceKanbanBoard`), a light
-code editor with syntax colors and line numbers (`RiceCodeEditor`), resizable and collapsible side panes that remember
-their layout (`RiceDockLayout`), a calendar with month, week and day views (`RiceScheduler`), a diff view of two
+code editor with syntax colors and line numbers (`RiceCodeEditor`), Visual Studio like docking of tool windows and
+documents with drag and drop, floating windows and auto hide (`RiceDockLayout`), a calendar with month, week and day views (`RiceScheduler`), a diff view of two
 texts (`RiceDiffView`), UML diagrams of all 14 types (`UmlDiagramView`, read from and written to
 PlantUML), dialogs with the system icons (`RiceDialog`), toast notifications (`RiceToast`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 23 chart
 controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, treemap, waterfall, gantt, gauge, …).

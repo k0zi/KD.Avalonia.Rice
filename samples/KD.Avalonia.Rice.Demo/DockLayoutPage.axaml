@@ -7,40 +7,63 @@
   <DockPanel Margin="24">
     <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,16">
       <TextBlock FontSize="24" FontWeight="SemiBold" Text="Dock layout" />
-      <TextBlock TextWrapping="Wrap" MaxWidth="720" HorizontalAlignment="Left"
+      <TextBlock TextWrapping="Wrap" MaxWidth="800" HorizontalAlignment="Left"
                  Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                 Text="RiceDockLayout: side panes that are resized on their inner edge (double click: starting size) and collapse to a strip. The layout is saved (LayoutKey) and comes back at the next start." />
-      <StackPanel Orientation="Horizontal" Spacing="12">
+                 Text="RiceDockLayout works like the docking of Visual Studio. Drag a title bar (the whole group) or a tab: the guides show where it can go – an edge, a side of a group, its tabs; dropped elsewhere it floats. The pin hides a tool window to a strip, × closes it; View brings it back. Double click a file in the explorer to open it. The layout is saved and comes back next time." />
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Name="ViewButton">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <mi:MaterialIcon Kind="ViewDashboardOutline" Width="16" Height="16" />
+            <TextBlock Text="View" />
+          </StackPanel>
+        </Button>
+        <Button Name="NewDocumentButton" Content="New document" />
         <Button Name="ResetButton" Content="Reset the layout" />
         <TextBlock Name="LayoutInfo" VerticalAlignment="Center" FontSize="12"
                    Foreground="{DynamicResource RiceForegroundMutedBrush}" />
       </StackPanel>
     </StackPanel>
 
-    <Border BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
-      <rice:RiceDockLayout Name="Layout" LayoutKey="demo-dock-layout">
-        <rice:RiceDockPane Name="Explorer" Dock="Left" Size="220" Header="EXPLORER"
-                           Icon="{x:Static icons:MaterialIconKind.FileTreeOutline}">
-          <rice:RiceDockPane.HeaderActions>
-            <Button Width="24" Height="24" Padding="0" Background="Transparent" BorderThickness="0">
-              <mi:MaterialIcon Kind="FilePlusOutline" Width="16" Height="16" />
-            </Button>
-          </rice:RiceDockPane.HeaderActions>
-          <TreeView Name="Files" Margin="4,0" />
-        </rice:RiceDockPane>
-        <rice:RiceDockPane Name="Output" Dock="Bottom" Size="140" MinSize="60" Header="OUTPUT"
-                           Icon="{x:Static icons:MaterialIconKind.Console}">
-          <SelectableTextBlock Name="OutputText" Margin="12,0,12,8" FontSize="12"
-                               FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, monospace"
-                               Foreground="{DynamicResource RiceForegroundMutedBrush}" />
-        </rice:RiceDockPane>
-        <rice:RiceDockPane Name="Properties" Dock="Right" Size="300" Header="PROPERTIES"
-                           Icon="{x:Static icons:MaterialIconKind.TuneVariant}">
-          <rice:RicePropertyGrid Name="PropertyGrid" />
-        </rice:RiceDockPane>
-        <!-- Not a pane: fills the rest. -->
-        <rice:RiceCodeEditor Name="Editor" Language="cs" CornerRadius="0" BorderThickness="0" />
-      </rice:RiceDockLayout>
-    </Border>
+    <rice:RiceDockLayout Name="Layout" LayoutKey="demo-dock-layout-v2" CornerRadius="8">
+      <rice:RiceDockPane Name="Explorer" Header="Explorer" Dock="Left" Size="230"
+                         Icon="{x:Static icons:MaterialIconKind.FileTreeOutline}">
+        <rice:RiceDockPane.HeaderActions>
+          <Button Name="CollapseAllButton" Width="22" Height="22" Padding="0" Background="Transparent" BorderThickness="0"
+                  ToolTip.Tip="Collapse all">
+            <mi:MaterialIcon Kind="CollapseAllOutline" Width="14" Height="14" />
+          </Button>
+        </rice:RiceDockPane.HeaderActions>
+        <TreeView Name="Files" Margin="4" />
+      </rice:RiceDockPane>
+      <rice:RiceDockPane Name="Output" Header="Output" Dock="Bottom" Size="160" Group="bottom"
+                         Icon="{x:Static icons:MaterialIconKind.Console}">
+        <SelectableTextBlock Name="OutputText" Margin="12,8" FontSize="12"
+                             FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, monospace"
+                             Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+      </rice:RiceDockPane>
+      <rice:RiceDockPane Name="Problems" Header="Problems" Dock="Bottom" Group="bottom"
+                         Icon="{x:Static icons:MaterialIconKind.AlertCircleOutline}">
+        <StackPanel Margin="12,8" Spacing="6">
+          <TextBlock FontSize="12" Text="⚠  CS0168: The variable 'e' is declared but never used   App.axaml.cs(42)" />
+          <TextBlock FontSize="12" Text="ⓘ  IDE0090: 'new' expression can be simplified   MainWindow.axaml.cs(17)" />
+        </StackPanel>
+      </rice:RiceDockPane>
+      <rice:RiceDockPane Name="Properties" Header="Properties" Dock="Right" Size="300" Group="right"
+                         Icon="{x:Static icons:MaterialIconKind.TuneVariant}">
+        <rice:RicePropertyGrid Name="PropertyGrid" />
+      </rice:RiceDockPane>
+      <rice:RiceDockPane Name="Outline" Header="Outline" Dock="Right" Group="right"
+                         Icon="{x:Static icons:MaterialIconKind.FormatListBulletedType}">
+        <StackPanel Margin="12,8" Spacing="4">
+          <TextBlock Text="▸ Counter" FontWeight="SemiBold" />
+          <TextBlock Text="    _count" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+          <TextBlock Text="    Text" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+          <TextBlock Text="    Increment()" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+        </StackPanel>
+      </rice:RiceDockPane>
+      <!-- Not a pane: shown in the document area while no document is open. -->
+      <rice:RiceEmptyState Icon="{x:Static icons:MaterialIconKind.FileDocumentMultipleOutline}" Title="No open documents"
+                           Description="Double click a file in the explorer." />
+    </rice:RiceDockLayout>
   </DockPanel>
 </UserControl>
