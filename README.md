@@ -22,6 +22,73 @@ texts (`RiceDiffView`), UML diagrams of all 14 types (`UmlDiagramView`, read fro
 PlantUML), dialogs with the system icons (`RiceDialog`), toast notifications (`RiceToast`), a Markdown view with syntax colored code and Mermaid diagrams (`MarkdownView`, `MermaidView`) and 23 chart
 controls (column, bar, line, area, pie, donut, radar, scatter, bubble, heatmap, funnel, treemap, waterfall, gantt, gauge, …).
 
+## Screenshots
+
+All screenshots come from the [demo app](samples/KD.Avalonia.Rice.Demo) (window 1200×760, click for full size). Every page
+is also in `docs/images` in the dark variant (`<page>-dark.png`); regenerate them with the
+[screenshot tool](#screenshots-tool).
+
+### Themes
+
+The same page (standard Avalonia controls) in a few of the built-in themes, light and dark.
+
+| Theme | Light | Dark |
+|-------|-------|------|
+| Ubuntu | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-ubuntu-light.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-ubuntu-light.png" alt="Ubuntu light" width="360" /></a> | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-ubuntu-dark.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-ubuntu-dark.png" alt="Ubuntu dark" width="360" /></a> |
+| Fedora | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-fedora-light.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-fedora-light.png" alt="Fedora light" width="360" /></a> | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-fedora-dark.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-fedora-dark.png" alt="Fedora dark" width="360" /></a> |
+| Nord | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-nord-light.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-nord-light.png" alt="Nord light" width="360" /></a> | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-nord-dark.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-nord-dark.png" alt="Nord dark" width="360" /></a> |
+| Dracula | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-dracula-light.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-dracula-light.png" alt="Dracula light" width="360" /></a> | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-dracula-dark.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-dracula-dark.png" alt="Dracula dark" width="360" /></a> |
+| Gruvbox | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-gruvbox-light.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-gruvbox-light.png" alt="Gruvbox light" width="360" /></a> | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-gruvbox-dark.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-gruvbox-dark.png" alt="Gruvbox dark" width="360" /></a> |
+| Catppuccin | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-catppuccin-light.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-catppuccin-light.png" alt="Catppuccin light" width="360" /></a> | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-catppuccin-dark.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-catppuccin-dark.png" alt="Catppuccin dark" width="360" /></a> |
+| Windows 11 | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-windows11-light.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-windows11-light.png" alt="Windows 11 light" width="360" /></a> | <a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-windows11-dark.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/theme-windows11-dark.png" alt="Windows 11 dark" width="360" /></a> |
+
+### Controls
+
+The side menu (`RiceSideMenu`) and the title bar of `RiceWindow` are on every screenshot.
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-card.md">Card</a></b><br /><code>RiceCard</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/card.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/card.png" alt="Card" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-group-box.md">Group box</a></b><br /><code>RiceGroupBox</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/group-box.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/group-box.png" alt="Group box" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-chat.md">Chat</a></b><br /><code>RiceChat</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/chat.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/chat.png" alt="Chat" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-progress-ring.md">Progress</a></b><br /><code>RiceProgressRing</code>, <code>RiceProgressBar</code>, <code>RiceSpinner</code>, <code>RiceLoadingOverlay</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/progress.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/progress.png" alt="Progress" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-dialog.md">Dialog</a></b><br /><code>RiceDialog</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/dialog.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/dialog.png" alt="Dialog" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-toast.md">Toasts</a></b><br /><code>RiceToast</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/toasts-shown.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/toasts-shown.png" alt="Toasts" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-info-bar.md">Feedback</a></b><br /><code>RiceInfoBar</code>, <code>RiceEmptyState</code>, <code>RiceSkeleton</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/feedback.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/feedback.png" alt="Feedback" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-tab-view.md">Navigation</a></b><br /><code>RiceBreadcrumb</code>, <code>RiceSegmentedControl</code>, <code>RiceTabView</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/navigation.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/navigation.png" alt="Navigation" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-ribbon.md">Ribbon</a></b><br /><code>RiceRibbon</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/ribbon.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/ribbon.png" alt="Ribbon" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-command-palette.md">Command palette</a></b><br /><code>RiceCommandPalette</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/command-palette-open.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/command-palette-open.png" alt="Command palette" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-property-grid.md">Property grid</a></b><br /><code>RicePropertyGrid</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/property-grid.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/property-grid.png" alt="Property grid" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-timeline.md">Timeline</a></b><br /><code>RiceTimeline</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/timeline.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/timeline.png" alt="Timeline" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-kanban-board.md">Kanban board</a></b><br /><code>RiceKanbanBoard</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/kanban.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/kanban.png" alt="Kanban board" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-code-editor.md">Code editor</a></b><br /><code>RiceCodeEditor</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/code-editor.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/code-editor.png" alt="Code editor" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-dock-layout.md">Dock layout</a></b><br /><code>RiceDockLayout</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/dock-layout.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/dock-layout.png" alt="Dock layout" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-scheduler.md">Calendar</a></b><br /><code>RiceScheduler</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/scheduler.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/scheduler.png" alt="Calendar" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-diff.md">Diff</a></b><br /><code>RiceDiffView</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/diff.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/diff.png" alt="Diff" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-uml.md">UML diagrams</a></b><br /><code>UmlDiagramView</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/uml.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/uml.png" alt="UML diagrams" width="400" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b><a href="docs/rice-markdown.md">Markdown</a></b><br /><code>MarkdownView</code>, <code>MermaidView</code><br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/markdown.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/markdown.png" alt="Markdown" width="400" /></a></td>
+    <td width="50%" valign="top"><b><a href="docs/rice-charts.md">Charts</a></b><br />23 chart controls<br /><a href="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/charts.png"><img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/docs/images/charts.png" alt="Charts" width="400" /></a></td>
+  </tr>
+</table>
+
 ## Documentation
 
 Usage guides for every control are in the [docs](docs/README.md) folder.
@@ -247,6 +314,17 @@ copy it as C#. See [tools/KD.Avalonia.Rice.ThemeEditor](tools/KD.Avalonia.Rice.T
 
 ```sh
 dotnet run --project tools/KD.Avalonia.Rice.ThemeEditor
+```
+
+## Screenshots tool
+
+A development tool (not part of the package): opens the demo window headless (Skia), selects every page of the side
+menu, also shows the toasts, the command palette and a dialog, and saves them light and dark as PNG files, plus the
+theme gallery. Run it after a visual change and commit the images.
+
+```sh
+dotnet run --project tools/KD.Avalonia.Rice.Screenshots              # into docs/images
+dotnet run --project tools/KD.Avalonia.Rice.Screenshots -- out/shots # into another folder
 ```
 
 ## Versioning & NuGet package

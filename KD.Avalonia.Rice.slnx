@@ -6,6 +6,7 @@
     <Project Path="src/KD.Avalonia.Rice/KD.Avalonia.Rice.csproj" />
   </Folder>
   <Folder Name="/tools/">
+    <Project Path="tools/KD.Avalonia.Rice.Screenshots/KD.Avalonia.Rice.Screenshots.csproj" />
     <Project Path="tools/KD.Avalonia.Rice.ThemeEditor/KD.Avalonia.Rice.ThemeEditor.csproj" />
   </Folder>
   <Folder Name="/tests/">
