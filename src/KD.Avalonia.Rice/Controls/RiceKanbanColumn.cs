@@ -41,6 +41,9 @@ public class RiceKanbanColumn : HeaderedItemsControl
     public static readonly StyledProperty<bool> ShowAddCardButtonProperty =
         RiceKanbanBoard.ShowAddCardButtonProperty.AddOwner<RiceKanbanColumn>();
 
+    public static readonly StyledProperty<bool> ShowColumnHeadersProperty =
+        RiceKanbanBoard.ShowColumnHeadersProperty.AddOwner<RiceKanbanColumn>();
+
     public static readonly DirectProperty<RiceKanbanColumn, string> CountTextProperty =
         AvaloniaProperty.RegisterDirect<RiceKanbanColumn, string>(nameof(CountText), o => o.CountText);
 
@@ -106,6 +109,13 @@ public class RiceKanbanColumn : HeaderedItemsControl
         set => SetValue(ShowAddCardButtonProperty, value);
     }
 
+    /// <summary>Shows the header (title, count, actions); inherited from the board.</summary>
+    public bool ShowColumnHeaders
+    {
+        get => GetValue(ShowColumnHeadersProperty);
+        set => SetValue(ShowColumnHeadersProperty, value);
+    }
+
     /// <summary>"3", or "3 / 5" with a <see cref="WipLimit"/>.</summary>
     public string CountText
     {
@@ -114,7 +124,15 @@ public class RiceKanbanColumn : HeaderedItemsControl
     }
 
     /// <summary>The board of the column; null when it is used on its own.</summary>
-    public RiceKanbanBoard? Board => ItemsControlFromItemContainer(this) as RiceKanbanBoard;
+    public RiceKanbanBoard? Board => ItemsControlFromItemContainer(this) switch
+    {
+        RiceKanbanBoard board => board,
+        RiceKanbanLane lane => lane.Board,
+        _ => null,
+    };
+
+    /// <summary>The lane of the column; null on a board without lanes.</summary>
+    public RiceKanbanLane? Lane => ItemsControlFromItemContainer(this) as RiceKanbanLane;
 
     /// <summary>Whether the cards can be moved: <c>Items</c>, or an <c>ItemsSource</c> that is a modifiable <see cref="IList"/>.</summary>
     public bool CanChangeItems => ItemsSource is null or IList { IsReadOnly: false, IsFixedSize: false };
@@ -169,6 +187,7 @@ public class RiceKanbanColumn : HeaderedItemsControl
         PseudoClasses.Set(":empty", count == 0);
         PseudoClasses.Set(":at-limit", WipLimit > 0 && count == WipLimit);
         PseudoClasses.Set(":over-limit", WipLimit > 0 && count > WipLimit);
+        Lane?.UpdateCount();
     }
 
     private void OnAddButtonClick(object? sender, RoutedEventArgs e) =>

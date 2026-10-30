@@ -27,7 +27,7 @@ themes that every control relies on.
 | [RiceCommandPalette](rice-command-palette.md) | Ctrl+Shift+P search over the commands and pages of the window |
 | [RicePropertyGrid](rice-property-grid.md) | Edits the public properties of an object, grouped by category |
 | [RiceTimeline](rice-timeline.md) | Events along a line, grouped under day headers |
-| [RiceKanbanBoard](rice-kanban-board.md) | Columns of cards moved by drag and drop or the keyboard, with WIP limits |
+| [RiceKanbanBoard](rice-kanban-board.md) | Columns of cards moved by drag and drop or the keyboard, with WIP limits and swimlanes |
 | [RiceCodeEditor](rice-code-editor.md) | Text box with syntax colors, line numbers and editor keys (indent, comment, auto indent) |
 | [RiceDockLayout](rice-dock-layout.md) | Visual Studio like docking: tab groups dragged to new places, floating windows, auto hide, close / show; saves the layout |
 | [RiceScheduler](rice-scheduler.md) | Calendar with month, week and day views; events dragged and resized with the mouse |

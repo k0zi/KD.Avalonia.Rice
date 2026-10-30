@@ -18,8 +18,8 @@ RiceToast.ShowWarning("Only 2 GB are left on the home partition.");
 RiceToast.ShowInfo("3 files were moved to the trash.", "Deleted", new ToastAction("Undo", RestoreFiles));
 ```
 
-Without an `owner` argument the active window of the application shows the toast (else its main window). Every
-method can be called from any thread.
+Without an `owner` argument the active window of the application shows the toast (else its main window); in a single
+view application (browser, mobile) the top level of its main view. Every method can be called from any thread.
 
 ## Kinds
 
