@@ -1,3 +1,4 @@
+using System.Collections;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -18,6 +19,9 @@ namespace KD.Avalonia.Rice.Controls;
 /// and inserts it into the target's, unless a <see cref="CardMoving"/> handler cancels it.
 /// From data: <c>ItemsSource</c> lists the columns, a <c>TreeDataTemplate</c> as <c>ItemTemplate</c> gives the
 /// header and the cards of a column (its <c>ItemsSource</c>), and <see cref="CardTemplate"/> shows a card.
+/// Swimlanes: when the items are <see cref="RiceKanbanLane"/>s (or <see cref="LaneTemplate"/> is set) every item is a
+/// lane holding a row of columns, and cards are dragged between the columns of every lane. <see cref="ColumnHeaders"/>
+/// shows a header row above the lanes. Pseudo class: <c>:lanes</c>.
 /// </summary>
 public class RiceKanbanBoard : ItemsControl
 {
@@ -34,6 +38,24 @@ public class RiceKanbanBoard : ItemsControl
     /// <summary>Shows an "Add card" button at the bottom of every column (inherited).</summary>
     public static readonly StyledProperty<bool> ShowAddCardButtonProperty =
         AvaloniaProperty.Register<RiceKanbanBoard, bool>(nameof(ShowAddCardButton), inherits: true);
+
+    /// <summary>
+    /// Template of the lanes: a <c>TreeDataTemplate</c> gives the header of a lane and its columns (its
+    /// <c>ItemsSource</c>). Setting it makes every item of the board a lane; <c>ItemTemplate</c> still shows the columns.
+    /// </summary>
+    public static readonly StyledProperty<IDataTemplate?> LaneTemplateProperty =
+        AvaloniaProperty.Register<RiceKanbanBoard, IDataTemplate?>(nameof(LaneTemplate));
+
+    /// <summary>Items of a header row above the lanes, one per column, e.g. the columns of the first lane's model.</summary>
+    public static readonly StyledProperty<IEnumerable?> ColumnHeadersProperty =
+        AvaloniaProperty.Register<RiceKanbanBoard, IEnumerable?>(nameof(ColumnHeaders));
+
+    public static readonly StyledProperty<IDataTemplate?> ColumnHeaderTemplateProperty =
+        AvaloniaProperty.Register<RiceKanbanBoard, IDataTemplate?>(nameof(ColumnHeaderTemplate));
+
+    /// <summary>Shows the header of every column (inherited); off when <see cref="ColumnHeaders"/> already names them.</summary>
+    public static readonly StyledProperty<bool> ShowColumnHeadersProperty =
+        AvaloniaProperty.Register<RiceKanbanBoard, bool>(nameof(ShowColumnHeaders), true, inherits: true);
 
     public static readonly StyledProperty<object?> SelectedCardProperty =
         AvaloniaProperty.Register<RiceKanbanBoard, object?>(nameof(SelectedCard),
@@ -57,6 +79,7 @@ public class RiceKanbanBoard : ItemsControl
     private const double AutoScrollStep = 14;
 
     private ScrollViewer? _scrollViewer;
+    private ScrollViewer? _lanesScrollViewer;
 
     private RiceKanbanCard? _pressedCard;
     private Point _pressPoint;
@@ -105,6 +128,31 @@ public class RiceKanbanBoard : ItemsControl
         set => SetValue(ShowAddCardButtonProperty, value);
     }
 
+    public IDataTemplate? LaneTemplate
+    {
+        get => GetValue(LaneTemplateProperty);
+        set => SetValue(LaneTemplateProperty, value);
+    }
+
+    public IEnumerable? ColumnHeaders
+    {
+        get => GetValue(ColumnHeadersProperty);
+        set => SetValue(ColumnHeadersProperty, value);
+    }
+
+    /// <summary>Template of the items of <see cref="ColumnHeaders"/>.</summary>
+    public IDataTemplate? ColumnHeaderTemplate
+    {
+        get => GetValue(ColumnHeaderTemplateProperty);
+        set => SetValue(ColumnHeaderTemplateProperty, value);
+    }
+
+    public bool ShowColumnHeaders
+    {
+        get => GetValue(ShowColumnHeadersProperty);
+        set => SetValue(ShowColumnHeadersProperty, value);
+    }
+
     /// <summary>The item of the selected card (the data item, or the <see cref="RiceKanbanCard"/> declared in XAML).</summary>
     public object? SelectedCard
     {
@@ -140,33 +188,59 @@ public class RiceKanbanBoard : ItemsControl
         remove => RemoveHandler(CardActivatedEvent, value);
     }
 
-    /// <summary>The columns on the board, in order.</summary>
+    /// <summary>The columns on the board, in order (lane by lane).</summary>
     public IEnumerable<RiceKanbanColumn> Columns =>
-        Enumerable.Range(0, ItemCount).Select(ContainerFromIndex).OfType<RiceKanbanColumn>();
+        Containers().SelectMany(c => c switch
+        {
+            RiceKanbanLane lane => lane.Columns,
+            RiceKanbanColumn column => [column],
+            _ => Enumerable.Empty<RiceKanbanColumn>(),
+        });
+
+    /// <summary>The lanes on the board, in order; none when the items are columns.</summary>
+    public IEnumerable<RiceKanbanLane> Lanes => Containers().OfType<RiceKanbanLane>();
+
+    /// <summary>Whether the items are lanes: <see cref="LaneTemplate"/> is set, or <see cref="RiceKanbanLane"/>s were added.</summary>
+    public bool HasLanes => LaneTemplate is not null || Items.OfType<RiceKanbanLane>().Any();
 
     protected override Type StyleKeyOverride => typeof(RiceKanbanBoard);
 
+    private IEnumerable<Control> Containers() => Enumerable.Range(0, ItemCount).Select(ContainerFromIndex).OfType<Control>();
+
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey) =>
-        new RiceKanbanColumn();
+        HasLanes ? new RiceKanbanLane() : new RiceKanbanColumn();
 
-    protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey) =>
-        NeedsContainer<RiceKanbanColumn>(item, out recycleKey);
+    protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
+    {
+        if (item is not RiceKanbanLane)
+            return NeedsContainer<RiceKanbanColumn>(item, out recycleKey);
+        recycleKey = null;
+        return false;
+    }
 
-    // Not the base: it would hand the board's ItemTemplate (the column header) down to the cards as well.
     protected override void PrepareContainerForItemOverride(Control container, object? item, int index)
     {
-        if (container == item || container is not RiceKanbanColumn column)
-        {
+        if (container != item && container is RiceKanbanLane lane)
+            PrepareHeadered(lane, item, LaneTemplate ?? this.FindDataTemplate(item), lane.SetChildrenBinding);
+        else if (container != item && container is RiceKanbanColumn column)
+            PrepareColumn(column, item, this);
+        else
             base.PrepareContainerForItemOverride(container, item, index);
-            return;
-        }
-        var template = ItemTemplate ?? this.FindDataTemplate(item);
-        if (!column.IsSet(HeaderedItemsControl.HeaderProperty))
-            column.Header = item;
-        if (!column.IsSet(HeaderedItemsControl.HeaderTemplateProperty) && template is not null)
-            column.HeaderTemplate = template;
-        if (template is ITreeDataTemplate tree && item is not null && !column.IsSet(ItemsSourceProperty))
-            column.SetChildrenBinding(tree.BindChildren(column, ItemsSourceProperty, item));
+    }
+
+    internal void PrepareColumn(RiceKanbanColumn column, object? item, Control scope) =>
+        PrepareHeadered(column, item, ItemTemplate ?? scope.FindDataTemplate(item), column.SetChildrenBinding);
+
+    // Not the base: it would hand the template of the header (lane or column) down to the children as well.
+    private static void PrepareHeadered(HeaderedItemsControl container, object? item, IDataTemplate? template,
+        Action<IDisposable?> setChildrenBinding)
+    {
+        if (!container.IsSet(HeaderedItemsControl.HeaderProperty))
+            container.Header = item;
+        if (!container.IsSet(HeaderedItemsControl.HeaderTemplateProperty) && template is not null)
+            container.HeaderTemplate = template;
+        if (template is ITreeDataTemplate tree && item is not null && !container.IsSet(ItemsSourceProperty))
+            setChildrenBinding(tree.BindChildren(container, ItemsSourceProperty, item));
     }
 
     protected override void ClearContainerForItemOverride(Control container)
@@ -174,12 +248,23 @@ public class RiceKanbanBoard : ItemsControl
         base.ClearContainerForItemOverride(container);
         if (container is RiceKanbanColumn column)
             column.SetChildrenBinding(null);
+        else if (container is RiceKanbanLane lane)
+            lane.SetChildrenBinding(null);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
         _scrollViewer = e.NameScope.Find<ScrollViewer>("PART_ScrollViewer");
+        _lanesScrollViewer = e.NameScope.Find<ScrollViewer>("PART_LanesScrollViewer");
+        // Each header gets the look (and width) of a column; its content comes from ColumnHeaderTemplate.
+        if (e.NameScope.Find<ItemsControl>("PART_ColumnHeaders") is { } headers)
+            headers.ItemTemplate = new FuncDataTemplate<object?>((item, _) => new RiceKanbanColumnHeader
+            {
+                Content = item,
+                [!ContentControl.ContentTemplateProperty] = this[!ColumnHeaderTemplateProperty],
+            });
+        UpdateLanes();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -190,7 +275,14 @@ public class RiceKanbanBoard : ItemsControl
             foreach (var card in AllCards())
                 card.IsSelected = SelectedCard is { } selected && Equals(ItemOf(card), selected);
         }
+        else if (change.Property == LaneTemplateProperty || change.Property == ItemCountProperty)
+        {
+            UpdateLanes();
+        }
     }
+
+    // :lanes stacks the items vertically and lets them scroll down; the columns of a lane grow with their cards.
+    private void UpdateLanes() => PseudoClasses.Set(":lanes", HasLanes);
 
     /// <summary>
     /// Moves the card at <paramref name="index"/> of <paramref name="source"/> to <paramref name="targetIndex"/> of
@@ -391,7 +483,10 @@ public class RiceKanbanBoard : ItemsControl
     {
         if (_drag is not { } drag)
             return;
-        var column = Columns.FirstOrDefault(c => c.IsEffectivelyVisible
+        // A column scrolled out of the lanes' view is still under the pointer by its bounds.
+        var inView = _lanesScrollViewer is not { } lanes || !HasLanes
+                     || new Rect(lanes.Bounds.Size).Contains(this.TranslatePoint(position, lanes) ?? default);
+        var column = !inView ? null : Columns.FirstOrDefault(c => c.IsEffectivelyVisible
                                                  && new Rect(c.Bounds.Size).Contains(this.TranslatePoint(position, c) ?? default));
         if (column != drag.Target)
             drag.Target?.HideDropIndicator();
@@ -417,6 +512,14 @@ public class RiceKanbanBoard : ItemsControl
                 _scrollViewer.Offset -= new Vector(AutoScrollStep, 0);
             else if (x > _scrollViewer.Bounds.Width - AutoScrollEdge)
                 _scrollViewer.Offset += new Vector(AutoScrollStep, 0);
+        }
+        if (_lanesScrollViewer is not null && HasLanes)
+        {
+            var y = this.TranslatePoint(position, _lanesScrollViewer)?.Y ?? 0;
+            if (y < AutoScrollEdge)
+                _lanesScrollViewer.Offset -= new Vector(0, AutoScrollStep);
+            else if (y > _lanesScrollViewer.Bounds.Height - AutoScrollEdge)
+                _lanesScrollViewer.Offset += new Vector(0, AutoScrollStep);
         }
         if (_drag?.Target?.CardsScrollViewer is { } cards)
         {
@@ -458,22 +561,41 @@ public class RiceKanbanBoard : ItemsControl
             || ColumnOf(card) is not { } column || column.Board != this)
             return;
         var index = column.IndexFromContainer(card);
-        var columns = Columns.ToList();
+        // Left / right stay in the lane; up / down go on into the lane above / below at the first / last card.
+        var columns = (column.Lane?.Columns ?? Columns).ToList();
         var columnIndex = columns.IndexOf(column);
+        var first = index == 0;
+        var last = index == column.ItemCount - 1;
         var ctrl = e.KeyModifiers.HasFlag(KeyModifiers.Control);
         e.Handled = (e.Key, ctrl) switch
         {
             (Key.Enter, false) => Activate(column, card),
+            (Key.Up, false) when first => LaneNeighbour(column, -1) is { } above && FocusCard(above, above.ItemCount - 1),
             (Key.Up, false) => FocusCard(column, index - 1),
+            (Key.Down, false) when last => LaneNeighbour(column, 1) is { } below && FocusCard(below, 0),
             (Key.Down, false) => FocusCard(column, index + 1),
             (Key.Left, false) => columnIndex > 0 && FocusCard(columns[columnIndex - 1], Math.Min(index, columns[columnIndex - 1].ItemCount - 1)),
             (Key.Right, false) => columnIndex < columns.Count - 1 && FocusCard(columns[columnIndex + 1], Math.Min(index, columns[columnIndex + 1].ItemCount - 1)),
+            (Key.Up, true) when CanDragCards && first => LaneNeighbour(column, -1) is { } above && MoveCard(column, index, above, above.ItemCount),
             (Key.Up, true) when CanDragCards => MoveCard(column, index, column, index - 1),
+            (Key.Down, true) when CanDragCards && last => LaneNeighbour(column, 1) is { } below && MoveCard(column, index, below, 0),
             (Key.Down, true) when CanDragCards => MoveCard(column, index, column, index + 2),
             (Key.Left, true) when CanDragCards && columnIndex > 0 => MoveCard(column, index, columns[columnIndex - 1], index),
             (Key.Right, true) when CanDragCards && columnIndex < columns.Count - 1 => MoveCard(column, index, columns[columnIndex + 1], index),
             _ => false,
         };
+    }
+
+    /// <summary>The column at the same place in the expanded lane <paramref name="step"/> lanes away; null without one.</summary>
+    private RiceKanbanColumn? LaneNeighbour(RiceKanbanColumn column, int step)
+    {
+        if (column.Lane is not { } lane)
+            return null;
+        var lanes = Lanes.Where(l => l.IsExpanded).ToList();
+        var at = lanes.IndexOf(lane) + step;
+        return at >= 0 && at < lanes.Count
+            ? lanes[at].Columns.ElementAtOrDefault(lane.Columns.ToList().IndexOf(column))
+            : null;
     }
 
     private bool Activate(RiceKanbanColumn column, RiceKanbanCard card)
@@ -512,6 +634,12 @@ public class RiceKanbanCardMovedEventArgs(RoutedEvent routedEvent, object? item,
     public int SourceIndex { get; } = sourceIndex;
 
     public RiceKanbanColumn TargetColumn { get; } = targetColumn;
+
+    /// <summary>The lane of <see cref="SourceColumn"/>; null on a board without lanes.</summary>
+    public RiceKanbanLane? SourceLane => SourceColumn.Lane;
+
+    /// <summary>The lane of <see cref="TargetColumn"/>; null on a board without lanes.</summary>
+    public RiceKanbanLane? TargetLane => TargetColumn.Lane;
 
     /// <summary>The index of the card in the target column after the move.</summary>
     public int TargetIndex { get; } = targetIndex;

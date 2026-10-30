@@ -17,10 +17,110 @@
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="{TemplateBinding CornerRadius}">
           <ScrollViewer Name="PART_ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-            <ItemsPresenter Name="PART_ItemsPresenter" Margin="{TemplateBinding Padding}"
-                            ItemsPanel="{TemplateBinding ItemsPanel}" />
+            <DockPanel Margin="{TemplateBinding Padding}">
+              <!-- Inside the horizontal scroll, so the headers stay above their columns. -->
+              <ItemsControl Name="PART_ColumnHeaders" DockPanel.Dock="Top" Margin="0,0,0,12"
+                            ItemsSource="{TemplateBinding ColumnHeaders}"
+                            IsVisible="{TemplateBinding ColumnHeaders, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="12" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              </ItemsControl>
+              <!-- Scrolls down only with lanes: without them the columns fill the height and scroll on their own. -->
+              <ScrollViewer Name="PART_LanesScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </ScrollViewer>
+            </DockPanel>
           </ScrollViewer>
         </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:lanes">
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel Spacing="16" />
+        </ItemsPanelTemplate>
+      </Setter>
+      <Style Selector="^ /template/ ScrollViewer#PART_LanesScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceKanbanLane}" TargetType="rice:RiceKanbanLane">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="12" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DockPanel Background="{TemplateBinding Background}">
+          <Border Name="PART_HeaderBar" DockPanel.Dock="Top" Padding="0,0,4,6" Margin="0,0,0,8"
+                  BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto">
+              <Button Name="PART_ExpandButton" Width="24" Height="24" Padding="0" Margin="0,0,4,0"
+                      VerticalAlignment="Center" Background="Transparent" BorderThickness="0"
+                      Foreground="{DynamicResource RiceForegroundMutedBrush}">
+                <mi:MaterialIcon Name="PART_Chevron" Kind="ChevronDown" Width="16" Height="16" />
+              </Button>
+              <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="1" VerticalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" />
+              <Border Grid.Column="2" Margin="8,0,0,0" Padding="7,1" CornerRadius="9"
+                      VerticalAlignment="Center" Background="{DynamicResource RiceHoverBrush}">
+                <TextBlock FontSize="12" Text="{TemplateBinding CountText}"
+                           Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+              </Border>
+              <ContentPresenter Grid.Column="4" Margin="4,0,0,0" VerticalAlignment="Center"
+                                Content="{TemplateBinding HeaderActions}"
+                                IsVisible="{TemplateBinding HeaderActions, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </Grid>
+          </Border>
+          <ItemsPresenter Name="PART_ItemsPresenter" Margin="{TemplateBinding Padding}"
+                          ItemsPanel="{TemplateBinding ItemsPanel}"
+                          IsVisible="{TemplateBinding IsExpanded}" />
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:collapsed /template/ mi|MaterialIcon#PART_Chevron">
+      <Setter Property="Kind" Value="ChevronRight" />
+    </Style>
+    <Style Selector="^:collapsed /template/ Border#PART_HeaderBar">
+      <Setter Property="Margin" Value="0" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceKanbanColumnHeader}" TargetType="rice:RiceKanbanColumnHeader">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceTrackBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Width" Value="280" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Name="PART_ContentPresenter"
+                          Background="{TemplateBinding Background}"
+                          BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          Padding="{TemplateBinding Padding}"
+                          Content="{TemplateBinding Content}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
       </ControlTemplate>
     </Setter>
   </ControlTheme>
@@ -46,7 +146,8 @@
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="{TemplateBinding CornerRadius}">
           <DockPanel>
-            <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,*,Auto,Auto" Margin="12,10,8,10">
+            <Grid Name="PART_Header" DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,*,Auto,Auto" Margin="12,10,8,10"
+                  IsVisible="{TemplateBinding ShowColumnHeaders}">
               <Ellipse Width="10" Height="10" Margin="0,0,8,0" VerticalAlignment="Center"
                        Fill="{TemplateBinding Accent}"
                        IsVisible="{TemplateBinding Accent, Converter={x:Static ObjectConverters.IsNotNull}}" />
@@ -99,6 +200,10 @@
       </ControlTemplate>
     </Setter>
 
+    <!-- Without the header the cards need room above them too. -->
+    <Style Selector="^[ShowColumnHeaders=False]">
+      <Setter Property="Padding" Value="8" />
+    </Style>
     <Style Selector="^:empty /template/ TextBlock#PART_EmptyText">
       <Setter Property="IsVisible" Value="True" />
     </Style>
