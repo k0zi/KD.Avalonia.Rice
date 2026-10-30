@@ -5,6 +5,11 @@ sweeping over it. Compose several into the outline of a card or a list row and s
 there; the layout stays steady instead of jumping when the data arrives. For a whole view that is busy, the
 [loading overlay](rice-loading-overlay.md) fits better.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/skeleton-dark.png" />
+  <img src="images/skeleton.png" alt="RiceSkeleton outlining a card" width="800" />
+</picture>
+
 ```xml
 <!-- Outline of a post: avatar, two header lines, a paragraph. -->
 <rice:RiceCard IsVisible="{Binding IsLoading}">

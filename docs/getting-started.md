@@ -1,5 +1,10 @@
 # Getting started
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/home-dark.png" />
+  <img src="images/home.png" alt="The demo app in the Ubuntu theme" width="800" />
+</picture>
+
 ## Setup
 
 1. Install the package:

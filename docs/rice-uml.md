@@ -4,6 +4,11 @@
 shadows, accent tinted headers, smooth lines. The elements are laid out automatically (no external layout engine);
 pan by dragging or scrolling, zoom with Ctrl + wheel or the buttons, click an element to select it.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/uml-dark.png" />
+  <img src="images/uml.png" alt="UmlDiagramView" width="800" />
+</picture>
+
 The diagrams are read from and written to **PlantUML** text (`.puml`), the de facto plain text format of UML, which
 IDEs, editors, wikis and the PlantUML tool itself understand. A file saved by your app opens in any PlantUML tool, and
 the other way round.

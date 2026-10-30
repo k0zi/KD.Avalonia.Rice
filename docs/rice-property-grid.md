@@ -4,6 +4,11 @@ Shows and edits the public properties of an object, like the property window of 
 sorted by name), with a search box on top and the description of the selected property below. Handy for settings pages,
 debugging panels and editors.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/property-grid-dark.png" />
+  <img src="images/property-grid.png" alt="RicePropertyGrid" width="800" />
+</picture>
+
 ```xml
 <rice:RicePropertyGrid SelectedObject="{Binding Settings}" Width="380" />
 ```

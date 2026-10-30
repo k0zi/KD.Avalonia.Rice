@@ -4,6 +4,11 @@
 stacked column, line, pie, donut, area, bar, clustered bar, stacked bar, bubble, radar, scatter, heatmap, pyramid,
 funnel, treemap, waterfall, gantt, histogram, bullet, gauge and diverging bar.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/charts-dark.png" />
+  <img src="images/charts.png" alt="Chart controls" width="800" />
+</picture>
+
 Every chart has:
 - **Tooltips:** hover a bar, slice or point to see its value.
 - **Legend toggle:** click a legend entry to hide or show that series or slice.

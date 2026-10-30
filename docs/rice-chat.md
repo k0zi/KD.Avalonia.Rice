@@ -2,6 +2,11 @@
 
 Chat view: the messages on top, an input box at the bottom. Two looks: modern bubbles or an IRC like log.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/chat-dark.png" />
+  <img src="images/chat.png" alt="RiceChat" width="800" />
+</picture>
+
 ```xml
 <rice:RiceChat ItemsSource="{Binding Messages}" ChatStyle="Bubbles" MessageSent="OnMessageSent" />
 ```

@@ -4,6 +4,11 @@ Message bar that stays in the layout of a page until it is closed – unlike a [
 the window and closes itself. A strip tinted with the color of its kind, an icon, a bold title flowing into the message,
 optional custom content, an optional action on the right and a close button.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/feedback-dark.png" />
+  <img src="images/feedback.png" alt="RiceInfoBar kinds" width="800" />
+</picture>
+
 ```xml
 <rice:RiceInfoBar Title="Update available" Message="Version 26.10 is ready to install." />
 

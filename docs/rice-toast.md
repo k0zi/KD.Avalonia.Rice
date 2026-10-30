@@ -4,6 +4,11 @@
 corner of the window that close themselves. Each toast is a card tinted with the color of its kind, with a colored
 stripe, an icon, an optional title, the message and a thin bar counting down the time until it closes.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/toasts-shown-dark.png" />
+  <img src="images/toasts-shown.png" alt="Info, success, warning and error toasts" width="800" />
+</picture>
+
 ```csharp
 using KD.Avalonia.Rice.Notifications;
 

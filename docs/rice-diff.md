@@ -4,6 +4,11 @@ Shows the difference of two texts like the diff of a code review: the removed li
 and inside a changed line the changed words in a stronger shade. Long unchanged runs are folded to a few lines of
 context, a strip on the right shows where the changes are in the whole text, and F7 / Shift+F7 jump between them.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/diff-dark.png" />
+  <img src="images/diff.png" alt="RiceDiffView side by side" width="800" />
+</picture>
+
 ```xml
 <!-- xmlns:diff="clr-namespace:KD.Avalonia.Rice.Controls.Diffs;assembly=KD.Avalonia.Rice" -->
 <diff:RiceDiffView OldText="{Binding Committed}" NewText="{Binding WorkingCopy}" Language="cs"

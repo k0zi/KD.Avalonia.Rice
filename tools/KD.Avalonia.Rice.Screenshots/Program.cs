@@ -4,6 +4,7 @@ using Avalonia.Headless;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using KD.Avalonia.Rice;
 using KD.Avalonia.Rice.Controls;
 using KD.Avalonia.Rice.Demo;
@@ -103,7 +104,8 @@ internal static class Program
         return 0;
     }
 
-    // Things that only show up on a click: toasts, the command palette and a dialog. Each gets a fresh window.
+    // Things that only show up on a click or further down a page: toasts, the command palette, dialogs, the collapsed
+    // menu, the loading overlay and the skeleton. Each gets a fresh window.
     private static void CaptureOverlays(string output, string suffix)
     {
         var window = Open("ToastsItem");
@@ -129,6 +131,38 @@ internal static class Program
         Save(dialog, Path.Combine(output, "dialog" + suffix + ".png"));
         dialog.Close();
         window.Close();
+
+        window = Open("HomeItem");
+        _ = window.ShowThemeDialog();
+        Settle();
+        dialog = window.OwnedWindows.FirstOrDefault() ?? throw new InvalidOperationException("The theme dialog did not open.");
+        Save(dialog, Path.Combine(output, "theme-dialog" + suffix + ".png"));
+        dialog.Close();
+        window.Close();
+
+        window = Open("HomeItem");
+        window.FindControl<RiceSideMenu>("SideMenu")!.IsCollapsed = true;
+        Settle();
+        Save(window, Path.Combine(output, "side-menu-collapsed" + suffix + ".png"));
+        window.Close();
+
+        // Further down on their pages: scrolled into view.
+        window = Open("ProgressItem");
+        window.GetVisualDescendants().OfType<RiceLoadingOverlay>().First().IsActive = true;
+        ScrollTo(window, "Loading overlay");
+        Save(window, Path.Combine(output, "loading-overlay" + suffix + ".png"));
+        window.Close();
+
+        window = Open("FeedbackItem");
+        ScrollTo(window, "Skeleton");
+        Save(window, Path.Combine(output, "skeleton" + suffix + ".png"));
+        window.Close();
+    }
+
+    private static void ScrollTo(Window window, string groupBoxHeader)
+    {
+        window.GetVisualDescendants().OfType<RiceGroupBox>().First(g => Equals(g.Header, groupBoxHeader)).BringIntoView();
+        Settle();
     }
 
     private static MainWindow Open(string item)

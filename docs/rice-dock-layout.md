@@ -5,6 +5,11 @@ document area. Everything can be rearranged with the mouse: drag a pane to anoth
 its tabs or out into a window of its own; hide tool windows to strips at the edges, close panes and show them again,
 add new ones from code. The whole arrangement is saved and restored.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dock-layout-dark.png" />
+  <img src="images/dock-layout.png" alt="RiceDockLayout" width="800" />
+</picture>
+
 ```xml
 <rice:RiceDockLayout LayoutKey="main">
   <rice:RiceDockPane Name="Explorer" Header="Explorer" Dock="Left" Size="240"

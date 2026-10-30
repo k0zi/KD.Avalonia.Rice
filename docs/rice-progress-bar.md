@@ -2,6 +2,11 @@
 
 Horizontal progress bar with rounded (pill shaped) ends and two modes:
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/progress-dark.png" />
+  <img src="images/progress.png" alt="RiceProgressRing and RiceProgressBar" width="800" />
+</picture>
+
 - **Determinate** – the bar fills from the left by `Value` (0–100 by default), optionally with the percentage on the
   right. Value changes animate smoothly, resizing redraws at once.
 - **Indeterminate** – a segment keeps sliding through (its head runs ahead, then the tail catches up) until

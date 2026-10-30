@@ -4,6 +4,16 @@ Search box over the commands of the application, like the command palette of cod
 commands (fuzzy: "ld" finds "Light / Dark", the matched letters are highlighted), the arrow keys move the selection,
 Enter runs the selected command, Escape closes. Recently used commands come first.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/command-palette-open-dark.png" />
+  <img src="images/command-palette-open.png" alt="RiceCommandPalette" width="800" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/command-palette-dark.png" />
+  <img src="images/command-palette.png" alt="RiceCommandPalette embedded in a page" width="800" />
+</picture>
+
 ## In a RiceWindow
 
 A `RiceWindow` opens the palette with **Ctrl+Shift+P**. It lists the window's `Commands` and – with

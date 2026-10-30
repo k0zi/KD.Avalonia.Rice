@@ -5,6 +5,11 @@ lists, quotes, tables, syntax colored code blocks with a copy button, images, fo
 `plantuml` code blocks drawn as diagrams. `MermaidView` shows one Mermaid diagram with pan, zoom and selection, like
 [`UmlDiagramView`](rice-uml.md).
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/markdown-dark.png" />
+  <img src="images/markdown.png" alt="MarkdownView" width="800" />
+</picture>
+
 Everything is built in: no external package, no browser, no JavaScript. The Markdown parser follows the
 [CommonMark](https://commonmark.org) spec with the GitHub (GFM) extensions; the diagrams use the layout and drawing
 engine of the UML controls.

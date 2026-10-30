@@ -319,8 +319,8 @@ dotnet run --project tools/KD.Avalonia.Rice.ThemeEditor
 ## Screenshots tool
 
 A development tool (not part of the package): opens the demo window headless (Skia), selects every page of the side
-menu, also shows the toasts, the command palette and a dialog, and saves them light and dark as PNG files, plus the
-theme gallery. Run it after a visual change and commit the images.
+menu, also shows the toasts, the command palette, the dialogs, the collapsed menu, the loading overlay and the skeleton,
+and saves them light and dark as PNG files, plus the theme gallery. Run it after a visual change and commit the images.
 
 ```sh
 dotnet run --project tools/KD.Avalonia.Rice.Screenshots              # into docs/images

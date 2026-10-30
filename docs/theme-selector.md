@@ -1,5 +1,10 @@
 # ThemeSelector and ThemeDialog
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/theme-dialog-dark.png" />
+  <img src="images/theme-dialog.png" alt="ThemeDialog" />
+</picture>
+
 ## ThemeSelector
 
 Lists the themes the app supports (`RiceOptions.SupportedThemes`) with light and dark color previews. Selecting one

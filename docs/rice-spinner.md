@@ -5,6 +5,11 @@ spinning arc without a track, 16 × 16 px, in the **current text color**: `Foreg
 an accent button and follows the theme everywhere else. `IsActive="False"` hides it (it takes no space) and stops the
 animation.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/progress-dark.png" />
+  <img src="images/progress.png" alt="RiceSpinner in buttons and a status line" width="800" />
+</picture>
+
 For a bigger indicator, a track or a percentage use [`RiceProgressRing`](rice-progress-ring.md); the spinner uses the
 same animation.
 

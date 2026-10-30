@@ -3,6 +3,11 @@
 Placeholder for a view without data – "No projects yet", "No search results", "Inbox zero": a large muted icon, a title,
 a description and, as content, the buttons that get the user going. Centered in the space it gets.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/feedback-dark.png" />
+  <img src="images/feedback.png" alt="RiceEmptyState" width="800" />
+</picture>
+
 ```xml
 <rice:RiceEmptyState Icon="{x:Static icons:MaterialIconKind.FolderOpenOutline}"
                      Title="No projects yet"
