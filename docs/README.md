@@ -29,7 +29,7 @@ themes that every control relies on.
 | [RiceTimeline](rice-timeline.md) | Events along a line, grouped under day headers |
 | [RiceKanbanBoard](rice-kanban-board.md) | Columns of cards moved by drag and drop or the keyboard, with WIP limits |
 | [RiceCodeEditor](rice-code-editor.md) | Text box with syntax colors, line numbers and editor keys (indent, comment, auto indent) |
-| [RiceDockLayout](rice-dock-layout.md) | Resizable, collapsible side panes around the content; saves the layout |
+| [RiceDockLayout](rice-dock-layout.md) | Visual Studio like docking: tab groups dragged to new places, floating windows, auto hide, close / show; saves the layout |
 | [RiceScheduler](rice-scheduler.md) | Calendar with month, week and day views; events dragged and resized with the mouse |
 | [RiceDiffView](rice-diff.md) | Difference of two texts side by side or inline, with the changed words marked |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |

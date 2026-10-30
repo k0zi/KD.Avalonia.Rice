@@ -2,177 +2,210 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
                     xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
-  <!-- The splitter is a thin band on the inner edge; the side styles below dock it and the border line there. -->
+  <!-- The groups float on the layout's background with a small gap (the splitters), like the tool windows of an IDE.
+       The tree, the auto hide strips and the slid out pane are filled in code; RiceDockLayout.Styles.axaml dresses them. -->
+  <ControlTheme x:Key="{x:Type rice:RiceDockLayout}" TargetType="rice:RiceDockLayout">
+    <Setter Property="Background" Value="{DynamicResource RiceTrackBrush}" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Name="PART_Root" Background="{TemplateBinding Background}">
+          <DockPanel Margin="{TemplateBinding Padding}">
+            <Border DockPanel.Dock="Left" IsVisible="False" Margin="0,0,4,0">
+              <StackPanel Name="PART_LeftStrip" Spacing="4" />
+            </Border>
+            <Border DockPanel.Dock="Right" IsVisible="False" Margin="4,0,0,0">
+              <StackPanel Name="PART_RightStrip" Spacing="4" />
+            </Border>
+            <Border DockPanel.Dock="Top" IsVisible="False" Margin="0,0,0,4">
+              <StackPanel Name="PART_TopStrip" Orientation="Horizontal" Spacing="4" />
+            </Border>
+            <Border DockPanel.Dock="Bottom" IsVisible="False" Margin="0,4,0,0">
+              <StackPanel Name="PART_BottomStrip" Orientation="Horizontal" Spacing="4" />
+            </Border>
+            <Panel>
+              <Decorator Name="PART_TreeHost" />
+              <Panel Name="PART_FlyoutLayer" />
+            </Panel>
+          </DockPanel>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
   <ControlTheme x:Key="{x:Type rice:RiceDockPane}" TargetType="rice:RiceDockPane">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Name="PART_ContentPresenter"
+                          Background="{TemplateBinding Background}"
+                          Padding="{TemplateBinding Padding}"
+                          Content="{TemplateBinding Content}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceDockGroupView}" TargetType="rice:RiceDockGroupView">
     <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
     <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
-    <Setter Property="Padding" Value="0" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
     <Setter Property="Template">
       <ControlTemplate>
         <Border Name="PART_Root" Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}">
-          <Panel>
-            <DockPanel Name="PART_Expanded">
-              <Panel Name="PART_Splitter" Background="Transparent" Focusable="True"
-                     IsVisible="{TemplateBinding CanResize}">
-                <Border Name="PART_SplitterLine" Background="{DynamicResource RiceAccentBrush}" Opacity="0" />
-              </Panel>
-              <Grid Name="PART_HeaderBar" DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto,Auto"
-                    Margin="10,6,6,6" MinHeight="26">
-                <rice:RiceIconPresenter Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"
-                                        Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                                        Content="{TemplateBinding Icon}"
-                                        IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="1" VerticalAlignment="Center"
-                                  FontSize="12" FontWeight="SemiBold"
-                                  Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                                  Content="{TemplateBinding Header}"
-                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
-                <ContentPresenter Grid.Column="2" VerticalAlignment="Center"
-                                  Content="{TemplateBinding HeaderActions}"
-                                  IsVisible="{TemplateBinding HeaderActions, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                <Button Name="PART_CollapseButton" Grid.Column="3" Width="24" Height="24" Padding="0" Margin="4,0,0,0"
-                        Background="Transparent" BorderThickness="0" CornerRadius="4"
-                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                        Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
+          <DockPanel>
+            <!-- Tool windows: the title of the selected pane with its buttons; documents: the tabs on top. -->
+            <Border Name="PART_TitleBar" DockPanel.Dock="Top" Background="Transparent" Padding="10,4,4,4"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1" Cursor="SizeAll">
+              <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" MinHeight="24">
+                <rice:RiceIconPresenter Name="PART_TitleIcon" Width="16" Height="16" Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        Content="{TemplateBinding TitleIcon}"
+                                        IsVisible="{TemplateBinding TitleIcon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <ContentPresenter Name="PART_Title" Grid.Column="1" VerticalAlignment="Center" FontSize="12"
+                                  FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                  Content="{TemplateBinding Title}" />
+                <Decorator Name="PART_TitleActions" Grid.Column="2" VerticalAlignment="Center" Cursor="Arrow" IsVisible="False" />
+                <Button Name="PART_MenuButton" Grid.Column="3" Classes="rice-dock-chrome">
+                  <mi:MaterialIcon Kind="ChevronDown" Width="16" Height="16" />
+                </Button>
+                <Button Name="PART_PinButton" Grid.Column="4" Classes="rice-dock-chrome"
                         IsVisible="{TemplateBinding CanCollapse}">
-                  <mi:MaterialIcon Name="PART_CollapseIcon" Kind="ChevronLeft" Width="16" Height="16" />
+                  <mi:MaterialIcon Name="PART_PinIcon" Kind="PinOutline" Width="15" Height="15" />
+                </Button>
+                <Button Name="PART_CloseButton" Grid.Column="5" Classes="rice-dock-chrome"
+                        IsVisible="{TemplateBinding CanClose}">
+                  <mi:MaterialIcon Kind="Close" Width="15" Height="15" />
                 </Button>
               </Grid>
-              <ContentPresenter Name="PART_ContentPresenter"
-                                Padding="{TemplateBinding Padding}"
-                                Content="{TemplateBinding Content}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-            </DockPanel>
-
-            <!-- Collapsed: a strip along the edge with the icon and the title (running down on the side edges). -->
-            <Button Name="PART_Strip" IsVisible="False" Padding="0,10" Background="Transparent" BorderThickness="0"
-                    CornerRadius="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
-              <StackPanel Name="PART_StripPanel" Spacing="10">
-                <rice:RiceIconPresenter Width="18" Height="18" Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                                        Content="{TemplateBinding Icon}"
-                                        IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                <LayoutTransformControl Name="PART_StripTitle">
-                  <ContentPresenter FontSize="12" Foreground="{DynamicResource RiceForegroundMutedBrush}"
-                                    Content="{TemplateBinding Header}"
-                                    ContentTemplate="{TemplateBinding HeaderTemplate}" />
-                </LayoutTransformControl>
-              </StackPanel>
-            </Button>
-          </Panel>
+            </Border>
+            <Border Name="PART_TopTabsHost" DockPanel.Dock="Top" IsVisible="False"
+                    Background="{DynamicResource RiceTrackBrush}"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1">
+              <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <StackPanel Name="PART_TopTabs" Orientation="Horizontal" Spacing="1" Margin="4,4,4,0" />
+              </ScrollViewer>
+            </Border>
+            <Border Name="PART_BottomTabsHost" DockPanel.Dock="Bottom" IsVisible="False"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1,0,0">
+              <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <StackPanel Name="PART_BottomTabs" Orientation="Horizontal" Spacing="1" Margin="4,0,4,2" />
+              </ScrollViewer>
+            </Border>
+            <Panel>
+              <Panel Name="PART_PaneHost" />
+              <Decorator Name="PART_Empty" IsVisible="False" />
+            </Panel>
+          </DockPanel>
         </Border>
       </ControlTemplate>
     </Setter>
 
-    <Style Selector="^ /template/ Panel#PART_Splitter:pointerover > Border#PART_SplitterLine">
-      <Setter Property="Opacity" Value="0.6" />
+    <!-- The group with the focus: the title bar in the accent color. -->
+    <Style Selector="^:active /template/ Border#PART_TitleBar">
+      <Setter Property="Background" Value="{DynamicResource RiceAccentBrush}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource RiceAccentForegroundBrush}" />
     </Style>
-    <Style Selector="^ /template/ Panel#PART_Splitter:focus-visible > Border#PART_SplitterLine">
-      <Setter Property="Opacity" Value="1" />
+    <Style Selector="^:has-tabs /template/ Border#PART_BottomTabsHost">
+      <Setter Property="IsVisible" Value="True" />
     </Style>
-    <Style Selector="^:resizing /template/ Border#PART_SplitterLine">
-      <Setter Property="Opacity" Value="1" />
-    </Style>
-    <Style Selector="^ /template/ Button#PART_CollapseButton:pointerover">
-      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
-    </Style>
-
-    <Style Selector="^:left">
-      <Style Selector="^ /template/ Border#PART_Root">
-        <Setter Property="BorderThickness" Value="0,0,1,0" />
-      </Style>
-      <Style Selector="^ /template/ Panel#PART_Splitter">
-        <Setter Property="DockPanel.Dock" Value="Right" />
-        <Setter Property="Width" Value="5" />
-        <Setter Property="Cursor" Value="SizeWestEast" />
-      </Style>
-      <Style Selector="^ /template/ Border#PART_SplitterLine">
-        <Setter Property="Width" Value="2" />
-        <Setter Property="HorizontalAlignment" Value="Right" />
-      </Style>
-    </Style>
-    <Style Selector="^:right">
-      <Style Selector="^ /template/ Border#PART_Root">
-        <Setter Property="BorderThickness" Value="1,0,0,0" />
-      </Style>
-      <Style Selector="^ /template/ Panel#PART_Splitter">
-        <Setter Property="DockPanel.Dock" Value="Left" />
-        <Setter Property="Width" Value="5" />
-        <Setter Property="Cursor" Value="SizeWestEast" />
-      </Style>
-      <Style Selector="^ /template/ Border#PART_SplitterLine">
-        <Setter Property="Width" Value="2" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-      </Style>
-      <Style Selector="^ /template/ mi|MaterialIcon#PART_CollapseIcon">
-        <Setter Property="Kind" Value="ChevronRight" />
-      </Style>
-    </Style>
-    <Style Selector="^:top">
-      <Style Selector="^ /template/ Border#PART_Root">
-        <Setter Property="BorderThickness" Value="0,0,0,1" />
-      </Style>
-      <Style Selector="^ /template/ Panel#PART_Splitter">
-        <Setter Property="DockPanel.Dock" Value="Bottom" />
-        <Setter Property="Height" Value="5" />
-        <Setter Property="Cursor" Value="SizeNorthSouth" />
-      </Style>
-      <Style Selector="^ /template/ Border#PART_SplitterLine">
-        <Setter Property="Height" Value="2" />
-        <Setter Property="VerticalAlignment" Value="Bottom" />
-      </Style>
-      <Style Selector="^ /template/ mi|MaterialIcon#PART_CollapseIcon">
-        <Setter Property="Kind" Value="ChevronUp" />
-      </Style>
-    </Style>
-    <Style Selector="^:bottom">
-      <Style Selector="^ /template/ Border#PART_Root">
-        <Setter Property="BorderThickness" Value="0,1,0,0" />
-      </Style>
-      <Style Selector="^ /template/ Panel#PART_Splitter">
-        <Setter Property="DockPanel.Dock" Value="Top" />
-        <Setter Property="Height" Value="5" />
-        <Setter Property="Cursor" Value="SizeNorthSouth" />
-      </Style>
-      <Style Selector="^ /template/ Border#PART_SplitterLine">
-        <Setter Property="Height" Value="2" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-      </Style>
-      <Style Selector="^ /template/ mi|MaterialIcon#PART_CollapseIcon">
-        <Setter Property="Kind" Value="ChevronDown" />
-      </Style>
-    </Style>
-
-    <Style Selector="^:collapsed">
-      <Style Selector="^ /template/ DockPanel#PART_Expanded">
+    <Style Selector="^:document">
+      <Style Selector="^ /template/ Border#PART_TitleBar">
         <Setter Property="IsVisible" Value="False" />
       </Style>
-      <Style Selector="^ /template/ Button#PART_Strip">
+      <Style Selector="^ /template/ Border#PART_TopTabsHost">
         <Setter Property="IsVisible" Value="True" />
       </Style>
     </Style>
-    <Style Selector="^:collapsed:left, ^:collapsed:right">
-      <Style Selector="^ /template/ Button#PART_Strip">
-        <Setter Property="Width" Value="34" />
-      </Style>
-      <Style Selector="^ /template/ LayoutTransformControl#PART_StripTitle">
-        <Setter Property="LayoutTransform" Value="rotate(90deg)" />
+    <Style Selector="^:document:empty /template/ Border#PART_TopTabsHost">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:floating">
+      <Setter Property="CornerRadius" Value="0" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="^:flyout /template/ mi|MaterialIcon#PART_PinIcon">
+      <Setter Property="Kind" Value="PinOffOutline" />
+    </Style>
+    <Style Selector="^ /template/ Button.rice-dock-chrome">
+      <Setter Property="Width" Value="24" />
+      <Setter Property="Height" Value="24" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Margin" Value="2,0,0,0" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="4" />
+      <Setter Property="Cursor" Value="Arrow" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    </Style>
+    <!-- After the chrome buttons' own style, so it wins. -->
+    <Style Selector="^:active /template/ Border#PART_TitleBar Button.rice-dock-chrome">
+      <Setter Property="Foreground" Value="{DynamicResource RiceAccentForegroundBrush}" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type rice:RiceDockTab}" TargetType="rice:RiceDockTab">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="10,4" />
+    <Setter Property="CornerRadius" Value="0,0,4,4" />
+    <Setter Property="MaxWidth" Value="220" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_Root" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}"
+                  Padding="{TemplateBinding Padding}">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <rice:RiceIconPresenter Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center"
+                                      Content="{TemplateBinding Icon}"
+                                      IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <ContentPresenter Grid.Column="1" VerticalAlignment="Center" FontSize="12" TextTrimming="CharacterEllipsis"
+                                Content="{TemplateBinding Header}" />
+              <Button Name="PART_CloseButton" Grid.Column="2" Width="20" Height="20" Padding="0" Margin="6,0,-4,0"
+                      Background="Transparent" BorderThickness="0" CornerRadius="4" IsVisible="False" Focusable="False"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      Foreground="{DynamicResource RiceForegroundMutedBrush}">
+                <mi:MaterialIcon Kind="Close" Width="13" Height="13" />
+              </Button>
+            </Grid>
+          </Border>
+          <Border Name="PART_Pipe" Height="2" Margin="6,0" CornerRadius="1" VerticalAlignment="Bottom"
+                  Background="{DynamicResource RiceAccentBrush}" IsVisible="False" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:pointerover">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+      <Setter Property="Background" Value="{DynamicResource RiceHoverBrush}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+      <Style Selector="^ /template/ Border#PART_Pipe">
+        <Setter Property="IsVisible" Value="True" />
       </Style>
     </Style>
-    <Style Selector="^:collapsed:top, ^:collapsed:bottom">
-      <Style Selector="^ /template/ Button#PART_Strip">
-        <Setter Property="Height" Value="32" />
-        <Setter Property="Padding" Value="12,0" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+    <!-- Documents: tabs on top, the selected one takes the color of the page below it. -->
+    <Style Selector="^:document">
+      <Setter Property="CornerRadius" Value="6,6,0,0" />
+      <Setter Property="Padding" Value="12,6,8,6" />
+      <Style Selector="^ /template/ Border#PART_Pipe">
+        <Setter Property="VerticalAlignment" Value="Top" />
       </Style>
-      <Style Selector="^ /template/ StackPanel#PART_StripPanel">
-        <Setter Property="Orientation" Value="Horizontal" />
-      </Style>
+    </Style>
+    <Style Selector="^:document:selected">
+      <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    </Style>
+    <Style Selector="^:closable:selected /template/ Button#PART_CloseButton, ^:closable:pointerover /template/ Button#PART_CloseButton">
+      <Setter Property="IsVisible" Value="True" />
     </Style>
   </ControlTheme>
 </ResourceDictionary>

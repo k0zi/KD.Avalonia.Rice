@@ -45,4 +45,5 @@
 
   <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/RiceTitleBar.Styles.axaml" />
   <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/Scheduling/RiceScheduler.Styles.axaml" />
+  <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/RiceDockLayout.Styles.axaml" />
 </Styles>

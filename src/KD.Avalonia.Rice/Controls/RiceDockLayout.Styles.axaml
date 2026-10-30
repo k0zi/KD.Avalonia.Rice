@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <!-- The parts RiceDockLayout builds in code (they have no templated parent, so a control theme cannot reach them). -->
+  <Style Selector="rice|RiceDockLayout Border.rice-dock-splitter">
+    <Setter Property="CornerRadius" Value="2" />
+  </Style>
+  <Style Selector="rice|RiceDockLayout Border.rice-dock-splitter:pointerover, rice|RiceDockLayout Border.rice-dock-splitter:dragging">
+    <Setter Property="Background" Value="{DynamicResource RiceAccentBrush}" />
+    <Setter Property="Opacity" Value="0.6" />
+  </Style>
+
+  <!-- A button per auto hidden pane on the strips at the edges. -->
+  <Style Selector="rice|RiceDockLayout Button.rice-dock-strip">
+    <Setter Property="Padding" Value="8,4" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+  </Style>
+  <Style Selector="rice|RiceDockLayout Button.rice-dock-strip.open">
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceAccentBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+  </Style>
+
+  <!-- An auto hidden pane slid out over the content. -->
+  <Style Selector="rice|RiceDockLayout Border.rice-dock-flyout">
+    <Setter Property="BoxShadow" Value="{DynamicResource RicePopupShadow}" />
+    <Setter Property="CornerRadius" Value="6" />
+  </Style>
+</Styles>

@@ -82,12 +82,16 @@ public static class RiceStrings
     public static string KanbanAddCard { get; set; } = "Add card";
     /// <summary>Shown in a kanban column without cards.</summary>
     public static string KanbanEmptyColumn { get; set; } = "No cards";
-    /// <summary>Tooltip of the button that collapses a dock pane.</summary>
-    public static string DockCollapse { get; set; } = "Collapse";
-    /// <summary>Tooltip of the strip of a collapsed dock pane.</summary>
-    public static string DockExpand { get; set; } = "Open";
-    /// <summary>Accessible name of the splitter of a dock pane.</summary>
-    public static string DockResize { get; set; } = "Resize";
+    public static string DockClose { get; set; } = "Close";
+    /// <summary>The pin button of a docked tool window: hides it to a strip at the edge.</summary>
+    public static string DockAutoHide { get; set; } = "Auto hide";
+    /// <summary>The pin button of a slid out tool window: docks it again.</summary>
+    public static string DockPin { get; set; } = "Dock";
+    /// <summary>Tooltip of the menu button in the title bar of a dock pane.</summary>
+    public static string DockOptions { get; set; } = "Window position";
+    public static string DockFloat { get; set; } = "Float";
+    public static string DockDock { get; set; } = "Dock";
+    public static string DockAsDocument { get; set; } = "Dock as tabbed document";
     public static string DiffOriginal { get; set; } = "Original";
     public static string DiffModified { get; set; } = "Modified";
     public static string DiffPreviousChange { get; set; } = "Previous change (Shift+F7)";

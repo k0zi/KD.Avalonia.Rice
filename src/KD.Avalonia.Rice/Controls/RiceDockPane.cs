@@ -1,35 +1,33 @@
 using Avalonia;
-using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 
 namespace KD.Avalonia.Rice.Controls;
 
 /// <summary>
-/// A side panel of a <see cref="RiceDockLayout"/>: docked to an edge (<see cref="Dock"/>), with a header bar (icon,
-/// title, actions, collapse button) and a splitter on its inner edge that resizes it (<see cref="Size"/>; double click:
-/// back to the starting size; arrow keys when focused). Collapsed it shrinks to a strip with its icon and title;
-/// clicking the strip opens it again.
-/// Pseudo classes: <c>:left</c>, <c>:top</c>, <c>:right</c>, <c>:bottom</c>, <c>:collapsed</c>, <c>:resizing</c>.
+/// A tool window or document of a <see cref="RiceDockLayout"/>. The layout shows it in a tab group with a title bar
+/// (icon, <c>Header</c>, <see cref="HeaderActions"/>, menu, auto hide and close buttons); the pane itself holds only
+/// its <c>Content</c>. It can be dragged by its title or tab to another place, floated in a window of its own, auto
+/// hidden to a strip at the edge (<see cref="IsCollapsed"/>) and closed, then shown again (<see cref="Show"/>).
 /// </summary>
 public class RiceDockPane : HeaderedContentControl
 {
-    public static readonly StyledProperty<Dock> DockProperty =
-        AvaloniaProperty.Register<RiceDockPane, Dock>(nameof(Dock));
+    /// <summary>The edge (or the document area) the pane starts at; see <see cref="RiceDockLayout"/> for the order.</summary>
+    public static readonly StyledProperty<DockSide> DockProperty =
+        AvaloniaProperty.Register<RiceDockPane, DockSide>(nameof(Dock));
 
-    /// <summary>Width (left / right) or height (top / bottom) of the open pane.</summary>
+    /// <summary>Width (left / right) or height (top / bottom) when docked at an edge or slid out from a strip.</summary>
     public static readonly StyledProperty<double> SizeProperty =
         AvaloniaProperty.Register<RiceDockPane, double>(nameof(Size), 240,
             defaultBindingMode: global::Avalonia.Data.BindingMode.TwoWay);
 
     public static readonly StyledProperty<double> MinSizeProperty =
-        AvaloniaProperty.Register<RiceDockPane, double>(nameof(MinSize), 120);
+        AvaloniaProperty.Register<RiceDockPane, double>(nameof(MinSize), 80);
 
     public static readonly StyledProperty<double> MaxSizeProperty =
         AvaloniaProperty.Register<RiceDockPane, double>(nameof(MaxSize), double.PositiveInfinity);
 
+    /// <summary>Auto hidden: a button on a strip at the edge, sliding out over the content when clicked.</summary>
     public static readonly StyledProperty<bool> IsCollapsedProperty =
         AvaloniaProperty.Register<RiceDockPane, bool>(nameof(IsCollapsed),
             defaultBindingMode: global::Avalonia.Data.BindingMode.TwoWay);
@@ -37,8 +35,14 @@ public class RiceDockPane : HeaderedContentControl
     public static readonly StyledProperty<bool> CanCollapseProperty =
         AvaloniaProperty.Register<RiceDockPane, bool>(nameof(CanCollapse), true);
 
-    public static readonly StyledProperty<bool> CanResizeProperty =
-        AvaloniaProperty.Register<RiceDockPane, bool>(nameof(CanResize), true);
+    public static readonly StyledProperty<bool> CanCloseProperty =
+        AvaloniaProperty.Register<RiceDockPane, bool>(nameof(CanClose), true);
+
+    public static readonly StyledProperty<bool> CanFloatProperty =
+        AvaloniaProperty.Register<RiceDockPane, bool>(nameof(CanFloat), true);
+
+    public static readonly StyledProperty<bool> CanMoveProperty =
+        AvaloniaProperty.Register<RiceDockPane, bool>(nameof(CanMove), true);
 
     public static readonly StyledProperty<object?> IconProperty =
         AvaloniaProperty.Register<RiceDockPane, object?>(nameof(Icon));
@@ -50,22 +54,21 @@ public class RiceDockPane : HeaderedContentControl
     public static readonly StyledProperty<string?> IdProperty =
         AvaloniaProperty.Register<RiceDockPane, string?>(nameof(Id));
 
-    // Arrow keys on the focused splitter resize by this much (Ctrl: ten times as much).
-    private const double KeyboardStep = 10;
+    /// <summary>Panes with the same group name start as tabs of one group.</summary>
+    public static readonly StyledProperty<string?> GroupProperty =
+        AvaloniaProperty.Register<RiceDockPane, string?>(nameof(Group));
 
-    private static readonly (Dock Dock, string PseudoClass)[] DockClasses =
-        [(Dock.Left, ":left"), (Dock.Top, ":top"), (Dock.Right, ":right"), (Dock.Bottom, ":bottom")];
+    public static readonly DirectProperty<RiceDockPane, bool> IsOpenProperty =
+        AvaloniaProperty.RegisterDirect<RiceDockPane, bool>(nameof(IsOpen), o => o.IsOpen);
 
-    private Control? _splitter;
-    private Button? _collapseButton;
-    private Button? _strip;
+    public static readonly DirectProperty<RiceDockPane, bool> IsFloatingProperty =
+        AvaloniaProperty.RegisterDirect<RiceDockPane, bool>(nameof(IsFloating), o => o.IsFloating);
+
     private double? _defaultSize;
-    private Point? _dragStart;
-    private double _dragStartSize;
+    private bool _isOpen;
+    private bool _isFloating;
 
-    public RiceDockPane() => UpdatePseudoClasses();
-
-    public Dock Dock
+    public DockSide Dock
     {
         get => GetValue(DockProperty);
         set => SetValue(DockProperty, value);
@@ -95,28 +98,42 @@ public class RiceDockPane : HeaderedContentControl
         set => SetValue(IsCollapsedProperty, value);
     }
 
-    /// <summary>Shows the collapse button in the header. Default true.</summary>
+    /// <summary>Offers auto hide (the pin button). Documents are never auto hidden. Default true.</summary>
     public bool CanCollapse
     {
         get => GetValue(CanCollapseProperty);
         set => SetValue(CanCollapseProperty, value);
     }
 
-    /// <summary>Shows the splitter on the inner edge. Default true.</summary>
-    public bool CanResize
+    /// <summary>Shows the close button. Default true.</summary>
+    public bool CanClose
     {
-        get => GetValue(CanResizeProperty);
-        set => SetValue(CanResizeProperty, value);
+        get => GetValue(CanCloseProperty);
+        set => SetValue(CanCloseProperty, value);
     }
 
-    /// <summary>An <c>IImage</c>, a <c>MaterialIconKind</c>, a string (e.g. an emoji) or any control; also shown on the collapsed strip.</summary>
+    /// <summary>Can be floated in a window of its own. Default true.</summary>
+    public bool CanFloat
+    {
+        get => GetValue(CanFloatProperty);
+        set => SetValue(CanFloatProperty, value);
+    }
+
+    /// <summary>Can be dragged to another place. Default true.</summary>
+    public bool CanMove
+    {
+        get => GetValue(CanMoveProperty);
+        set => SetValue(CanMoveProperty, value);
+    }
+
+    /// <summary>An <c>IImage</c>, a <c>MaterialIconKind</c>, a string (e.g. an emoji) or any control; on the title, tab and strip.</summary>
     public object? Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
 
-    /// <summary>Content in the header bar before the collapse button, e.g. small buttons.</summary>
+    /// <summary>Content in the title bar while the pane is selected, e.g. small buttons.</summary>
     public object? HeaderActions
     {
         get => GetValue(HeaderActionsProperty);
@@ -129,15 +146,44 @@ public class RiceDockPane : HeaderedContentControl
         set => SetValue(IdProperty, value);
     }
 
+    public string? Group
+    {
+        get => GetValue(GroupProperty);
+        set => SetValue(GroupProperty, value);
+    }
+
     /// <summary>The <see cref="Id"/>, else the <c>Name</c>; panes without either are not saved.</summary>
     public string? LayoutId => Id ?? Name;
 
-    /// <summary>The <see cref="Size"/> the pane started with; a double click on the splitter goes back to it.</summary>
+    /// <summary>The <see cref="Size"/> the pane started with.</summary>
     public double DefaultSize => _defaultSize ?? Size;
 
-    private bool IsHorizontal => Dock is Dock.Left or Dock.Right;
+    /// <summary>Shown somewhere: docked, auto hidden or floating (not closed).</summary>
+    public bool IsOpen
+    {
+        get => _isOpen;
+        internal set => SetAndRaise(IsOpenProperty, ref _isOpen, value);
+    }
+
+    public bool IsFloating
+    {
+        get => _isFloating;
+        internal set => SetAndRaise(IsFloatingProperty, ref _isFloating, value);
+    }
+
+    /// <summary>The layout the pane belongs to.</summary>
+    public RiceDockLayout? Layout { get; internal set; }
 
     protected override Type StyleKeyOverride => typeof(RiceDockPane);
+
+    /// <summary>Closes the pane (the layout may cancel it, see <see cref="RiceDockLayout.PaneClosing"/>).</summary>
+    public bool Close() => Layout?.ClosePane(this) ?? false;
+
+    /// <summary>Shows a closed pane at its last place, or brings an open one to the front.</summary>
+    public void Show() => Layout?.ShowPane(this);
+
+    /// <summary>Moves the pane into a window of its own.</summary>
+    public void Float() => Layout?.FloatPane(this);
 
     public void ToggleCollapsed() => IsCollapsed = !IsCollapsed;
 
@@ -147,147 +193,17 @@ public class RiceDockPane : HeaderedContentControl
         _defaultSize ??= Size;
     }
 
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-        if (_splitter is not null)
-        {
-            _splitter.PointerPressed -= OnSplitterPressed;
-            _splitter.PointerMoved -= OnSplitterMoved;
-            _splitter.PointerReleased -= OnSplitterReleased;
-            _splitter.PointerCaptureLost -= OnSplitterCaptureLost;
-            _splitter.DoubleTapped -= OnSplitterDoubleTapped;
-            _splitter.KeyDown -= OnSplitterKeyDown;
-        }
-        _collapseButton?.Click -= OnCollapseClick;
-        _strip?.Click -= OnStripClick;
-
-        _splitter = e.NameScope.Find<Control>("PART_Splitter");
-        _collapseButton = e.NameScope.Find<Button>("PART_CollapseButton");
-        _strip = e.NameScope.Find<Button>("PART_Strip");
-
-        if (_splitter is not null)
-        {
-            _splitter.PointerPressed += OnSplitterPressed;
-            _splitter.PointerMoved += OnSplitterMoved;
-            _splitter.PointerReleased += OnSplitterReleased;
-            _splitter.PointerCaptureLost += OnSplitterCaptureLost;
-            _splitter.DoubleTapped += OnSplitterDoubleTapped;
-            _splitter.KeyDown += OnSplitterKeyDown;
-            AutomationProperties.SetName(_splitter, RiceStrings.DockResize);
-        }
-        if (_collapseButton is not null)
-        {
-            _collapseButton.Click += OnCollapseClick;
-            ToolTip.SetTip(_collapseButton, RiceStrings.DockCollapse);
-            AutomationProperties.SetName(_collapseButton, RiceStrings.DockCollapse);
-        }
-        if (_strip is not null)
-        {
-            _strip.Click += OnStripClick;
-            ToolTip.SetTip(_strip, RiceStrings.DockExpand);
-        }
-    }
-
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == DockProperty || change.Property == IsCollapsedProperty)
-            UpdatePseudoClasses();
-        if (change.Property == DockProperty || change.Property == SizeProperty || change.Property == MinSizeProperty
-            || change.Property == MaxSizeProperty || change.Property == IsCollapsedProperty)
-            (Parent as RiceDockLayout)?.InvalidateMeasure();
-        if (change.Property == SizeProperty || change.Property == IsCollapsedProperty)
-            (Parent as RiceDockLayout)?.OnPaneChanged();
-    }
-
-    private void UpdatePseudoClasses()
-    {
-        foreach (var (dock, pseudoClass) in DockClasses)
-            PseudoClasses.Set(pseudoClass, Dock == dock);
-        PseudoClasses.Set(":collapsed", IsCollapsed);
-    }
-
-    private void OnCollapseClick(object? sender, RoutedEventArgs e) => IsCollapsed = true;
-
-    private void OnStripClick(object? sender, RoutedEventArgs e) => IsCollapsed = false;
-
-    // The pointer position is taken in the layout's coordinates: the splitter itself moves while the pane resizes.
-    private Visual Reference => (Visual?)Parent ?? this;
-
-    private void OnSplitterPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (!CanResize || IsCollapsed || !e.GetCurrentPoint(_splitter).Properties.IsLeftButtonPressed)
+        if (Layout is not { } layout)
             return;
-        _dragStart = e.GetPosition(Reference);
-        _dragStartSize = Bounds.Width > 0 && IsHorizontal ? Bounds.Width : Bounds.Height > 0 && !IsHorizontal ? Bounds.Height : Size;
-        e.Pointer.Capture(_splitter);
-        PseudoClasses.Set(":resizing", true);
-        e.Handled = true;
-    }
-
-    private void OnSplitterMoved(object? sender, PointerEventArgs e)
-    {
-        if (_dragStart is not { } start)
-            return;
-        var moved = e.GetPosition(Reference) - start;
-        var delta = Dock switch
-        {
-            Dock.Left => moved.X,
-            Dock.Right => -moved.X,
-            Dock.Top => moved.Y,
-            _ => -moved.Y,
-        };
-        Resize(_dragStartSize + delta);
-        e.Handled = true;
-    }
-
-    private void OnSplitterReleased(object? sender, PointerReleasedEventArgs e)
-    {
-        if (_dragStart is null)
-            return;
-        e.Pointer.Capture(null);
-        EndResize();
-        e.Handled = true;
-    }
-
-    private void OnSplitterCaptureLost(object? sender, PointerCaptureLostEventArgs e) => EndResize();
-
-    private void EndResize()
-    {
-        _dragStart = null;
-        PseudoClasses.Set(":resizing", false);
-    }
-
-    private void OnSplitterDoubleTapped(object? sender, TappedEventArgs e)
-    {
-        if (CanResize && !IsCollapsed)
-            Resize(DefaultSize);
-        e.Handled = true;
-    }
-
-    private void OnSplitterKeyDown(object? sender, KeyEventArgs e)
-    {
-        if (!CanResize || IsCollapsed)
-            return;
-        var step = e.KeyModifiers.HasFlag(KeyModifiers.Control) ? KeyboardStep * 10 : KeyboardStep;
-        // Toward the content grows the pane.
-        var direction = (e.Key, Dock) switch
-        {
-            (Key.Right, Dock.Left) or (Key.Left, Dock.Right) or (Key.Down, Dock.Top) or (Key.Up, Dock.Bottom) => 1,
-            (Key.Left, Dock.Left) or (Key.Right, Dock.Right) or (Key.Up, Dock.Top) or (Key.Down, Dock.Bottom) => -1,
-            _ => 0,
-        };
-        if (direction == 0)
-            return;
-        Resize((IsHorizontal ? Bounds.Width : Bounds.Height) + direction * step);
-        e.Handled = true;
-    }
-
-    // The layout may give the pane less than asked (the content keeps its minimum), so the size is limited to that too.
-    private void Resize(double size)
-    {
-        var limit = (Parent as RiceDockLayout)?.MaxExtentFor(this) ?? double.PositiveInfinity;
-        Size = RiceDockLayout.ClampSize(size, MinSize, Math.Min(MaxSize, limit));
+        if (change.Property == IsCollapsedProperty)
+            layout.OnPaneCollapsedChanged(this);
+        else if (change.Property == HeaderProperty || change.Property == IconProperty || change.Property == HeaderActionsProperty
+                 || change.Property == CanCloseProperty || change.Property == CanCollapseProperty)
+            layout.OnPaneChromeChanged(this);
+        else if (change.Property == SizeProperty)
+            layout.OnLayoutChanged();
     }
 }
