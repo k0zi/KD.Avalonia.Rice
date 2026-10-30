@@ -88,4 +88,22 @@ public static class RiceStrings
     public static string DockExpand { get; set; } = "Open";
     /// <summary>Accessible name of the splitter of a dock pane.</summary>
     public static string DockResize { get; set; } = "Resize";
+    public static string DiffOriginal { get; set; } = "Original";
+    public static string DiffModified { get; set; } = "Modified";
+    public static string DiffPreviousChange { get; set; } = "Previous change (Shift+F7)";
+    public static string DiffNextChange { get; set; } = "Next change (F7)";
+    /// <summary>Shown by a diff of two equal texts.</summary>
+    public static string DiffIdentical { get; set; } = "The texts are identical";
+    /// <summary>A folded run of unchanged lines in a diff; {0} is their number.</summary>
+    public static string DiffHiddenLines { get; set; } = "{0} unchanged lines";
+    public static string SchedulerToday { get; set; } = "Today";
+    public static string SchedulerPrevious { get; set; } = "Previous";
+    public static string SchedulerNext { get; set; } = "Next";
+    public static string SchedulerMonth { get; set; } = "Month";
+    public static string SchedulerWeek { get; set; } = "Week";
+    public static string SchedulerDay { get; set; } = "Day";
+    /// <summary>Label of the strip of all day events in the week and day views.</summary>
+    public static string SchedulerAllDay { get; set; } = "all-day";
+    /// <summary>A day of the month view with more events than fit; {0} is the number of hidden events.</summary>
+    public static string SchedulerMore { get; set; } = "+{0} more";
 }

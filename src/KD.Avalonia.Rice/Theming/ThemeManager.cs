@@ -210,11 +210,18 @@ public sealed class ThemeManager : INotifyPropertyChanged
         // Diff: tints of the success / danger colors for whole lines, stronger ones for the changed words.
         target["RiceDiffAddedBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Success, p.IsDark ? 0.16 : 0.12));
         target["RiceDiffRemovedBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Danger, p.IsDark ? 0.16 : 0.10));
-        target["RiceDiffAddedWordBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Success, p.IsDark ? 0.36 : 0.30));
-        target["RiceDiffRemovedWordBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Danger, p.IsDark ? 0.36 : 0.26));
+        target["RiceDiffAddedWordBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Success, p.IsDark ? 0.52 : 0.30));
+        target["RiceDiffRemovedWordBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Danger, p.IsDark ? 0.46 : 0.26));
         target["RiceDiffAddedMarkBrush"] = new SolidColorBrush(p.Success);
         target["RiceDiffRemovedMarkBrush"] = new SolidColorBrush(p.Danger);
         target["RiceDiffEmptyBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x0C : (byte)0x08));
+
+        // Scheduler: faint half hour lines, shaded hours outside the working day and weekends, a tint for today and
+        // the danger color for the line of the current time.
+        target["RiceSchedulerGridBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x12 : (byte)0x0E));
+        target["RiceSchedulerOffHoursBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x08 : (byte)0x05));
+        target["RiceSchedulerTodayBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Accent, p.IsDark ? (byte)0x14 : (byte)0x0C));
+        target["RiceSchedulerNowBrush"] = new SolidColorBrush(p.Danger);
 
         // Chart colors (pie slices, gantt sections, mind map branches): the accent first, then fixed hues.
         string[] series = ["#4C9AFF", "#36B37E", "#FFAB00", "#FF5630", "#8B5CF6", "#00B8D9", "#E5892E"];

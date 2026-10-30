@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sched="clr-namespace:KD.Avalonia.Rice.Controls.Scheduling;assembly=KD.Avalonia.Rice"
+             x:Class="KD.Avalonia.Rice.Demo.SchedulerPage">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,16">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Calendar" />
+      <TextBlock TextWrapping="Wrap" MaxWidth="760" HorizontalAlignment="Left"
+                 Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceScheduler: month, week and day views. Drag an event to another day or time, drag the bottom edge of a block to resize it, double click an empty slot to add an event, double click an event to open it. PageUp / PageDown page, Home goes to today." />
+      <TextBlock Name="ChangeInfo" FontSize="12" Foreground="{DynamicResource RiceForegroundMutedBrush}" />
+    </StackPanel>
+    <sched:RiceScheduler Name="Scheduler" />
+  </DockPanel>
+</UserControl>

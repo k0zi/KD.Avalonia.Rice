@@ -128,6 +128,8 @@ public partial class MainWindow : RiceWindow
                 _ when key == KanbanItem => new KanbanPage(),
                 _ when key == CodeEditorItem => new CodeEditorPage(),
                 _ when key == DockLayoutItem => new DockLayoutPage(),
+                _ when key == SchedulerItem => new SchedulerPage(),
+                _ when key == DiffItem => new DiffPage(),
                 nameof(SettingsPage) => new SettingsPage(),
                 _ => new HomePage(),
             };

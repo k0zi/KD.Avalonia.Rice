@@ -1,0 +1,63 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sched="clr-namespace:KD.Avalonia.Rice.Controls.Scheduling">
+  <!-- The parts of the views RiceScheduler builds in code (they have no templated parent, so a control theme cannot reach them). -->
+  <Style Selector="sched|RiceScheduler Grid.weekdays">
+    <Setter Property="Background" Value="{DynamicResource RiceTrackBrush}" />
+  </Style>
+  <Style Selector="sched|RiceScheduler TextBlock.weekday">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Margin" Value="0,6" />
+  </Style>
+  <Style Selector="sched|RiceScheduler Button.day-header">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="Padding" Value="0,2,0,6" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="sched|RiceScheduler Border.date">
+    <Setter Property="Width" Value="30" />
+    <Setter Property="Height" Value="30" />
+    <Setter Property="CornerRadius" Value="15" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="sched|RiceScheduler Border.date.today">
+    <Setter Property="Background" Value="{DynamicResource RiceAccentBrush}" />
+  </Style>
+  <Style Selector="sched|RiceScheduler TextBlock.date">
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="sched|RiceScheduler Border.date.today > TextBlock.date">
+    <Setter Property="Foreground" Value="{DynamicResource RiceAccentForegroundBrush}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="sched|RiceScheduler Border.all-day">
+    <Setter Property="MinHeight" Value="28" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="sched|RiceScheduler TextBlock.gutter">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+    <Setter Property="TextAlignment" Value="Right" />
+    <Setter Property="Padding" Value="0,6,10,0" />
+  </Style>
+  <Style Selector="sched|RiceScheduler Button.more">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="6,0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+  </Style>
+</Styles>

@@ -16,7 +16,7 @@ namespace KD.Avalonia.Rice.Controls;
 /// within and between the columns (a picture of the card follows the pointer, a line shows where it lands), or moved
 /// with Ctrl+arrow keys. Moving removes the item from the source column's <c>Items</c> / modifiable <c>ItemsSource</c>
 /// and inserts it into the target's, unless a <see cref="CardMoving"/> handler cancels it.
-/// From data: <c>ItemsSource</c> lists the columns, a <see cref="TreeDataTemplate"/> as <c>ItemTemplate</c> gives the
+/// From data: <c>ItemsSource</c> lists the columns, a <c>TreeDataTemplate</c> as <c>ItemTemplate</c> gives the
 /// header and the cards of a column (its <c>ItemsSource</c>), and <see cref="CardTemplate"/> shows a card.
 /// </summary>
 public class RiceKanbanBoard : ItemsControl

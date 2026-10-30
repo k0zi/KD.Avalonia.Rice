@@ -35,6 +35,8 @@
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceKanbanBoard.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceCodeEditor.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceDockLayout.Theme.axaml" />
+        <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/Diffs/RiceDiffView.Theme.axaml" />
+        <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/Scheduling/RiceScheduler.Theme.axaml" />
       </ResourceDictionary.MergedDictionaries>
       <!-- Fluent's corner radius for buttons, text boxes, combo boxes, ... -->
       <CornerRadius x:Key="ControlCornerRadius">6</CornerRadius>
@@ -42,4 +44,5 @@
   </Styles.Resources>
 
   <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/RiceTitleBar.Styles.axaml" />
+  <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/Scheduling/RiceScheduler.Styles.axaml" />
 </Styles>

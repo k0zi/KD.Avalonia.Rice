@@ -111,6 +111,8 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceTrackBrush` | Recessed strips: tab strip, segmented control, property grid description |
 | `RiceHoverBrush`, `RiceSelectedRowBrush` | Row under the pointer, selected row (lists, property grid, command palette) |
 | `RiceSkeletonBrush`, `RiceSkeletonHighlightBrush` | Loading placeholders and the band sweeping over them |
+| `RiceDiffAddedBrush`, `RiceDiffRemovedBrush`, `RiceDiffAddedWordBrush`, `RiceDiffRemovedWordBrush`, `RiceDiffAddedMarkBrush`, `RiceDiffRemovedMarkBrush`, `RiceDiffEmptyBrush` | Added / removed lines and words of the [diff view](rice-diff.md) |
+| `RiceSchedulerGridBrush`, `RiceSchedulerOffHoursBrush`, `RiceSchedulerTodayBrush`, `RiceSchedulerNowBrush` | Half hour lines, hours outside the working day, today, the current time of the [scheduler](rice-scheduler.md) |
 
 ```xml
 <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}" BorderThickness="1">
