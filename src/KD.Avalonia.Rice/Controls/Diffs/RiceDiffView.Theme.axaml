@@ -1,0 +1,88 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:diff="clr-namespace:KD.Avalonia.Rice.Controls.Diffs">
+  <ControlTheme x:Key="{x:Type diff:RiceDiffView}" TargetType="diff:RiceDiffView">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
+          <DockPanel>
+            <!-- Header: the two titles over their halves (one line when inline), the counts and the change buttons. -->
+            <Border DockPanel.Dock="Top" Background="{DynamicResource RiceTrackBrush}"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1">
+              <Grid ColumnDefinitions="*,*,Auto" Margin="12,6,6,6">
+                <StackPanel Name="PART_OldTitle" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <mi:MaterialIcon Kind="MinusBox" Width="16" Height="16"
+                                   Foreground="{DynamicResource RiceDiffRemovedMarkBrush}" />
+                  <TextBlock Name="PART_OldHeader" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <StackPanel Name="PART_NewTitle" Grid.Column="1" Orientation="Horizontal" Spacing="6"
+                            VerticalAlignment="Center" Margin="12,0,0,0">
+                  <mi:MaterialIcon Kind="PlusBox" Width="16" Height="16"
+                                   Foreground="{DynamicResource RiceDiffAddedMarkBrush}" />
+                  <TextBlock Name="PART_NewHeader" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+                  <TextBlock Margin="0,0,8,0" VerticalAlignment="Center" FontSize="12"
+                             Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                             Text="{TemplateBinding Statistics}" />
+                  <Button Name="PART_PreviousButton" Width="26" Height="26" Padding="0" Background="Transparent"
+                          BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <mi:MaterialIcon Kind="ArrowUp" Width="16" Height="16" />
+                  </Button>
+                  <Button Name="PART_NextButton" Width="26" Height="26" Padding="0" Background="Transparent"
+                          BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <mi:MaterialIcon Kind="ArrowDown" Width="16" Height="16" />
+                  </Button>
+                </StackPanel>
+              </Grid>
+            </Border>
+            <diff:RiceDiffOverview Name="PART_Overview" DockPanel.Dock="Right" Width="14" Margin="0,2"
+                                   Cursor="Hand" />
+            <Panel>
+              <ItemsControl Name="PART_Rows">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Template>
+                  <ControlTemplate>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                      <ItemsPresenter ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </ScrollViewer>
+                  </ControlTemplate>
+                </ItemsControl.Template>
+              </ItemsControl>
+              <TextBlock Name="PART_IdenticalText" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,8"
+                         Padding="10,4" FontSize="12" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                         Background="{DynamicResource RiceTrackBrush}" IsVisible="False" />
+            </Panel>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:inline">
+      <!-- One column: the old title reads "old → new". -->
+      <Style Selector="^ /template/ StackPanel#PART_OldTitle">
+        <Setter Property="Grid.ColumnSpan" Value="2" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_NewTitle">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+    </Style>
+    <Style Selector="^:identical /template/ TextBlock#PART_IdenticalText">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

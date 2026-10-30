@@ -40,6 +40,8 @@
         <rice:RiceSideMenuItem Name="KanbanItem" Icon="{x:Static icons:MaterialIconKind.ViewColumnOutline}" Header="Kanban board" />
         <rice:RiceSideMenuItem Name="CodeEditorItem" Icon="{x:Static icons:MaterialIconKind.CodeBraces}" Header="Code editor" />
         <rice:RiceSideMenuItem Name="DockLayoutItem" Icon="{x:Static icons:MaterialIconKind.ViewQuiltOutline}" Header="Dock layout" />
+        <rice:RiceSideMenuItem Name="SchedulerItem" Icon="{x:Static icons:MaterialIconKind.CalendarMonthOutline}" Header="Calendar" />
+        <rice:RiceSideMenuItem Name="DiffItem" Icon="{x:Static icons:MaterialIconKind.FileCompare}" Header="Diff" />
       </rice:RiceSideMenuItem>
       <rice:RiceSideMenu.Footer>
         <StackPanel>

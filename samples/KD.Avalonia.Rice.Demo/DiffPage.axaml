@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
+             xmlns:diff="clr-namespace:KD.Avalonia.Rice.Controls.Diffs;assembly=KD.Avalonia.Rice"
+             x:Class="KD.Avalonia.Rice.Demo.DiffPage">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,16">
+      <TextBlock FontSize="24" FontWeight="SemiBold" Text="Diff" />
+      <TextBlock TextWrapping="Wrap" MaxWidth="760" HorizontalAlignment="Left"
+                 Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                 Text="RiceDiffView compares two texts line by line and marks the changed words. Unchanged runs are folded (click to unfold); F7 / Shift+F7 or the arrows jump between the changes, the strip on the right shows them all. Edit the texts below to see the diff follow." />
+      <WrapPanel ItemSpacing="16" LineSpacing="8">
+        <rice:RiceSegmentedControl Name="ModeSwitch" SelectedIndex="0">
+          <rice:RiceSegmentedItem Content="Side by side" />
+          <rice:RiceSegmentedItem Content="Inline" />
+        </rice:RiceSegmentedControl>
+        <CheckBox Name="WhitespaceCheck" Content="Ignore whitespace" />
+        <CheckBox Name="FoldCheck" Content="Fold unchanged lines" IsChecked="True" />
+        <CheckBox Name="WrapCheck" Content="Wrap lines" IsChecked="True" />
+        <CheckBox Name="EditCheck" Content="Edit the texts" />
+        <Button Name="CopyButton" Content="Copy as unified diff" />
+      </WrapPanel>
+    </StackPanel>
+
+    <Grid Name="Editors" DockPanel.Dock="Top" ColumnDefinitions="*,12,*" Height="200" Margin="0,0,0,12"
+          IsVisible="{Binding #EditCheck.IsChecked}">
+      <rice:RiceCodeEditor Name="OldEditor" Language="cs" />
+      <rice:RiceCodeEditor Name="NewEditor" Grid.Column="2" Language="cs" />
+    </Grid>
+
+    <diff:RiceDiffView Name="Diff" Language="cs" OldHeader="RiceTabView.cs (main)" NewHeader="RiceTabView.cs (working copy)"
+                       OldText="{Binding #OldEditor.Text}" NewText="{Binding #NewEditor.Text}"
+                       IgnoreWhitespace="{Binding #WhitespaceCheck.IsChecked}"
+                       WrapLines="{Binding #WrapCheck.IsChecked}" />
+  </DockPanel>
+</UserControl>

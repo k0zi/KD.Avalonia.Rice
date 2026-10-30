@@ -1,0 +1,184 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+                    xmlns:sched="clr-namespace:KD.Avalonia.Rice.Controls.Scheduling">
+  <!-- The views are built in code into PART_ViewHost; RiceScheduler.Styles.axaml dresses their parts. -->
+  <ControlTheme x:Key="{x:Type sched:RiceScheduler}" TargetType="sched:RiceScheduler">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RiceSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,Auto,*,Auto" Margin="0,0,0,12">
+            <Button Name="PART_TodayButton" Margin="0,0,8,0" VerticalAlignment="Center" />
+            <Button Name="PART_PreviousButton" Grid.Column="1" Width="32" Height="32" Padding="0"
+                    Background="Transparent" BorderThickness="0" VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+              <mi:MaterialIcon Kind="ChevronLeft" Width="20" Height="20" />
+            </Button>
+            <Button Name="PART_NextButton" Grid.Column="2" Width="32" Height="32" Padding="0"
+                    Background="Transparent" BorderThickness="0" VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+              <mi:MaterialIcon Kind="ChevronRight" Width="20" Height="20" />
+            </Button>
+            <TextBlock Grid.Column="3" Margin="12,0" VerticalAlignment="Center" FontSize="18" FontWeight="SemiBold"
+                       TextTrimming="CharacterEllipsis" Text="{TemplateBinding Title}" />
+            <rice:RiceSegmentedControl Name="PART_ViewSwitch" Grid.Column="4" VerticalAlignment="Center" />
+          </Grid>
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  ClipToBounds="True">
+            <Decorator Name="PART_ViewHost" />
+          </Border>
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type sched:RiceSchedulerDayCell}" TargetType="sched:RiceSchedulerDayCell">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderThickness" Value="0,1,1,0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Root" Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+          <Border Name="PART_DayCircle" Width="24" Height="24" CornerRadius="12" Margin="4,2,0,0"
+                  HorizontalAlignment="Left" VerticalAlignment="Top" IsVisible="{TemplateBinding ShowDayNumber}">
+            <TextBlock Name="PART_DayNumber" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:weekend">
+      <Setter Property="Background" Value="{DynamicResource RiceSchedulerOffHoursBrush}" />
+    </Style>
+    <Style Selector="^:other-month /template/ TextBlock#PART_DayNumber">
+      <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
+      <Setter Property="Opacity" Value="0.6" />
+    </Style>
+    <Style Selector="^:today">
+      <Style Selector="^ /template/ Border#PART_DayCircle">
+        <Setter Property="Background" Value="{DynamicResource RiceAccentBrush}" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_DayNumber">
+        <Setter Property="Foreground" Value="{DynamicResource RiceAccentForegroundBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+      </Style>
+    </Style>
+    <Style Selector="^:drop-target">
+      <Setter Property="Background" Value="{DynamicResource RiceSelectedRowBrush}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- A tint of the event's color with a stripe of it on the left; dots in the month view have no tint until hovered. -->
+  <ControlTheme x:Key="{x:Type sched:RiceSchedulerEventChip}" TargetType="sched:RiceSchedulerEventChip">
+    <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
+    <Setter Property="EventBrush" Value="{DynamicResource RiceAccentBrush}" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="ClipToBounds" Value="True" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <!-- Blocks lie over the hour lines: an opaque base under the tint. -->
+          <Border Name="PART_Base" Background="{DynamicResource RiceSurfaceBrush}" CornerRadius="{TemplateBinding CornerRadius}"
+                  IsVisible="False" />
+          <Border Name="PART_Tint" Background="{TemplateBinding EventBrush}" CornerRadius="{TemplateBinding CornerRadius}"
+                  Opacity="0.22" />
+          <Border Name="PART_Outline" BorderBrush="{TemplateBinding EventBrush}" CornerRadius="{TemplateBinding CornerRadius}"
+                  BorderThickness="0" />
+          <Border Name="PART_Stripe" Width="3" HorizontalAlignment="Left" Background="{TemplateBinding EventBrush}"
+                  CornerRadius="2,0,0,2" />
+          <!-- Bar and block: the title (and the time under it in a block). -->
+          <StackPanel Name="PART_Text" Margin="7,2,4,2" VerticalAlignment="Center">
+            <ContentPresenter Name="PART_ContentPresenter" FontWeight="Medium" TextTrimming="CharacterEllipsis"
+                              Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+            <TextBlock Name="PART_Time" FontSize="11" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                       TextTrimming="CharacterEllipsis" Text="{TemplateBinding TimeText}" IsVisible="False" />
+          </StackPanel>
+          <!-- Dot: a colored dot, the time and the title in one line. -->
+          <StackPanel Name="PART_DotLine" Orientation="Horizontal" Spacing="5" Margin="6,0,4,0" VerticalAlignment="Center"
+                      IsVisible="False">
+            <Ellipse Width="8" Height="8" Fill="{TemplateBinding EventBrush}" VerticalAlignment="Center" />
+            <TextBlock FontSize="11" Foreground="{DynamicResource RiceForegroundMutedBrush}" VerticalAlignment="Center"
+                       Text="{TemplateBinding TimeText}" />
+            <ContentPresenter VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                              Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+          </StackPanel>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:block">
+      <Style Selector="^ /template/ Border#PART_Base">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_Text">
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="8,3,4,2" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_Time">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:dot">
+      <Style Selector="^ /template/ Border#PART_Tint">
+        <Setter Property="Opacity" Value="0" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_Stripe">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_Text">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_DotLine">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:dot:pointerover /template/ Border#PART_Tint">
+      <Setter Property="Opacity" Value="0.14" />
+    </Style>
+    <Style Selector="^:pointerover /template/ Border#PART_Tint">
+      <Setter Property="Opacity" Value="0.32" />
+    </Style>
+    <Style Selector="^:selected">
+      <Style Selector="^ /template/ Border#PART_Tint">
+        <Setter Property="Opacity" Value="0.4" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_Outline">
+        <Setter Property="BorderThickness" Value="1" />
+      </Style>
+    </Style>
+    <Style Selector="^:continues-before">
+      <Setter Property="CornerRadius" Value="0,4,4,0" />
+      <Style Selector="^ /template/ Border#PART_Stripe">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+    </Style>
+    <Style Selector="^:continues-after">
+      <Setter Property="CornerRadius" Value="4,0,0,4" />
+    </Style>
+    <Style Selector="^:continues-before:continues-after">
+      <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="^:past">
+      <Setter Property="Opacity" Value="0.7" />
+    </Style>
+    <Style Selector="^:dragging">
+      <Setter Property="Opacity" Value="0.9" />
+      <Setter Property="ZIndex" Value="10" />
+      <Style Selector="^ /template/ Border#PART_Tint">
+        <Setter Property="Opacity" Value="0.5" />
+      </Style>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

@@ -30,6 +30,8 @@ themes that every control relies on.
 | [RiceKanbanBoard](rice-kanban-board.md) | Columns of cards moved by drag and drop or the keyboard, with WIP limits |
 | [RiceCodeEditor](rice-code-editor.md) | Text box with syntax colors, line numbers and editor keys (indent, comment, auto indent) |
 | [RiceDockLayout](rice-dock-layout.md) | Resizable, collapsible side panes around the content; saves the layout |
+| [RiceScheduler](rice-scheduler.md) | Calendar with month, week and day views; events dragged and resized with the mouse |
+| [RiceDiffView](rice-diff.md) | Difference of two texts side by side or inline, with the changed words marked |
 | [ThemeSelector and ThemeDialog](theme-selector.md) | Theme picker with color previews, embedded or as a dialog |
 | [UML diagrams](rice-uml.md) | `UmlDiagramView`: all 14 UML diagram types, read from and written to PlantUML (`.puml`) |
 | [Markdown and Mermaid](rice-markdown.md) | `MarkdownView`: CommonMark + GFM with colored code and diagrams; `MermaidView` for Mermaid diagrams |
@@ -42,12 +44,14 @@ xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls;assembly=KD.Avalonia.Rice"
 xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
 ```
 
-The UML, Markdown and chart controls have their own namespaces:
+The UML, Markdown, chart, scheduler and diff controls have their own namespaces:
 
 ```xml
 xmlns:uml="clr-namespace:KD.Avalonia.Rice.Controls.Uml;assembly=KD.Avalonia.Rice"
 xmlns:md="clr-namespace:KD.Avalonia.Rice.Controls.Markdowns;assembly=KD.Avalonia.Rice"
 xmlns:charts="clr-namespace:KD.Avalonia.Rice.Controls.Charts;assembly=KD.Avalonia.Rice"
+xmlns:sched="clr-namespace:KD.Avalonia.Rice.Controls.Scheduling;assembly=KD.Avalonia.Rice"
+xmlns:diff="clr-namespace:KD.Avalonia.Rice.Controls.Diffs;assembly=KD.Avalonia.Rice"
 ```
 
 The dialogs are used from code, namespace `KD.Avalonia.Rice.Dialogs`; the toasts too, namespace
