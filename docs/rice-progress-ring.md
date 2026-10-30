@@ -2,6 +2,11 @@
 
 Circular progress indicator with two modes:
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/progress-dark.png" />
+  <img src="images/progress.png" alt="RiceProgressRing and RiceProgressBar" width="800" />
+</picture>
+
 - **Determinate** – the ring fills from the top, clockwise, by `Value` (0–100 by default), optionally with the
   percentage in the center. Value changes animate smoothly.
 - **Indeterminate** – an arc keeps spinning (growing and shrinking) until `IsIndeterminate` is switched off; use it

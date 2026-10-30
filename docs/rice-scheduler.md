@@ -3,6 +3,11 @@
 Calendar of events with a month, a week and a day view, like the calendar of a mail client. The header has a Today
 button, the previous / next arrows, the title of the shown period and a switch between the views.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/scheduler-dark.png" />
+  <img src="images/scheduler.png" alt="RiceScheduler, month view" width="800" />
+</picture>
+
 - **Month**: six weeks; all day and multi day events are bars over their days, timed events a dot with the time and the
   title. A day with more events than fit shows "+n more"; it opens that day.
 - **Week** and **Day**: the hours of the days, the timed events as blocks (overlapping events side by side), all day

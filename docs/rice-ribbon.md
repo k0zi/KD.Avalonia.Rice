@@ -5,6 +5,11 @@ groups collapse into a single button from the right, and that button opens the g
 minimized to its tabs; then a click on a tab opens its groups over the content below. Alt shows key tips, so every
 command can be run from the keyboard.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/ribbon-dark.png" />
+  <img src="images/ribbon.png" alt="RiceRibbon" width="800" />
+</picture>
+
 ```xml
 <rice:RiceRibbon DockPanel.Dock="Top" ApplicationButtonContent="File">
   <rice:RiceRibbon.ApplicationMenu>

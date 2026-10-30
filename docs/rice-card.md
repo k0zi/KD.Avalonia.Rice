@@ -3,6 +3,11 @@
 Raised surface for related content: an optional header (title, subtitle, icon, actions on the right), the content and an
 optional footer bar, with a shadow whose depth is set by `Elevation`. Every part is optional.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/card-dark.png" />
+  <img src="images/card.png" alt="RiceCard" width="800" />
+</picture>
+
 ```xml
 <rice:RiceCard Header="Downloads" Subtitle="3 files, 1.2 GB" Icon="{x:Static icons:MaterialIconKind.DownloadOutline}">
   <rice:RiceCard.HeaderActions>

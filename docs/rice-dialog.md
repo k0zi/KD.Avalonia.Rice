@@ -4,6 +4,11 @@
 **without a title bar** – only the icon, the message, optional custom content and the buttons, in the theme's thin
 frame with rounded corners. Drag it by its background; Enter clicks the default button, Esc the cancel button.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dialog-dark.png" />
+  <img src="images/dialog.png" alt="A question dialog" />
+</picture>
+
 ```csharp
 using KD.Avalonia.Rice.Dialogs;
 

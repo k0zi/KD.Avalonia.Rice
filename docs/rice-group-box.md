@@ -3,6 +3,11 @@
 Frame around related controls with the title on the top line, like the WinForms `GroupBox`. The line is cut where the
 title is (it is drawn with a gap, not hidden behind a painted background), so the group box works on any background.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/group-box-dark.png" />
+  <img src="images/group-box.png" alt="RiceGroupBox" width="800" />
+</picture>
+
 ```xml
 <rice:RiceGroupBox Header="Network" Icon="{x:Static icons:MaterialIconKind.Tune}">
   <StackPanel Spacing="8">

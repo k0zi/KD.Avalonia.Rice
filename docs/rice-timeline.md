@@ -4,6 +4,11 @@ Vertical list of events along a line, like an activity feed or the history of a 
 in a filled circle) on the line, a title, a time and optional details. The items are grouped under day headers
 ("Today", "Yesterday", then the long date), and the line breaks between the days.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/timeline-dark.png" />
+  <img src="images/timeline.png" alt="RiceTimeline" width="800" />
+</picture>
+
 ```xml
 <rice:RiceTimeline>
   <rice:RiceTimelineItem Header="Pull request merged" Kind="Success"

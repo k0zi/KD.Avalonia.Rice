@@ -4,6 +4,11 @@ Tabs like a browser or an editor: each tab has an optional icon and a close butt
 dragging, and an optional "+" button asks for a new tab. The selected tab carries an accent line and takes the color of
 the content below it.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/navigation-dark.png" />
+  <img src="images/navigation.png" alt="RiceTabView" width="800" />
+</picture>
+
 ```xml
 <rice:RiceTabView ShowAddButton="True" AddTabRequested="OnAddTab">
   <rice:RiceTabViewItem Header="Welcome" Icon="{x:Static icons:MaterialIconKind.HomeOutline}" IsClosable="False">

@@ -3,6 +3,11 @@
 Row of 2–5 linked buttons of which exactly one is selected, like the linked buttons of GNOME / libadwaita: a view
 switcher (Day / Week / Month), a filter, a unit picker. The selected segment takes the accent color.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/navigation-dark.png" />
+  <img src="images/navigation.png" alt="RiceSegmentedControl" width="800" />
+</picture>
+
 ```xml
 <rice:RiceSegmentedControl SelectedIndex="{Binding ViewIndex}">
   <rice:RiceSegmentedItem Content="Day" />

@@ -4,6 +4,11 @@ Light code editor for snippets, configuration files and scripts: a `TextBox` wit
 the caret's line highlighted, plus the usual editor keys. The colors are those of the code blocks of the
 [Markdown view](rice-markdown.md), from the same highlighter.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/code-editor-dark.png" />
+  <img src="images/code-editor.png" alt="RiceCodeEditor" width="800" />
+</picture>
+
 ```xml
 <rice:RiceCodeEditor Text="{Binding Script}" Language="py" Height="320" />
 

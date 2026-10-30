@@ -4,6 +4,11 @@ Path of the current location – Settings › Appearance › Colors – with a c
 current location (semi-bold, not clickable); the parent levels highlight under the pointer and raise `ItemClicked` when
 clicked (or activated with Enter / Space).
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/navigation-dark.png" />
+  <img src="images/navigation.png" alt="RiceBreadcrumb" width="800" />
+</picture>
+
 ```xml
 <rice:RiceBreadcrumb TrimOnClick="True" ItemClicked="OnBreadcrumbClicked">
   <rice:RiceBreadcrumbItem Icon="{x:Static icons:MaterialIconKind.HomeOutline}" Content="Home" />

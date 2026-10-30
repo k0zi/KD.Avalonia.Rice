@@ -4,6 +4,11 @@ Kanban board: columns side by side (`RiceKanbanColumn`) with cards (`RiceKanbanC
 between the columns. While dragging, a picture of the card follows the pointer, the card's place stays faded, and a line
 shows where it will land. The board scrolls sideways, a column scrolls down, both also while dragging near their edge.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/kanban-dark.png" />
+  <img src="images/kanban.png" alt="RiceKanbanBoard" width="800" />
+</picture>
+
 ```xml
 <rice:RiceKanbanBoard ShowAddCardButton="True" AddCardRequested="OnAddCard" CardMoved="OnCardMoved">
   <rice:RiceKanbanColumn Header="To do" ItemsSource="{Binding Todo}" />

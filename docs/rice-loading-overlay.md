@@ -5,6 +5,11 @@ showing a [`RiceProgressRing`](rice-progress-ring.md) and an optional message. M
 **no pointer and no keyboard input** (clicks, typing, Tab, Enter are swallowed), so the user cannot change data that is
 being loaded or saved. The layer fades in and out.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/loading-overlay-dark.png" />
+  <img src="images/loading-overlay.png" alt="RiceLoadingOverlay over a form" width="800" />
+</picture>
+
 ```xml
 <rice:RiceLoadingOverlay IsActive="{Binding IsLoading}" Message="Loading profile…">
   <StackPanel Spacing="8">

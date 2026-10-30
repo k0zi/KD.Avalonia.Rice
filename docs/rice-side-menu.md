@@ -3,6 +3,16 @@
 Navigation menu for the left side of a window: icon + text items with sub items, an optional header and footer and a
 hamburger button that collapses the menu to its icons.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/home-dark.png" />
+  <img src="images/home.png" alt="RiceSideMenu with sub items" width="800" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/side-menu-collapsed-dark.png" />
+  <img src="images/side-menu-collapsed.png" alt="RiceSideMenu collapsed to its icons" width="800" />
+</picture>
+
 `RiceSideMenu` is a `TreeView` and its items (`RiceSideMenuItem`) are `TreeViewItem`s, so selection, keyboard
 navigation and `ItemsSource` work the same way.
 
