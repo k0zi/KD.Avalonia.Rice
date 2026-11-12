@@ -57,6 +57,11 @@ public class RiceWindow : Window
         ("PART_ResizeSW", WindowEdge.SouthWest), ("PART_ResizeSE", WindowEdge.SouthEast),
     ];
 
+    // True while the app sets TransparencyLevelHint itself; the corner radius does not override it then.
+    // Clearing the value (ClearValue) gives the hint back to the corner radius.
+    private bool _appTransparencyHint;
+    private bool _settingTransparencyHint;
+
     public RiceWindow()
     {
         AppInfo = ThemeManager.Instance.Options.AppInfo;
@@ -222,13 +227,28 @@ public class RiceWindow : Window
         base.OnPropertyChanged(change);
         if (change.Property == CornerRadiusProperty)
         {
-            // Rounded corners need a transparent window; square ones keep the cheaper opaque window.
-            TransparencyLevelHint = CornerRadius == default ? [] : [WindowTransparencyLevel.Transparent];
+            if (!_appTransparencyHint)
+                ApplyCornerTransparencyHint();
+        }
+        else if (change.Property == TransparencyLevelHintProperty && !_settingTransparencyHint)
+        {
+            _appTransparencyHint = IsSet(TransparencyLevelHintProperty);
+            if (!_appTransparencyHint)
+                ApplyCornerTransparencyHint();
         }
         else if (change.Property == ActualTransparencyLevelProperty)
         {
             UpdateRoundedPseudoClass();
         }
+    }
+
+    // Rounded corners need a transparent window; square ones keep the cheaper opaque window.
+    // A hint set by the app (e.g. AcrylicBlur) is kept instead: any non-opaque level draws the corners too.
+    private void ApplyCornerTransparencyHint()
+    {
+        _settingTransparencyHint = true;
+        TransparencyLevelHint = CornerRadius == default ? [] : [WindowTransparencyLevel.Transparent];
+        _settingTransparencyHint = false;
     }
 
     // Without a compositor (e.g. plain X11) the corners would be black, so fall back to square ones.

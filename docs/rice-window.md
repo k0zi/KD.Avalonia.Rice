@@ -93,6 +93,25 @@ clicks themselves.
 - Corners are square while maximized or full screen, and when the platform cannot draw transparent windows (e.g. X11
   without a compositor) – the window falls back automatically.
 
+## Blurred background (acrylic, mica)
+
+`TransparencyLevelHint` set on the window is kept – the corner radius no longer overrides it. The platform picks the
+first level of the list it supports, so give fallbacks; any non-opaque level keeps the rounded corners too:
+
+```xml
+<rice:RiceWindow TransparencyLevelHint="Mica, AcrylicBlur, Blur, Transparent"
+                 Background="{DynamicResource RiceWindowTranslucentBackgroundBrush}">
+```
+
+- The blur only shows through a translucent `Background` (and content without its own opaque background); with the
+  default theme background the window looks the same as before. `RiceWindowTranslucentBackgroundBrush` is the theme
+  background, translucent, and follows theme switches; a fixed color (e.g. `#B0202020`) works too but does not.
+- `ClearValue(TransparencyLevelHintProperty)` gives the hint back to the window (transparent for rounded corners).
+  The demo's Settings page has a switch for this.
+- Support: Windows 10/11 (`AcrylicBlur`, `Mica` on 11), macOS (`AcrylicBlur`), Linux only `Transparent` with a
+  compositor (`Blur` on KDE). GNOME has no blur protocol: there the window only becomes see-through, without blur.
+  `ActualTransparencyLevel` tells which one was applied.
+
 ## AboutDialog
 
 The built-in about dialog shows the icon, name, description, author and version from `RiceAppInfo`. It is a

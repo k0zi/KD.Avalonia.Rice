@@ -160,6 +160,9 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceWarningForegroundBrush"] = new SolidColorBrush(p.WarningForeground);
         // Loading overlay: the background color, translucent, so the content stays recognizable but recedes.
         target["RiceOverlayBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Background, 0xB8));
+        // Window background for blurred windows (AcrylicBlur, Mica): the theme background, translucent enough
+        // for the blur to show through, opaque enough to keep the text readable.
+        target["RiceWindowTranslucentBackgroundBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Background, 0xC0));
         // Side menu states are accent tints of the title bar color. The idle brush is the same color fully
         // transparent, so the background transition does not fade through white (Transparent is #00FFFFFF).
         Color MenuTint(double amount) => ColorMath.Blend(p.TitleBarBackground, p.Accent, amount);

@@ -19,6 +19,18 @@
           <Button Grid.Column="2" Name="ChangeThemeButton" Content="Change…" VerticalAlignment="Center" />
         </Grid>
       </Border>
+      <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}"
+              BorderThickness="1" CornerRadius="8" Padding="16">
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+          <mi:MaterialIcon Kind="{x:Static icons:MaterialIconKind.BlurOn}" Width="24" Height="24" />
+          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock Text="Blurred window background" />
+            <TextBlock Name="TransparencyText" Foreground="{DynamicResource RiceForegroundMutedBrush}"
+                       TextWrapping="Wrap" />
+          </StackPanel>
+          <ToggleSwitch Grid.Column="2" Name="BlurSwitch" OnContent="" OffContent="" VerticalAlignment="Center" />
+        </Grid>
+      </Border>
 
       <TextBlock FontWeight="SemiBold" Text="General" />
       <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}"
