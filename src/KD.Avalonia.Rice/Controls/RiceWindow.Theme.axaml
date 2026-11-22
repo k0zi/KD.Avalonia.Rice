@@ -20,22 +20,27 @@
                   Background="{TemplateBinding Background}"
                   CornerRadius="{TemplateBinding CornerRadius}"
                   ClipToBounds="True">
-            <!-- The overlay layer hosts the command palette (and the toasts of windows without a built-in host). -->
-            <VisualLayerManager Margin="{TemplateBinding BorderThickness}" EnableOverlayLayer="True">
-              <DockPanel>
-                <rice:RiceTitleBar Name="PART_TitleBar" DockPanel.Dock="Top" />
-                <!-- Toasts float over the content, below the title bar. -->
-                <Panel>
-                  <ContentPresenter Name="PART_ContentPresenter"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                  <toast:RiceToastHost Name="PART_ToastHost" Position="{TemplateBinding ToastPosition}" />
-                </Panel>
-              </DockPanel>
-            </VisualLayerManager>
+            <Panel>
+              <!-- Accent colored blobs of the Gradient material, between the window background and the content. -->
+              <rice:RiceGradientBackground Name="PART_Gradient" IsVisible="False"
+                                           IsAnimated="{TemplateBinding IsBackgroundAnimated}" />
+              <!-- The overlay layer hosts the command palette (and the toasts of windows without a built-in host). -->
+              <VisualLayerManager Margin="{TemplateBinding BorderThickness}" EnableOverlayLayer="True">
+                <DockPanel>
+                  <rice:RiceTitleBar Name="PART_TitleBar" DockPanel.Dock="Top" />
+                  <!-- Toasts float over the content, below the title bar. -->
+                  <Panel>
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Margin="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    <toast:RiceToastHost Name="PART_ToastHost" Position="{TemplateBinding ToastPosition}" />
+                  </Panel>
+                </DockPanel>
+              </VisualLayerManager>
+            </Panel>
           </Border>
           <Border Name="PART_FrameOutline"
                   BorderBrush="{TemplateBinding BorderBrush}"
@@ -74,6 +79,16 @@
     <Style Selector="^:glass">
       <Style Selector="^ /template/ Border#PART_Frame">
         <Setter Property="Background" Value="{DynamicResource RiceGlassBackgroundBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_FrameOutline">
+        <Setter Property="BorderBrush" Value="{DynamicResource RiceGlassBorderBrush}" />
+      </Style>
+    </Style>
+    <!-- Gradient: soft accent colored blobs over the solid background; RiceGlass.Styles.axaml makes the Rice
+         controls inside translucent, so the colors show through them. -->
+    <Style Selector="^:gradient">
+      <Style Selector="^ /template/ rice|RiceGradientBackground#PART_Gradient">
+        <Setter Property="IsVisible" Value="True" />
       </Style>
       <Style Selector="^ /template/ Border#PART_FrameOutline">
         <Setter Property="BorderBrush" Value="{DynamicResource RiceGlassBorderBrush}" />

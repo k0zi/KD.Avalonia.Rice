@@ -16,10 +16,15 @@ public partial class SettingsPage : UserControl
             if (TopLevel.GetTopLevel(this) is RiceWindow window)
                 await window.ShowThemeDialog();
         };
-        GlassSwitch.IsCheckedChanged += (_, _) =>
+        MaterialSwitch.SelectionChanged += (_, _) =>
+        {
+            if (TopLevel.GetTopLevel(this) is RiceWindow window && MaterialSwitch.SelectedIndex >= 0)
+                window.Material = (RiceWindowMaterial)MaterialSwitch.SelectedIndex;
+        };
+        AnimateSwitch.IsCheckedChanged += (_, _) =>
         {
             if (TopLevel.GetTopLevel(this) is RiceWindow window)
-                window.Material = GlassSwitch.IsChecked == true ? RiceWindowMaterial.Glass : RiceWindowMaterial.Solid;
+                window.IsBackgroundAnimated = AnimateSwitch.IsChecked == true;
         };
     }
 
@@ -29,7 +34,10 @@ public partial class SettingsPage : UserControl
         ThemeManager.Instance.PropertyChanged += OnThemeChanged;
         UpdateCurrentTheme();
         if (TopLevel.GetTopLevel(this) is RiceWindow window)
-            GlassSwitch.IsChecked = window.Material == RiceWindowMaterial.Glass;
+        {
+            MaterialSwitch.SelectedIndex = (int)window.Material;
+            AnimateSwitch.IsChecked = window.IsBackgroundAnimated;
+        }
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)

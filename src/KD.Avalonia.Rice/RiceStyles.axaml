@@ -9,6 +9,7 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceWindow.Theme.axaml" />
+        <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceGradientBackground.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceSideMenu.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceChat.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/RiceGroupBox.Theme.axaml" />

@@ -76,4 +76,28 @@ public class ThemeManagerTests
         Assert.Equal(palette.Success, ((SolidColorBrush)brushes["RiceSuccessBrush"]!).Color);
         Assert.Equal(palette.Warning, ((SolidColorBrush)brushes["RiceWarningBrush"]!).Color);
     }
+
+    [Fact]
+    public void GradientColorsComeFromThePaletteAndCanBeOverridden()
+    {
+        var accent = Color.Parse("#E95420");
+        var palette = new RicePalette(accent, Colors.White, Colors.White, Colors.Black);
+        // Pastels in the accent's hue: close to it on the color wheel, but softer and lighter on a light background.
+        var hue = accent.ToHsl();
+        foreach (var gradient in new[] { palette.Gradient1, palette.Gradient2, palette.Gradient3 })
+        {
+            var hsl = gradient.ToHsl();
+            Assert.InRange(Math.Abs((hsl.H - hue.H + 540) % 360 - 180), 0, 21);
+            Assert.True(hsl.S < hue.S);
+            Assert.True(hsl.L > hue.L);
+        }
+        Assert.NotEqual(palette.Gradient2, palette.Gradient3);
+
+        var colors = new ResourceDictionary();
+        ThemeManager.ApplyBrushes(colors, palette with { Gradient2 = Colors.Teal });
+
+        var blob = (Color)colors["RiceGradient2Color"]!;
+        Assert.Equal((Colors.Teal.R, Colors.Teal.G, Colors.Teal.B), (blob.R, blob.G, blob.B));
+        Assert.InRange(blob.A, (byte)1, (byte)0xFE);
+    }
 }

@@ -32,6 +32,9 @@ public static class PaletteFields
         new(nameof(RicePalette.SuccessForeground), "Text on success", p => p.SuccessForeground, (p, c) => p with { SuccessForeground = c }),
         new(nameof(RicePalette.Warning), "Warning", p => p.Warning, (p, c) => p with { Warning = c }),
         new(nameof(RicePalette.WarningForeground), "Text on warning", p => p.WarningForeground, (p, c) => p with { WarningForeground = c }),
+        new(nameof(RicePalette.Gradient1), "Gradient (top left)", p => p.Gradient1, (p, c) => p with { Gradient1 = c }),
+        new(nameof(RicePalette.Gradient2), "Gradient (right)", p => p.Gradient2, (p, c) => p with { Gradient2 = c }),
+        new(nameof(RicePalette.Gradient3), "Gradient (bottom)", p => p.Gradient3, (p, c) => p with { Gradient3 = c }),
     ];
 
     /// <summary>Builds a palette; <paramref name="valueOf"/> returns null for optional colors that stay derived.</summary>

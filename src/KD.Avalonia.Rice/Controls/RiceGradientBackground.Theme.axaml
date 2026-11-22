@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls">
+  <ControlTheme x:Key="{x:Type rice:RiceGradientBackground}" TargetType="rice:RiceGradientBackground">
+    <Setter Property="Color1" Value="{DynamicResource RiceGradient1Color}" />
+    <Setter Property="Color2" Value="{DynamicResource RiceGradient2Color}" />
+    <Setter Property="Color3" Value="{DynamicResource RiceGradient3Color}" />
+
+    <!-- One slow drift cycle a minute; the blobs come back to where they started, so the loop has no jump. -->
+    <Style Selector="^:animated">
+      <Style.Animations>
+        <Animation Duration="0:1:0" IterationCount="Infinite">
+          <KeyFrame Cue="0%">
+            <Setter Property="Phase" Value="0" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Phase" Value="1" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

@@ -56,6 +56,17 @@ public sealed record RicePalette(Color Accent, Color Background, Color Surface, 
 
     private readonly Color? _warningForeground;
 
+    /// <summary>
+    /// Large top left blob of gradient windows (<c>RiceWindowMaterial.Gradient</c>); a pastel of the accent unless set.
+    /// </summary>
+    public Color Gradient1 { get; init; } = ColorMath.Pastel(Accent, Background);
+
+    /// <summary>Blob on the right of gradient windows; a pastel of the accent's hue turned 20° unless set.</summary>
+    public Color Gradient2 { get; init; } = ColorMath.Pastel(ColorMath.RotateHue(Accent, 20), Background);
+
+    /// <summary>Blob at the bottom of gradient windows; a pastel of the accent's hue turned back 20° unless set.</summary>
+    public Color Gradient3 { get; init; } = ColorMath.Pastel(ColorMath.RotateHue(Accent, -20), Background);
+
     public bool IsDark => ColorMath.Luminance(Background) < 0.5;
 
     /// <summary>Background, surface, accent and foreground brushes for previews.</summary>
@@ -81,6 +92,23 @@ internal static class ColorMath
         Luminance(background) > 0.6 ? Color.Parse("#1A1A1A") : Colors.White;
 
     public static Color WithAlpha(Color c, byte alpha) => Color.FromArgb(alpha, c.R, c.G, c.B);
+
+    /// <summary>
+    /// Soft version of a color for large areas: saturation capped and the color drawn towards the background,
+    /// so it turns pastel on light backgrounds and muted on dark ones.
+    /// </summary>
+    public static Color Pastel(Color c, Color background)
+    {
+        var hsl = c.ToHsl();
+        return Blend(HslColor.ToRgb(hsl.H, Math.Min(hsl.S * 0.6, 0.5), hsl.L, 1), background, 0.3);
+    }
+
+    /// <summary>The same saturation and lightness at a hue <paramref name="degrees"/> further around the color wheel.</summary>
+    public static Color RotateHue(Color c, double degrees)
+    {
+        var hsl = c.ToHsl();
+        return HslColor.ToRgb(((hsl.H + degrees) % 360 + 360) % 360, hsl.S, hsl.L, hsl.A);
+    }
 
     private static byte Lerp(byte a, byte b, double t) => (byte)Math.Round(a + (b - a) * t);
 }

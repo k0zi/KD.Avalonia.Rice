@@ -11,6 +11,9 @@ dotnet run --project tools/KD.Avalonia.Rice.ThemeEditor
 - **Edit the colors:** the four core colors (accent, background, surface, foreground) are required for both the light
   and the dark variant. The other colors are derived from them, as in `RicePalette`; check one to set it yourself.
   The whole editor window uses the theme being edited, the Light / Dark tab switches the variant.
+- **Gradient colors:** the three blobs of `RiceWindowMaterial.Gradient` windows are derived colors too (pastels of the
+  accent and two close hues); set them to give the theme its own gradient. "Window background" above the preview switches
+  the editor window between Solid, Gradient and Glass, so the gradient can be checked while editing.
 - **Save:** writes `<id>.json` (the id is made from the name, e.g. "My Theme" → `my-theme`) to
   `<ApplicationData>/kd-rice-theme-editor/themes` (`~/.config/kd-rice-theme-editor/themes` on Linux). Saving under
   the name of an existing saved theme replaces it. Only the core colors and the overridden ones are stored:
