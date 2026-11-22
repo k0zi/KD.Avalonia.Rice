@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using KD.Avalonia.Rice.Controls;
 using KD.Avalonia.Rice.Theming;
 
@@ -17,53 +16,11 @@ public partial class SettingsPage : UserControl
             if (TopLevel.GetTopLevel(this) is RiceWindow window)
                 await window.ShowThemeDialog();
         };
-        BlurSwitch.IsCheckedChanged += (_, _) =>
+        GlassSwitch.IsCheckedChanged += (_, _) =>
         {
-            SetBlurredBackground(BlurSwitch.IsChecked == true);
-            UpdateTransparencyText();
+            if (TopLevel.GetTopLevel(this) is RiceWindow window)
+                window.Material = GlassSwitch.IsChecked == true ? RiceWindowMaterial.Glass : RiceWindowMaterial.Solid;
         };
-    }
-
-    // Mica (Windows 11), acrylic (Windows 10/11, macOS), blur (KDE), else plain transparency.
-    private static readonly WindowTransparencyLevel[] BlurLevels =
-    [
-        WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur,
-        WindowTransparencyLevel.Blur, WindowTransparencyLevel.Transparent,
-    ];
-
-    private void SetBlurredBackground(bool blurred)
-    {
-        if (TopLevel.GetTopLevel(this) is not RiceWindow window)
-            return;
-        if (blurred)
-        {
-            window.TransparencyLevelHint = BlurLevels;
-            // The blur shows through the translucent theme background; it follows theme switches.
-            window[!TemplatedControl.BackgroundProperty] =
-                window.GetResourceObservable("RiceWindowTranslucentBackgroundBrush").ToBinding();
-        }
-        else
-        {
-            window.ClearValue(TopLevel.TransparencyLevelHintProperty);
-            window.ClearValue(TemplatedControl.BackgroundProperty);
-        }
-    }
-
-    private void OnTransparencyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property == TopLevel.ActualTransparencyLevelProperty)
-            UpdateTransparencyText();
-    }
-
-    private void UpdateTransparencyText()
-    {
-        if (TopLevel.GetTopLevel(this) is not { } topLevel)
-            return;
-        var level = topLevel.ActualTransparencyLevel;
-        // GNOME (mutter) and X11 without KDE offer no blur protocol: the best they give is plain transparency.
-        TransparencyText.Text = BlurSwitch.IsChecked == true && level == WindowTransparencyLevel.Transparent
-            ? "Applied: Transparent – this desktop cannot blur windows (e.g. GNOME), only see-through"
-            : $"Applied: {level}";
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -71,21 +28,14 @@ public partial class SettingsPage : UserControl
         base.OnAttachedToVisualTree(e);
         ThemeManager.Instance.PropertyChanged += OnThemeChanged;
         UpdateCurrentTheme();
-        if (TopLevel.GetTopLevel(this) is { } topLevel)
-        {
-            // The switch shows the window's state, as the page is kept and the window outlives it.
-            BlurSwitch.IsChecked = topLevel.TransparencyLevelHint.Contains(WindowTransparencyLevel.AcrylicBlur);
-            topLevel.PropertyChanged += OnTransparencyChanged;
-            UpdateTransparencyText();
-        }
+        if (TopLevel.GetTopLevel(this) is RiceWindow window)
+            GlassSwitch.IsChecked = window.Material == RiceWindowMaterial.Glass;
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
         ThemeManager.Instance.PropertyChanged -= OnThemeChanged;
-        if (e.Root is TopLevel topLevel)
-            topLevel.PropertyChanged -= OnTransparencyChanged;
     }
 
     private void OnThemeChanged(object? sender, PropertyChangedEventArgs e) => UpdateCurrentTheme();

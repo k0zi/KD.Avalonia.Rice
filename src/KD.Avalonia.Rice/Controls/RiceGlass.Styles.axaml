@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rice="clr-namespace:KD.Avalonia.Rice.Controls"
+        xmlns:sched="clr-namespace:KD.Avalonia.Rice.Controls.Scheduling"
+        xmlns:uml="clr-namespace:KD.Avalonia.Rice.Controls.Uml"
+        xmlns:md="clr-namespace:KD.Avalonia.Rice.Controls.Markdowns">
+  <!-- Glass windows (RiceWindow:glass): the large surfaces of the Rice controls turn translucent, so the blurred
+       desktop shows through the whole window. Inputs, buttons and popups stay solid to keep them readable.
+       These are styles, not control themes, so they win over the setters of the control themes. -->
+
+  <Style Selector="rice|RiceWindow:glass rice|RiceSideMenu">
+    <Setter Property="Background" Value="{DynamicResource RiceGlassChromeBrush}" />
+  </Style>
+
+  <Style Selector="rice|RiceWindow:glass rice|RiceCard,
+                   rice|RiceWindow:glass rice|RiceTabView,
+                   rice|RiceWindow:glass rice|RiceTabViewItem:selected,
+                   rice|RiceWindow:glass rice|RicePropertyGrid,
+                   rice|RiceWindow:glass rice|RiceRibbon,
+                   rice|RiceWindow:glass sched|RiceScheduler,
+                   rice|RiceWindow:glass rice|RiceDockGroupView,
+                   rice|RiceWindow:glass rice|RiceDockTab:document:selected,
+                   rice|RiceWindow:glass rice|RiceDockLayout Button.rice-dock-strip">
+    <Setter Property="Background" Value="{DynamicResource RiceGlassSurfaceBrush}" />
+  </Style>
+
+  <!-- Diagrams are drawn on the window color; let the glass show instead. -->
+  <Style Selector="rice|RiceWindow:glass uml|UmlDiagramView, rice|RiceWindow:glass md|MermaidView">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="rice|RiceWindow:glass uml|UmlDiagramCanvas">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+</Styles>

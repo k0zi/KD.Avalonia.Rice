@@ -13,7 +13,13 @@ public sealed record RicePalette(Color Accent, Color Background, Color Surface, 
     public Color SurfaceAlt { get; init; } = ColorMath.Blend(Surface, Foreground, 0.08);
     public Color ForegroundMuted { get; init; } = ColorMath.Blend(Foreground, Background, 0.35);
     public Color Border { get; init; } = ColorMath.Blend(Background, Foreground, 0.16);
+    /// <summary>
+    /// Chrome color: the background of the side menu. The title bar itself has no color of its own any more,
+    /// it blends into the window background.
+    /// </summary>
     public Color TitleBarBackground { get; init; } = Surface;
+
+    /// <summary>Text and icons on <see cref="TitleBarBackground"/> (the side menu).</summary>
     public Color TitleBarForeground { get; init; } = Foreground;
     public Color Danger { get; init; } = Color.Parse("#E81123");
 

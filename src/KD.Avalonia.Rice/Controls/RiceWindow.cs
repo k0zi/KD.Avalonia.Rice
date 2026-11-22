@@ -46,6 +46,10 @@ public class RiceWindow : Window
     public static readonly StyledProperty<bool> IncludeNavigationCommandsProperty =
         AvaloniaProperty.Register<RiceWindow, bool>(nameof(IncludeNavigationCommands), true);
 
+    /// <summary>Solid or glass background; defaults to <see cref="RiceOptions.WindowMaterial"/>.</summary>
+    public static readonly StyledProperty<RiceWindowMaterial> MaterialProperty =
+        AvaloniaProperty.Register<RiceWindow, RiceWindowMaterial>(nameof(Material));
+
     public static readonly RoutedEvent<RoutedEventArgs> AboutRequestedEvent =
         RoutedEvent.Register<RiceWindow, RoutedEventArgs>(nameof(AboutRequested), RoutingStrategies.Direct);
 
@@ -57,8 +61,8 @@ public class RiceWindow : Window
         ("PART_ResizeSW", WindowEdge.SouthWest), ("PART_ResizeSE", WindowEdge.SouthEast),
     ];
 
-    // True while the app sets TransparencyLevelHint itself; the corner radius does not override it then.
-    // Clearing the value (ClearValue) gives the hint back to the corner radius.
+    // True while the app sets TransparencyLevelHint itself; the corner radius and Material do not override it then.
+    // Clearing the value (ClearValue) gives the hint back to the window.
     private bool _appTransparencyHint;
     private bool _settingTransparencyHint;
 
@@ -68,8 +72,9 @@ public class RiceWindow : Window
         Title = AppInfo.Name;
         if (AppInfo.Icon is { } icon)
             Icon = new WindowIcon(icon);
+        Material = ThemeManager.Instance.Options.WindowMaterial;
         // The platform may report its transparency level up front without a change notification.
-        UpdateRoundedPseudoClass();
+        UpdatePseudoClasses();
         // Tunnel: the shortcuts work wherever the focus is, even in a text box.
         AddHandler(KeyDownEvent, OnShortcutKeyDown, RoutingStrategies.Tunnel);
     }
@@ -105,6 +110,16 @@ public class RiceWindow : Window
     {
         get => GetValue(TitleBarContentProperty);
         set => SetValue(TitleBarContentProperty, value);
+    }
+
+    /// <summary>
+    /// <see cref="RiceWindowMaterial.Glass"/> lets the desktop show through blurred, where the platform supports it;
+    /// the <c>:glass</c> pseudo class tells whether it is actually in effect.
+    /// </summary>
+    public RiceWindowMaterial Material
+    {
+        get => GetValue(MaterialProperty);
+        set => SetValue(MaterialProperty, value);
     }
 
     public RiceAppInfo AppInfo
@@ -181,12 +196,12 @@ public class RiceWindow : Window
         if (Commands.Count > 0)
             yield return new RiceCommandProvider(">", RiceStrings.CommandPaletteCommandsMode, Commands.ToList())
             {
-                Icon = Material.Icons.MaterialIconKind.ConsoleLine,
+                Icon = global::Material.Icons.MaterialIconKind.ConsoleLine,
             };
         if (navigation.Count > 0)
             yield return new RiceCommandProvider("@", RiceStrings.CommandPaletteNavigationMode, navigation)
             {
-                Icon = Material.Icons.MaterialIconKind.Compass,
+                Icon = global::Material.Icons.MaterialIconKind.Compass,
             };
         foreach (var provider in CommandProviders)
             yield return provider;
@@ -225,35 +240,56 @@ public class RiceWindow : Window
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == CornerRadiusProperty)
+        if (change.Property == CornerRadiusProperty || change.Property == MaterialProperty)
         {
             if (!_appTransparencyHint)
-                ApplyCornerTransparencyHint();
+                ApplyTransparencyHint();
+            UpdatePseudoClasses();
         }
         else if (change.Property == TransparencyLevelHintProperty && !_settingTransparencyHint)
         {
             _appTransparencyHint = IsSet(TransparencyLevelHintProperty);
             if (!_appTransparencyHint)
-                ApplyCornerTransparencyHint();
+                ApplyTransparencyHint();
         }
         else if (change.Property == ActualTransparencyLevelProperty)
         {
-            UpdateRoundedPseudoClass();
+            UpdatePseudoClasses();
         }
     }
 
-    // Rounded corners need a transparent window; square ones keep the cheaper opaque window.
     // A hint set by the app (e.g. AcrylicBlur) is kept instead: any non-opaque level draws the corners too.
-    private void ApplyCornerTransparencyHint()
+    private void ApplyTransparencyHint()
     {
         _settingTransparencyHint = true;
-        TransparencyLevelHint = CornerRadius == default ? [] : [WindowTransparencyLevel.Transparent];
+        TransparencyLevelHint = GetTransparencyHint(Material, CornerRadius);
         _settingTransparencyHint = false;
     }
 
+    /// <summary>
+    /// Glass asks for the best blur the platform has (Mica on Windows 11, Acrylic on Windows 10 / macOS, blur on KDE).
+    /// Otherwise rounded corners need a transparent window; square ones keep the cheaper opaque window.
+    /// </summary>
+    internal static IReadOnlyList<WindowTransparencyLevel> GetTransparencyHint(RiceWindowMaterial material, CornerRadius cornerRadius) =>
+        material == RiceWindowMaterial.Glass
+            ?
+            [
+                WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur,
+                WindowTransparencyLevel.Blur, WindowTransparencyLevel.Transparent,
+            ]
+            : cornerRadius == default ? [] : [WindowTransparencyLevel.Transparent];
+
+    /// <summary>True for the levels that blur what is behind the window; plain transparency would leave the UI unreadable.</summary>
+    internal static bool IsBlurred(WindowTransparencyLevel level) =>
+        level == WindowTransparencyLevel.Blur || level == WindowTransparencyLevel.AcrylicBlur || level == WindowTransparencyLevel.Mica;
+
     // Without a compositor (e.g. plain X11) the corners would be black, so fall back to square ones.
-    private void UpdateRoundedPseudoClass() =>
+    // Without blur the glass falls back to the solid look.
+    private void UpdatePseudoClasses()
+    {
         PseudoClasses.Set(":rounded", ActualTransparencyLevel != WindowTransparencyLevel.None);
+        PseudoClasses.Set(":glass", Material == RiceWindowMaterial.Glass && IsBlurred(ActualTransparencyLevel));
+    }
 
     public void ToggleMaximized() =>
         WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;

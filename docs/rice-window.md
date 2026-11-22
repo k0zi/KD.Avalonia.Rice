@@ -42,7 +42,8 @@ can be set per window; the title bar icon is `AppInfo.Icon`, so set `AppInfo` to
 | `ShowAboutButton` | `false` | Info button that opens the about dialog. |
 | `TitleBarContent` | `null` | Extra content in the title bar, between the title and the buttons. |
 | `AppInfo` | `RiceOptions.AppInfo` | Metadata shown by the about dialog. |
-| `CornerRadius` | `RiceOptions.WindowCornerRadius` (8) | Window corners; `0` = square. |
+| `CornerRadius` | `RiceOptions.WindowCornerRadius` (15) | Window corners; `0` = square. |
+| `Material` | `RiceOptions.WindowMaterial` (`Solid`) | `Glass` lets the blurred desktop show through the window, see [Glass](#glass). |
 | `ToastPosition` | `BottomRight` | Corner of the built-in host of the [toasts](rice-toast.md), below the title bar. |
 | `Commands` | empty | Entries of the [command palette](rice-command-palette.md); their `Gesture`s work in the whole window. |
 | `CommandPaletteGesture` | `Ctrl+Shift+P` | Opens / closes the command palette; `null` turns the shortcut off. |
@@ -93,10 +94,38 @@ clicks themselves.
 - Corners are square while maximized or full screen, and when the platform cannot draw transparent windows (e.g. X11
   without a compositor) – the window falls back automatically.
 
-## Blurred background (acrylic, mica)
+## Glass
 
-`TransparencyLevelHint` set on the window is kept – the corner radius no longer overrides it. The platform picks the
-first level of the list it supports, so give fallbacks; any non-opaque level keeps the rounded corners too:
+The title bar has no band of its own: it blends into the window background, and only the side menu keeps the
+theme's chrome color (`RicePalette.TitleBarBackground`).
+
+With `Material="Glass"` the whole window turns into frosted glass: the frame is a translucent tint of the theme's
+background over the blurred desktop, and the large surfaces of the Rice controls (side menu, cards, tab views, property
+grid, ribbon, scheduler, dock panes, diagrams) turn translucent too. Inputs, buttons and popups stay solid, so they
+remain readable.
+
+- All windows: `options.WindowMaterial = RiceWindowMaterial.Glass`.
+- One window: `Material="Glass"` on the `RiceWindow` (can be switched at run time).
+
+The window asks for the best blur the platform has: Mica on Windows 11, Acrylic on Windows 10 and macOS, blur on KDE
+Plasma. Where nothing blurs (e.g. GNOME, X11 without a compositor) the window keeps the solid look – plain transparency
+without blur would leave the content unreadable. The `:glass` pseudo class is set only while the glass is actually in
+effect, so your own styles can follow it:
+
+```xml
+<Style Selector="rice|RiceWindow:glass Border.my-panel">
+  <Setter Property="Background" Value="{DynamicResource RiceGlassSurfaceBrush}" />
+</Style>
+```
+
+Brushes: `RiceGlassBackgroundBrush` (window), `RiceGlassChromeBrush` (side menu), `RiceGlassSurfaceBrush` (cards,
+panels), `RiceGlassBorderBrush` (window outline).
+
+## Custom blur (acrylic, mica)
+
+`Glass` is the ready-made blur. For full control set `TransparencyLevelHint` on the window yourself: it is kept – the
+corner radius and `Material` no longer override it. The platform picks the first level of the list it supports, so give
+fallbacks; any non-opaque level keeps the rounded corners too:
 
 ```xml
 <rice:RiceWindow TransparencyLevelHint="Mica, AcrylicBlur, Blur, Transparent"
@@ -106,8 +135,8 @@ first level of the list it supports, so give fallbacks; any non-opaque level kee
 - The blur only shows through a translucent `Background` (and content without its own opaque background); with the
   default theme background the window looks the same as before. `RiceWindowTranslucentBackgroundBrush` is the theme
   background, translucent, and follows theme switches; a fixed color (e.g. `#B0202020`) works too but does not.
-- `ClearValue(TransparencyLevelHintProperty)` gives the hint back to the window (transparent for rounded corners).
-  The demo's Settings page has a switch for this.
+- `ClearValue(TransparencyLevelHintProperty)` gives the hint back to the window (transparent for rounded corners,
+  blur for `Glass`).
 - Support: Windows 10/11 (`AcrylicBlur`, `Mica` on 11), macOS (`AcrylicBlur`), Linux only `Transparent` with a
   compositor (`Blur` on KDE). GNOME has no blur protocol: there the window only becomes see-through, without blur.
   `ActualTransparencyLevel` tells which one was applied.

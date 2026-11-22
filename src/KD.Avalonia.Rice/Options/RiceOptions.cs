@@ -1,4 +1,5 @@
 using Avalonia;
+using KD.Avalonia.Rice.Controls;
 using KD.Avalonia.Rice.Theming;
 
 namespace KD.Avalonia.Rice.Options;
@@ -14,8 +15,14 @@ public sealed class RiceOptions
     public string? DefaultThemeId { get; set; }
 
     /// <summary>
-    /// Corner radius of every <c>RiceWindow</c> (0 = square corners). Defaults to 8.
+    /// Corner radius of every <c>RiceWindow</c> (0 = square corners). Defaults to 15.
     /// A single window can override it with its <c>CornerRadius</c> property.
     /// </summary>
-    public CornerRadius WindowCornerRadius { get; set; } = new(8);
+    public CornerRadius WindowCornerRadius { get; set; } = new(15);
+
+    /// <summary>
+    /// Background material of every <c>RiceWindow</c>. Defaults to <see cref="RiceWindowMaterial.Solid"/>.
+    /// A single window can override it with its <c>Material</c> property.
+    /// </summary>
+    public RiceWindowMaterial WindowMaterial { get; set; } = RiceWindowMaterial.Solid;
 }
