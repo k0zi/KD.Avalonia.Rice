@@ -56,7 +56,8 @@
 | `SupportedThemes` | `BuiltInThemes.All` | Themes the app offers. With a single theme there is no theme choice and nothing is saved. |
 | `DefaultThemeId` | first supported theme | Theme used until the user picks one. |
 | `WindowCornerRadius` | `15` | Corner radius of every `RiceWindow`; `new CornerRadius(0)` gives square corners. |
-| `WindowMaterial` | `Solid` | Background of every `RiceWindow`; `RiceWindowMaterial.Glass` gives [frosted glass](rice-window.md#glass) where the platform can blur. |
+| `WindowMaterial` | `Solid` | Background of every `RiceWindow`; `RiceWindowMaterial.Gradient` gives [soft accent colors](rice-window.md#gradient-and-glass), `Glass` frosted glass where the platform can blur. |
+| `AnimateWindowBackground` | `false` | Lets the colors of `Gradient` windows drift slowly. |
 
 `RiceAppInfo`:
 
@@ -95,7 +96,8 @@ options.SupportedThemes = [ocean, .. BuiltInThemes.All];
 ```
 
 `RicePalette` derived colors: `AccentForeground`, `SurfaceAlt`, `ForegroundMuted`, `Border`, `TitleBarBackground`,
-`TitleBarForeground`, `Danger`, `DangerForeground`, `Success`, `SuccessForeground`, `Warning`, `WarningForeground`.
+`TitleBarForeground`, `Danger`, `DangerForeground`, `Success`, `SuccessForeground`, `Warning`, `WarningForeground`,
+`Gradient1`, `Gradient2`, `Gradient3` (the blobs of [gradient windows](rice-window.md#gradient-and-glass)).
 
 ## Brushes for your own controls
 
@@ -117,7 +119,8 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceTrackBrush` | Recessed strips: tab strip, segmented control, property grid description |
 | `RiceHoverBrush`, `RiceSelectedRowBrush` | Row under the pointer, selected row (lists, property grid, command palette) |
 | `RiceHoverStrongBrush` | Pressed state of flat buttons on any background (title bar buttons) |
-| `RiceGlassBackgroundBrush`, `RiceGlassChromeBrush`, `RiceGlassSurfaceBrush`, `RiceGlassBorderBrush` | Translucent window, side menu, surface and outline colors of [glass windows](rice-window.md#glass) |
+| `RiceGlassBackgroundBrush`, `RiceGlassChromeBrush`, `RiceGlassSurfaceBrush`, `RiceGlassBorderBrush` | Translucent window, side menu, surface and outline colors of [glass and gradient windows](rice-window.md#gradient-and-glass) |
+| `RiceGradient1Color`, `RiceGradient2Color`, `RiceGradient3Color` | Colors (not brushes) of the blobs of [gradient windows](rice-window.md#gradient-and-glass) |
 | `RiceSkeletonBrush`, `RiceSkeletonHighlightBrush` | Loading placeholders and the band sweeping over them |
 | `RiceDiffAddedBrush`, `RiceDiffRemovedBrush`, `RiceDiffAddedWordBrush`, `RiceDiffRemovedWordBrush`, `RiceDiffAddedMarkBrush`, `RiceDiffRemovedMarkBrush`, `RiceDiffEmptyBrush` | Added / removed lines and words of the [diff view](rice-diff.md) |
 | `RiceSchedulerGridBrush`, `RiceSchedulerOffHoursBrush`, `RiceSchedulerTodayBrush`, `RiceSchedulerNowBrush` | Half hour lines, hours outside the working day, today, the current time of the [scheduler](rice-scheduler.md) |

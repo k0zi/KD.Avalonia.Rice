@@ -139,7 +139,7 @@ public sealed class ThemeManager : INotifyPropertyChanged
         public ColorPaletteResources DarkPalette { get; } = new();
     }
 
-    private static void ApplyBrushes(ResourceDictionary target, RicePalette p)
+    internal static void ApplyBrushes(ResourceDictionary target, RicePalette p)
     {
         target["RiceAccentBrush"] = new SolidColorBrush(p.Accent);
         target["RiceAccentForegroundBrush"] = new SolidColorBrush(p.AccentForeground);
@@ -265,6 +265,11 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceGlassChromeBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.TitleBarBackground, p.IsDark ? (byte)0x80 : (byte)0x90));
         target["RiceGlassSurfaceBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Surface, p.IsDark ? (byte)0xB0 : (byte)0xC8));
         target["RiceGlassBorderBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x30 : (byte)0x26));
+
+        // Gradient windows: translucent blobs (by default pastels of the accent and its two neighboring hues) fading into the background.
+        target["RiceGradient1Color"] = ColorMath.WithAlpha(p.Gradient1, p.IsDark ? (byte)0x70 : (byte)0x5C);
+        target["RiceGradient2Color"] = ColorMath.WithAlpha(p.Gradient2, p.IsDark ? (byte)0x58 : (byte)0x48);
+        target["RiceGradient3Color"] = ColorMath.WithAlpha(p.Gradient3, p.IsDark ? (byte)0x58 : (byte)0x48);
 
         // Card shadows: shadows barely show on dark backgrounds, so they are much stronger there.
         target["RiceCardShadow1"] = Shadow(1, 3, p.IsDark ? 0.40 : 0.10);

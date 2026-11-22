@@ -25,4 +25,10 @@ public sealed class RiceOptions
     /// A single window can override it with its <c>Material</c> property.
     /// </summary>
     public RiceWindowMaterial WindowMaterial { get; set; } = RiceWindowMaterial.Solid;
+
+    /// <summary>
+    /// Lets the color blobs of <see cref="RiceWindowMaterial.Gradient"/> windows drift slowly. Defaults to false.
+    /// A single window can override it with its <c>IsBackgroundAnimated</c> property.
+    /// </summary>
+    public bool AnimateWindowBackground { get; set; }
 }

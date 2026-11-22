@@ -64,6 +64,10 @@
     <Style Selector="TextBlock.hint, TextBlock.derived">
       <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
     </Style>
+    <!-- Gradient / glass preview: the theme list turns translucent like the side menu of an app. -->
+    <Style Selector="rice|RiceWindow:translucent Border#ThemesPane">
+      <Setter Property="Background" Value="{DynamicResource RiceGlassChromeBrush}" />
+    </Style>
     <Style Selector="TextBlock#StatusText.error">
       <Setter Property="Foreground" Value="{DynamicResource RiceDangerBrush}" />
     </Style>
@@ -82,7 +86,7 @@
 
   <Grid ColumnDefinitions="260,460,*">
     <!-- Themes to start from -->
-    <Border Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}"
+    <Border Name="ThemesPane" Background="{DynamicResource RiceSurfaceBrush}" BorderBrush="{DynamicResource RiceBorderBrush}"
             BorderThickness="0,0,1,0">
       <DockPanel Margin="12">
         <TextBlock DockPanel.Dock="Top" Classes="section" Margin="4,0,0,8" Text="Themes" />
@@ -142,6 +146,16 @@
           <TextBlock FontSize="22" FontWeight="SemiBold" Text="Preview" />
           <TextBlock Classes="hint" TextWrapping="Wrap"
                      Text="The whole editor uses the theme being edited. The Light / Dark tab switches the variant, as does the title bar toggle." />
+
+          <WrapPanel ItemSpacing="12" LineSpacing="8">
+            <TextBlock VerticalAlignment="Center" Text="Window background" />
+            <rice:RiceSegmentedControl Name="MaterialSwitch" SelectedIndex="0">
+              <rice:RiceSegmentedItem Content="Solid" />
+              <rice:RiceSegmentedItem Content="Gradient" />
+              <rice:RiceSegmentedItem Content="Glass" />
+            </rice:RiceSegmentedControl>
+            <CheckBox Name="AnimateCheck" Content="Animate the gradient" />
+          </WrapPanel>
 
           <WrapPanel ItemSpacing="8" LineSpacing="8">
             <Button Content="Button" />

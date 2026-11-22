@@ -46,9 +46,13 @@ public class RiceWindow : Window
     public static readonly StyledProperty<bool> IncludeNavigationCommandsProperty =
         AvaloniaProperty.Register<RiceWindow, bool>(nameof(IncludeNavigationCommands), true);
 
-    /// <summary>Solid or glass background; defaults to <see cref="RiceOptions.WindowMaterial"/>.</summary>
+    /// <summary>Solid, gradient or glass background; defaults to <see cref="RiceOptions.WindowMaterial"/>.</summary>
     public static readonly StyledProperty<RiceWindowMaterial> MaterialProperty =
         AvaloniaProperty.Register<RiceWindow, RiceWindowMaterial>(nameof(Material));
+
+    /// <summary>Drifting gradient blobs; defaults to <see cref="RiceOptions.AnimateWindowBackground"/>.</summary>
+    public static readonly StyledProperty<bool> IsBackgroundAnimatedProperty =
+        AvaloniaProperty.Register<RiceWindow, bool>(nameof(IsBackgroundAnimated));
 
     public static readonly RoutedEvent<RoutedEventArgs> AboutRequestedEvent =
         RoutedEvent.Register<RiceWindow, RoutedEventArgs>(nameof(AboutRequested), RoutingStrategies.Direct);
@@ -68,6 +72,7 @@ public class RiceWindow : Window
         if (AppInfo.Icon is { } icon)
             Icon = new WindowIcon(icon);
         Material = ThemeManager.Instance.Options.WindowMaterial;
+        IsBackgroundAnimated = ThemeManager.Instance.Options.AnimateWindowBackground;
         // The platform may report its transparency level up front without a change notification.
         UpdatePseudoClasses();
         // Tunnel: the shortcuts work wherever the focus is, even in a text box.
@@ -108,13 +113,22 @@ public class RiceWindow : Window
     }
 
     /// <summary>
-    /// <see cref="RiceWindowMaterial.Glass"/> lets the desktop show through blurred, where the platform supports it;
-    /// the <c>:glass</c> pseudo class tells whether it is actually in effect.
+    /// <see cref="RiceWindowMaterial.Gradient"/> puts soft accent colored blobs behind the content,
+    /// <see cref="RiceWindowMaterial.Glass"/> lets the desktop show through blurred, where the platform supports it.
+    /// The <c>:gradient</c> / <c>:glass</c> pseudo classes tell which one is actually in effect, <c>:translucent</c>
+    /// is set for both.
     /// </summary>
     public RiceWindowMaterial Material
     {
         get => GetValue(MaterialProperty);
         set => SetValue(MaterialProperty, value);
+    }
+
+    /// <summary>Lets the blobs of the <see cref="RiceWindowMaterial.Gradient"/> material drift slowly.</summary>
+    public bool IsBackgroundAnimated
+    {
+        get => GetValue(IsBackgroundAnimatedProperty);
+        set => SetValue(IsBackgroundAnimatedProperty, value);
     }
 
     public RiceAppInfo AppInfo
@@ -267,8 +281,12 @@ public class RiceWindow : Window
     // Without blur the glass falls back to the solid look.
     private void UpdatePseudoClasses()
     {
+        var glass = Material == RiceWindowMaterial.Glass && IsBlurred(ActualTransparencyLevel);
+        var gradient = Material == RiceWindowMaterial.Gradient;
         PseudoClasses.Set(":rounded", ActualTransparencyLevel != WindowTransparencyLevel.None);
-        PseudoClasses.Set(":glass", Material == RiceWindowMaterial.Glass && IsBlurred(ActualTransparencyLevel));
+        PseudoClasses.Set(":glass", glass);
+        PseudoClasses.Set(":gradient", gradient);
+        PseudoClasses.Set(":translucent", glass || gradient);
     }
 
     public void ToggleMaximized() =>
