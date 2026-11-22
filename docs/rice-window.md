@@ -42,7 +42,8 @@ can be set per window; the title bar icon is `AppInfo.Icon`, so set `AppInfo` to
 | `ShowAboutButton` | `false` | Info button that opens the about dialog. |
 | `TitleBarContent` | `null` | Extra content in the title bar, between the title and the buttons. |
 | `AppInfo` | `RiceOptions.AppInfo` | Metadata shown by the about dialog. |
-| `CornerRadius` | `RiceOptions.WindowCornerRadius` (8) | Window corners; `0` = square. |
+| `CornerRadius` | `RiceOptions.WindowCornerRadius` (15) | Window corners; `0` = square. |
+| `Material` | `RiceOptions.WindowMaterial` (`Solid`) | `Glass` lets the blurred desktop show through the window, see [Glass](#glass). |
 | `ToastPosition` | `BottomRight` | Corner of the built-in host of the [toasts](rice-toast.md), below the title bar. |
 | `Commands` | empty | Entries of the [command palette](rice-command-palette.md); their `Gesture`s work in the whole window. |
 | `CommandPaletteGesture` | `Ctrl+Shift+P` | Opens / closes the command palette; `null` turns the shortcut off. |
@@ -92,6 +93,33 @@ clicks themselves.
 - One window: `CornerRadius="0"` on the `RiceWindow`.
 - Corners are square while maximized or full screen, and when the platform cannot draw transparent windows (e.g. X11
   without a compositor) – the window falls back automatically.
+
+## Glass
+
+The title bar has no band of its own: it blends into the window background, and only the side menu keeps the
+theme's chrome color (`RicePalette.TitleBarBackground`).
+
+With `Material="Glass"` the whole window turns into frosted glass: the frame is a translucent tint of the theme's
+background over the blurred desktop, and the large surfaces of the Rice controls (side menu, cards, tab views, property
+grid, ribbon, scheduler, dock panes, diagrams) turn translucent too. Inputs, buttons and popups stay solid, so they
+remain readable.
+
+- All windows: `options.WindowMaterial = RiceWindowMaterial.Glass`.
+- One window: `Material="Glass"` on the `RiceWindow` (can be switched at run time).
+
+The window asks for the best blur the platform has: Mica on Windows 11, Acrylic on Windows 10 and macOS, blur on KDE
+Plasma. Where nothing blurs (e.g. GNOME, X11 without a compositor) the window keeps the solid look – plain transparency
+without blur would leave the content unreadable. The `:glass` pseudo class is set only while the glass is actually in
+effect, so your own styles can follow it:
+
+```xml
+<Style Selector="rice|RiceWindow:glass Border.my-panel">
+  <Setter Property="Background" Value="{DynamicResource RiceGlassSurfaceBrush}" />
+</Style>
+```
+
+Brushes: `RiceGlassBackgroundBrush` (window), `RiceGlassChromeBrush` (side menu), `RiceGlassSurfaceBrush` (cards,
+panels), `RiceGlassBorderBrush` (window outline).
 
 ## AboutDialog
 

@@ -69,6 +69,16 @@
         <Setter Property="CornerRadius" Value="0" />
       </Style>
     </Style>
+    <!-- Glass (only while the platform actually blurs): the frame is a translucent tint over the desktop.
+         RiceGlass.Styles.axaml makes the Rice controls inside translucent too. -->
+    <Style Selector="^:glass">
+      <Style Selector="^ /template/ Border#PART_Frame">
+        <Setter Property="Background" Value="{DynamicResource RiceGlassBackgroundBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_FrameOutline">
+        <Setter Property="BorderBrush" Value="{DynamicResource RiceGlassBorderBrush}" />
+      </Style>
+    </Style>
     <Style Selector="^[ShowTitleBar=False] /template/ rice|RiceTitleBar#PART_TitleBar">
       <Setter Property="IsVisible" Value="False" />
     </Style>

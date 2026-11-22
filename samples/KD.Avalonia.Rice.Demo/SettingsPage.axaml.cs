@@ -16,6 +16,11 @@ public partial class SettingsPage : UserControl
             if (TopLevel.GetTopLevel(this) is RiceWindow window)
                 await window.ShowThemeDialog();
         };
+        GlassSwitch.IsCheckedChanged += (_, _) =>
+        {
+            if (TopLevel.GetTopLevel(this) is RiceWindow window)
+                window.Material = GlassSwitch.IsChecked == true ? RiceWindowMaterial.Glass : RiceWindowMaterial.Solid;
+        };
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -23,6 +28,8 @@ public partial class SettingsPage : UserControl
         base.OnAttachedToVisualTree(e);
         ThemeManager.Instance.PropertyChanged += OnThemeChanged;
         UpdateCurrentTheme();
+        if (TopLevel.GetTopLevel(this) is RiceWindow window)
+            GlassSwitch.IsChecked = window.Material == RiceWindowMaterial.Glass;
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)

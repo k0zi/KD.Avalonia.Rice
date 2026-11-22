@@ -55,7 +55,8 @@
 | `AppInfo` | entry assembly name | Application metadata, see below. |
 | `SupportedThemes` | `BuiltInThemes.All` | Themes the app offers. With a single theme there is no theme choice and nothing is saved. |
 | `DefaultThemeId` | first supported theme | Theme used until the user picks one. |
-| `WindowCornerRadius` | `8` | Corner radius of every `RiceWindow`; `new CornerRadius(0)` gives square corners. |
+| `WindowCornerRadius` | `15` | Corner radius of every `RiceWindow`; `new CornerRadius(0)` gives square corners. |
+| `WindowMaterial` | `Solid` | Background of every `RiceWindow`; `RiceWindowMaterial.Glass` gives [frosted glass](rice-window.md#glass) where the platform can blur. |
 
 `RiceAppInfo`:
 
@@ -107,7 +108,7 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceSurfaceBrush`, `RiceSurfaceAltBrush` | Panels, cards, alternate rows |
 | `RiceForegroundBrush`, `RiceForegroundMutedBrush` | Text, secondary text |
 | `RiceBorderBrush` | Separators and frames |
-| `RiceTitleBarBackgroundBrush`, `RiceTitleBarForegroundBrush`, `RiceTitleBarHoverBrush` | Title bar and side menu |
+| `RiceTitleBarBackgroundBrush`, `RiceTitleBarForegroundBrush`, `RiceTitleBarHoverBrush` | Side menu (chrome); the title bar itself blends into the window background |
 | `RiceDangerBrush`, `RiceDangerForegroundBrush` | Destructive actions, errors, and the text on them |
 | `RiceSuccessBrush`, `RiceSuccessForegroundBrush` | Success states and the text on them |
 | `RiceWarningBrush`, `RiceWarningForegroundBrush` | Warnings and the text on them |
@@ -115,6 +116,8 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceBackdropBrush` | Dark translucent layer that dims the window behind a popup (command palette) |
 | `RiceTrackBrush` | Recessed strips: tab strip, segmented control, property grid description |
 | `RiceHoverBrush`, `RiceSelectedRowBrush` | Row under the pointer, selected row (lists, property grid, command palette) |
+| `RiceHoverStrongBrush` | Pressed state of flat buttons on any background (title bar buttons) |
+| `RiceGlassBackgroundBrush`, `RiceGlassChromeBrush`, `RiceGlassSurfaceBrush`, `RiceGlassBorderBrush` | Translucent window, side menu, surface and outline colors of [glass windows](rice-window.md#glass) |
 | `RiceSkeletonBrush`, `RiceSkeletonHighlightBrush` | Loading placeholders and the band sweeping over them |
 | `RiceDiffAddedBrush`, `RiceDiffRemovedBrush`, `RiceDiffAddedWordBrush`, `RiceDiffRemovedWordBrush`, `RiceDiffAddedMarkBrush`, `RiceDiffRemovedMarkBrush`, `RiceDiffEmptyBrush` | Added / removed lines and words of the [diff view](rice-diff.md) |
 | `RiceSchedulerGridBrush`, `RiceSchedulerOffHoursBrush`, `RiceSchedulerTodayBrush`, `RiceSchedulerNowBrush` | Half hour lines, hours outside the working day, today, the current time of the [scheduler](rice-scheduler.md) |
