@@ -46,9 +46,9 @@ public class RiceWindow : Window
     public static readonly StyledProperty<bool> IncludeNavigationCommandsProperty =
         AvaloniaProperty.Register<RiceWindow, bool>(nameof(IncludeNavigationCommands), true);
 
-    /// <summary>Solid, gradient or glass background; defaults to <see cref="RiceOptions.WindowMaterial"/>.</summary>
+    /// <summary>Gradient or solid background; defaults to <see cref="RiceOptions.WindowMaterial"/>.</summary>
     public static readonly StyledProperty<RiceWindowMaterial> MaterialProperty =
-        AvaloniaProperty.Register<RiceWindow, RiceWindowMaterial>(nameof(Material));
+        AvaloniaProperty.Register<RiceWindow, RiceWindowMaterial>(nameof(Material), RiceWindowMaterial.Gradient);
 
     /// <summary>Drifting gradient blobs; defaults to <see cref="RiceOptions.AnimateWindowBackground"/>.</summary>
     public static readonly StyledProperty<bool> IsBackgroundAnimatedProperty =
@@ -113,10 +113,9 @@ public class RiceWindow : Window
     }
 
     /// <summary>
-    /// <see cref="RiceWindowMaterial.Gradient"/> puts soft accent colored blobs behind the content,
-    /// <see cref="RiceWindowMaterial.Glass"/> lets the desktop show through blurred, where the platform supports it.
-    /// The <c>:gradient</c> / <c>:glass</c> pseudo classes tell which one is actually in effect, <c>:translucent</c>
-    /// is set for both.
+    /// <see cref="RiceWindowMaterial.Gradient"/> (the default) puts soft accent colored blobs behind the content,
+    /// <see cref="RiceWindowMaterial.Solid"/> keeps the plain theme background. The <c>:gradient</c> pseudo class is
+    /// set while the gradient is in effect.
     /// </summary>
     public RiceWindowMaterial Material
     {
@@ -249,44 +248,21 @@ public class RiceWindow : Window
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == CornerRadiusProperty || change.Property == MaterialProperty)
-        {
-            TransparencyLevelHint = GetTransparencyHint(Material, CornerRadius);
+        if (change.Property == CornerRadiusProperty)
+            TransparencyLevelHint = GetTransparencyHint(CornerRadius);
+        else if (change.Property == MaterialProperty || change.Property == ActualTransparencyLevelProperty)
             UpdatePseudoClasses();
-        }
-        else if (change.Property == ActualTransparencyLevelProperty)
-        {
-            UpdatePseudoClasses();
-        }
     }
 
-    /// <summary>
-    /// Glass asks for the best blur the platform has (Mica on Windows 11, Acrylic on Windows 10 / macOS, blur on KDE).
-    /// Otherwise rounded corners need a transparent window; square ones keep the cheaper opaque window.
-    /// </summary>
-    internal static IReadOnlyList<WindowTransparencyLevel> GetTransparencyHint(RiceWindowMaterial material, CornerRadius cornerRadius) =>
-        material == RiceWindowMaterial.Glass
-            ?
-            [
-                WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur,
-                WindowTransparencyLevel.Blur, WindowTransparencyLevel.Transparent,
-            ]
-            : cornerRadius == default ? [] : [WindowTransparencyLevel.Transparent];
-
-    /// <summary>True for the levels that blur what is behind the window; plain transparency would leave the UI unreadable.</summary>
-    internal static bool IsBlurred(WindowTransparencyLevel level) =>
-        level == WindowTransparencyLevel.Blur || level == WindowTransparencyLevel.AcrylicBlur || level == WindowTransparencyLevel.Mica;
+    /// <summary>Rounded corners need a transparent window; square ones keep the cheaper opaque window.</summary>
+    internal static IReadOnlyList<WindowTransparencyLevel> GetTransparencyHint(CornerRadius cornerRadius) =>
+        cornerRadius == default ? [] : [WindowTransparencyLevel.Transparent];
 
     // Without a compositor (e.g. plain X11) the corners would be black, so fall back to square ones.
-    // Without blur the glass falls back to the solid look.
     private void UpdatePseudoClasses()
     {
-        var glass = Material == RiceWindowMaterial.Glass && IsBlurred(ActualTransparencyLevel);
-        var gradient = Material == RiceWindowMaterial.Gradient;
         PseudoClasses.Set(":rounded", ActualTransparencyLevel != WindowTransparencyLevel.None);
-        PseudoClasses.Set(":glass", glass);
-        PseudoClasses.Set(":gradient", gradient);
-        PseudoClasses.Set(":translucent", glass || gradient);
+        PseudoClasses.Set(":gradient", Material == RiceWindowMaterial.Gradient);
     }
 
     public void ToggleMaximized() =>

@@ -61,11 +61,11 @@ public sealed record RicePalette(Color Accent, Color Background, Color Surface, 
     /// </summary>
     public Color Gradient1 { get; init; } = ColorMath.Pastel(Accent, Background);
 
-    /// <summary>Blob on the right of gradient windows; a pastel of the accent's hue turned 20° unless set.</summary>
-    public Color Gradient2 { get; init; } = ColorMath.Pastel(ColorMath.RotateHue(Accent, 20), Background);
+    /// <summary>Blob on the right of gradient windows; a pastel of a lighter shade of the accent unless set.</summary>
+    public Color Gradient2 { get; init; } = ColorMath.Pastel(ColorMath.Shade(Accent, 0.12), Background);
 
-    /// <summary>Blob at the bottom of gradient windows; a pastel of the accent's hue turned back 20° unless set.</summary>
-    public Color Gradient3 { get; init; } = ColorMath.Pastel(ColorMath.RotateHue(Accent, -20), Background);
+    /// <summary>Blob at the bottom of gradient windows; a pastel of a darker shade of the accent unless set.</summary>
+    public Color Gradient3 { get; init; } = ColorMath.Pastel(ColorMath.Shade(Accent, -0.12), Background);
 
     public bool IsDark => ColorMath.Luminance(Background) < 0.5;
 
@@ -103,11 +103,11 @@ internal static class ColorMath
         return Blend(HslColor.ToRgb(hsl.H, Math.Min(hsl.S * 0.6, 0.5), hsl.L, 1), background, 0.3);
     }
 
-    /// <summary>The same saturation and lightness at a hue <paramref name="degrees"/> further around the color wheel.</summary>
-    public static Color RotateHue(Color c, double degrees)
+    /// <summary>The same hue and saturation, <paramref name="lightness"/> lighter (negative: darker), kept within 0.1–0.9.</summary>
+    public static Color Shade(Color c, double lightness)
     {
         var hsl = c.ToHsl();
-        return HslColor.ToRgb(((hsl.H + degrees) % 360 + 360) % 360, hsl.S, hsl.L, hsl.A);
+        return HslColor.ToRgb(hsl.H, hsl.S, Math.Clamp(hsl.L + lightness, 0.1, 0.9), hsl.A);
     }
 
     private static byte Lerp(byte a, byte b, double t) => (byte)Math.Round(a + (b - a) * t);

@@ -8,7 +8,7 @@ namespace KD.Avalonia.Rice.Controls;
 /// <summary>
 /// Three large, soft color blobs that fade into each other, optionally drifting slowly. It draws only the blobs, so put
 /// it on a solid background. <see cref="RiceWindow"/> uses it for <see cref="RiceWindowMaterial.Gradient"/>; the colors
-/// default to pastels of the current theme's accent and two close hues.
+/// default to pastels of the current theme's accent and two shades of it.
 /// </summary>
 public class RiceGradientBackground : Control
 {

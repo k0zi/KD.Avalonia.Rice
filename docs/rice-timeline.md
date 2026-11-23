@@ -67,5 +67,5 @@ it. It is an `ItemsControl` underneath: put it in a `ScrollViewer` when the list
 ## Styling
 
 `RiceTimelineItem` pseudo classes: `:first` / `:last` (the line starts / ends at the dot: the first and last item of a
-day), `:has-icon`, `:info`, `:success`, `:warning`, `:error`. The line uses `BorderBrush` (`RiceBorderBrush`), the space
+day), `:has-icon`, `:info`, `:success`, `:warning`, `:error`. The line uses `BorderBrush` (`RiceTimelineRailBrush`), the space
 under an item is its `Padding` (`0,0,0,16`). Texts: `RiceStrings.TimelineToday`, `RiceStrings.TimelineYesterday`.

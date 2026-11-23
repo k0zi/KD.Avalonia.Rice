@@ -64,9 +64,9 @@
     <Style Selector="TextBlock.hint, TextBlock.derived">
       <Setter Property="Foreground" Value="{DynamicResource RiceForegroundMutedBrush}" />
     </Style>
-    <!-- Gradient / glass preview: the theme list turns translucent like the side menu of an app. -->
-    <Style Selector="rice|RiceWindow:translucent Border#ThemesPane">
-      <Setter Property="Background" Value="{DynamicResource RiceGlassChromeBrush}" />
+    <!-- Gradient preview: the theme list turns translucent like the side menu of an app. -->
+    <Style Selector="rice|RiceWindow:gradient Border#ThemesPane">
+      <Setter Property="Background" Value="{DynamicResource RiceGradientChromeBrush}" />
     </Style>
     <Style Selector="TextBlock#StatusText.error">
       <Setter Property="Foreground" Value="{DynamicResource RiceDangerBrush}" />
@@ -149,10 +149,9 @@
 
           <WrapPanel ItemSpacing="12" LineSpacing="8">
             <TextBlock VerticalAlignment="Center" Text="Window background" />
-            <rice:RiceSegmentedControl Name="MaterialSwitch" SelectedIndex="0">
+            <rice:RiceSegmentedControl Name="MaterialSwitch">
               <rice:RiceSegmentedItem Content="Solid" />
               <rice:RiceSegmentedItem Content="Gradient" />
-              <rice:RiceSegmentedItem Content="Glass" />
             </rice:RiceSegmentedControl>
             <CheckBox Name="AnimateCheck" Content="Animate the gradient" />
           </WrapPanel>

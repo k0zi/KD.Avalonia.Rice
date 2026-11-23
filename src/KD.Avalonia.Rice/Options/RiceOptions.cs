@@ -21,10 +21,10 @@ public sealed class RiceOptions
     public CornerRadius WindowCornerRadius { get; set; } = new(15);
 
     /// <summary>
-    /// Background material of every <c>RiceWindow</c>. Defaults to <see cref="RiceWindowMaterial.Solid"/>.
+    /// Background material of every <c>RiceWindow</c>. Defaults to <see cref="RiceWindowMaterial.Gradient"/>.
     /// A single window can override it with its <c>Material</c> property.
     /// </summary>
-    public RiceWindowMaterial WindowMaterial { get; set; } = RiceWindowMaterial.Solid;
+    public RiceWindowMaterial WindowMaterial { get; set; } = RiceWindowMaterial.Gradient;
 
     /// <summary>
     /// Lets the color blobs of <see cref="RiceWindowMaterial.Gradient"/> windows drift slowly. Defaults to false.
