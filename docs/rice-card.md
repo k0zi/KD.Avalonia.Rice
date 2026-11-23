@@ -50,7 +50,7 @@ Content only (a plain raised panel):
 | `HeaderActions` | `null` | Content on the right of the header, e.g. a menu button. |
 | `Footer`, `FooterTemplate` | `null` | Bar below the content, e.g. buttons. |
 | `Elevation` | `1` | Shadow depth, `0` (flat) to `3`; other values are clamped. |
-| `Background` | `RiceSurfaceBrush` | Card color. |
+| `Background` | `RiceSurfaceBrush` | Card color; in [gradient windows](rice-window.md#gradient-background) the translucent `RiceGradientSurfaceBrush`. |
 | `BorderBrush`, `BorderThickness` | `RiceBorderBrush`, `1` | Outline. |
 | `CornerRadius` | `12` | |
 | `Padding` | `16` | Space around the content. |

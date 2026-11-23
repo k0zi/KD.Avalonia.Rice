@@ -109,4 +109,4 @@ Tabs are 80–240 px wide; when they do not fit, the strip scrolls.
 ## Styling
 
 `RiceTabViewItem` pseudo classes: `:selected`, `:closable`, `:dragging`, `:tearing` (dragged out of the strip). The tab strip uses `RiceTrackBrush`, the
-content `Background` (`RiceSurfaceBrush`). Tooltips: `RiceStrings.TabClose`, `RiceStrings.TabAdd`.
+content `Background` (`RiceSurfaceBrush`, in [gradient windows](rice-window.md#gradient-background) the translucent `RiceGradientSurfaceBrush`). Tooltips: `RiceStrings.TabClose`, `RiceStrings.TabAdd`.

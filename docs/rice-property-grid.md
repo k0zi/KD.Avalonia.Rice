@@ -103,5 +103,6 @@ to build your own editor on the same rules.
 
 Rows: `Grid.rice-property-row` (`.selected`), expanders `ToggleButton.rice-property-expander`, names `TextBlock.rice-property-name`, read-only values
 `TextBlock.rice-property-value`, category headers `Button.rice-category`, invalid text boxes `TextBox.error`. Brushes:
-`RiceHoverBrush`, `RiceSelectedRowBrush`, `RiceTrackBrush` (description panel). Texts: `RiceStrings.PropertyGridSearch`,
+`RiceHoverBrush`, `RiceSelectedRowBrush`, `RiceTrackBrush` (description panel); the grid's background is the
+translucent `RiceGradientSurfaceBrush` in [gradient windows](rice-window.md#gradient-background). Texts: `RiceStrings.PropertyGridSearch`,
 `PropertyGridMisc`, `PropertyGridCategorized`, `PropertyGridAlphabetical`.

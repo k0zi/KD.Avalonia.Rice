@@ -2,7 +2,8 @@
 
 Frameless window with a custom title bar: the app icon and title on the left, then optional custom content, the
 light / dark toggle, the theme settings and about buttons and the window controls (minimize, maximize, close) on the
-right. Corners are rounded, the window can be moved by the title bar (double click maximizes) and resized at the edges.
+right. Corners are rounded, the background is a soft [gradient](#gradient-background) in the shades of the accent, the
+window can be moved by the title bar (double click maximizes) and resized at the edges.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/home-dark.png" />

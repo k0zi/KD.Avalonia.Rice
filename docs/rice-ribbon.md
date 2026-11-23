@@ -158,7 +158,7 @@ The badges are `RiceKeyTip` controls in the adorner layer, styled with its contr
 | `TabStripFooter` | | Content at the right end of the tab strip, e.g. a search box. |
 | `IsKeyTipsEnabled` | `true` | Alt / F10 shows the key tips. |
 | `ApplicationButtonKeyTip` | | Key tip of the application button; chosen from its content when not set. |
-| `Background` | `RiceSurfaceBrush` | Behind the groups; the tabs sit on the window background. |
+| `Background` | `RiceSurfaceBrush` | Behind the groups (in [gradient windows](rice-window.md#gradient-background) the translucent `RiceGradientSurfaceBrush`); the tabs sit on the window background. |
 
 ## Contextual tabs
 

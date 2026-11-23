@@ -6,7 +6,7 @@ themes that every control relies on.
 | Page | Contents |
 |------|----------|
 | [Getting started](getting-started.md) | `UseRice`, `RiceStyles`, options, themes, brushes, localization |
-| [RiceWindow](rice-window.md) | Frameless window with the custom title bar, `AboutDialog` |
+| [RiceWindow](rice-window.md) | Frameless window with the custom title bar and gradient background, `AboutDialog` |
 | [RiceSideMenu](rice-side-menu.md) | Navigation menu with icons, sub items, header, footer and collapse button |
 | [RiceCard](rice-card.md) | Raised surface with header, actions, footer and shadow |
 | [RiceGroupBox](rice-group-box.md) | Frame with the title on the top line |

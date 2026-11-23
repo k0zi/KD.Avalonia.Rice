@@ -6,9 +6,9 @@
 
 <img src="https://raw.githubusercontent.com/k0zi/KD.Avalonia.Rice/main/src/KD.Avalonia.Rice/Assets/icon.png" alt="KD.Avalonia.Rice icon" width="96" />
 
-Avalonia 12 library: frameless `RiceWindow` with a custom title bar and Linux distro inspired themes
-(Ubuntu, Fedora, Manjaro, openSUSE, Nord, Solarized, Dracula, Gruvbox, Catppuccin) plus a Windows 11 theme – each with
-light and dark variants.
+Avalonia 12 library: frameless `RiceWindow` with a custom title bar and a soft gradient background in the shades of the
+accent, and Linux distro inspired themes (Ubuntu, Fedora, Manjaro, openSUSE, Nord, Solarized, Dracula, Gruvbox,
+Catppuccin) plus a Windows 11 theme – each with light and dark variants.
 
 Controls that follow the theme: side menu with sub items (`RiceSideMenu`), card (`RiceCard`), group box
 (`RiceGroupBox`), chat (`RiceChat`), progress ring and bar (`RiceProgressRing`, `RiceProgressBar`), busy spinner (`RiceSpinner`), loading overlay (`RiceLoadingOverlay`), a theme
@@ -124,9 +124,14 @@ AppBuilder.Configure<App>()
 
 - **Light/Dark** follows the system on startup; the title bar button switches it for the session only (not saved).
 - **Theme** (`ThemeManager.Instance.CurrentTheme`) is saved to `~/.config/<AppId>/rice.json` when the app supports more than one theme.
-- Window corners are rounded (8 px) by default: set `RiceOptions.WindowCornerRadius` for every window
+- Window corners are rounded (15 px) by default: set `RiceOptions.WindowCornerRadius` for every window
   (`new CornerRadius(0)` = square), or `CornerRadius` on a single `RiceWindow`. Corners are square when maximized
   and when the platform cannot draw transparent windows (e.g. X11 without a compositor).
+- Windows have a gradient background by default: soft blobs of the accent and a lighter and a darker shade of it, the
+  side menu, cards and panels are translucent over it. `RiceOptions.WindowMaterial = RiceWindowMaterial.Solid` (or
+  `Material="Solid"` on a single window) gives the plain theme background, `AnimateWindowBackground` lets the blobs
+  drift, see [Gradient background](docs/rice-window.md#gradient-background).
+- Buttons are a bit rounder (`RiceButtonCornerRadius`, 8 px) than the inputs (`ControlCornerRadius`, 6 px).
 - The theme settings button (`ShowThemeSettingsButton`) handles the theme only: it opens the built-in `ThemeDialog`.
   Your app's own settings belong elsewhere (e.g. a settings page); open the same dialog from there with
   `window.ShowThemeDialog()`.
