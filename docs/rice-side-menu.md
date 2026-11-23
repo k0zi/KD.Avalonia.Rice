@@ -219,5 +219,6 @@ added they are a `TreeView` / `TreeViewItem`:
 
 `RiceSideMenuItemBackgroundBrush`, `RiceSideMenuItemHoverBrush`, `RiceSideMenuItemPressedBrush`,
 `RiceSideMenuItemSelectedBrush`, `RiceSideMenuItemSelectedHoverBrush` (accent tints of the title bar color); the menu
-uses `RiceTitleBarBackgroundBrush` / `RiceTitleBarForegroundBrush`. Texts: `RiceStrings.CollapseMenu`,
+uses `RiceTitleBarBackgroundBrush` / `RiceTitleBarForegroundBrush` (in [gradient windows](rice-window.md#gradient-background) the translucent
+`RiceGradientChromeBrush`). Texts: `RiceStrings.CollapseMenu`,
 `RiceStrings.ExpandMenu` (hamburger tool tip).

@@ -142,6 +142,6 @@ Methods: `Close()`, `Show()`, `Float()`, `ToggleCollapsed()`.
 
 The parts are `RiceDockGroupView` (pseudo classes `:document`, `:floating`, `:flyout`, `:active`, `:has-tabs`,
 `:empty`) and `RiceDockTab` (`:selected`, `:document`, `:closable`). The layout's background (`RiceTrackBrush`) shows
-between the groups; groups use `RiceSurfaceBrush`, the active title bar `RiceAccentBrush`, the guides and the drop
+between the groups; groups use `RiceSurfaceBrush` (in [gradient windows](rice-window.md#gradient-background) the translucent `RiceGradientSurfaceBrush`), the active title bar `RiceAccentBrush`, the guides and the drop
 preview `RiceSurfaceBrush`, `RiceAccentBrush` and `RiceSelectedRowBrush`. Texts: `RiceStrings.DockClose`,
 `DockAutoHide`, `DockPin`, `DockOptions`, `DockFloat`, `DockDock`, `DockAsDocument`.

@@ -82,6 +82,7 @@ selected event.
 The views are built from `RiceSchedulerDayCell` (pseudo classes `:today`, `:other-month`, `:weekend`, `:drop-target`)
 and `RiceSchedulerEventChip` (`:bar`, `:dot`, `:block`, `:selected`, `:dragging`, `:past`, `:continues-before`,
 `:continues-after`; `EventBrush` is the event's color). Brushes: `RiceSchedulerGridBrush` (half hour lines),
-`RiceSchedulerOffHoursBrush`, `RiceSchedulerTodayBrush`, `RiceSchedulerNowBrush`. Texts: `RiceStrings.SchedulerToday`,
+`RiceSchedulerOffHoursBrush`, `RiceSchedulerTodayBrush`, `RiceSchedulerNowBrush`; the background is the translucent
+`RiceGradientSurfaceBrush` in [gradient windows](rice-window.md#gradient-background). Texts: `RiceStrings.SchedulerToday`,
 `SchedulerPrevious`, `SchedulerNext`, `SchedulerMonth`, `SchedulerWeek`, `SchedulerDay`, `SchedulerAllDay`,
 `SchedulerMore`. Day and month names come from the current culture.
