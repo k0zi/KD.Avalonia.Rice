@@ -39,13 +39,15 @@
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/Diffs/RiceDiffView.Theme.axaml" />
         <ResourceInclude Source="avares://KD.Avalonia.Rice/Controls/Scheduling/RiceScheduler.Theme.axaml" />
       </ResourceDictionary.MergedDictionaries>
-      <!-- Fluent's corner radius for buttons, text boxes, combo boxes, ... -->
+      <!-- Fluent's corner radius for text boxes, combo boxes, check boxes, ... -->
       <CornerRadius x:Key="ControlCornerRadius">6</CornerRadius>
+      <!-- Buttons, toggle / repeat / drop down / split buttons: a bit rounder than the inputs. -->
+      <CornerRadius x:Key="RiceButtonCornerRadius">8</CornerRadius>
     </ResourceDictionary>
   </Styles.Resources>
 
   <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/RiceTitleBar.Styles.axaml" />
   <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/Scheduling/RiceScheduler.Styles.axaml" />
   <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/RiceDockLayout.Styles.axaml" />
-  <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/RiceGlass.Styles.axaml" />
+  <StyleInclude Source="avares://KD.Avalonia.Rice/Controls/RiceGradient.Styles.axaml" />
 </Styles>

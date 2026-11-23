@@ -77,13 +77,10 @@ public partial class MainWindow : RiceWindow
         ThemeManager.Instance.PropertyChanged += OnThemeManagerChanged;
         VariantTabs.SelectedIndex = ThemeManager.Instance.IsDark ? 1 : 0;
 
-        // Preview of the window materials: the gradient colors are part of the palette, glass shows the blurred desktop.
-        MaterialSwitch.SelectionChanged += (_, _) => Material = MaterialSwitch.SelectedIndex switch
-        {
-            1 => RiceWindowMaterial.Gradient,
-            2 => RiceWindowMaterial.Glass,
-            _ => RiceWindowMaterial.Solid,
-        };
+        // Preview of the window materials: the gradient colors are part of the palette.
+        MaterialSwitch.SelectedIndex = (int)Material;
+        MaterialSwitch.SelectionChanged += (_, _) =>
+            Material = MaterialSwitch.SelectedIndex == 1 ? RiceWindowMaterial.Gradient : RiceWindowMaterial.Solid;
         AnimateCheck.IsCheckedChanged += (_, _) => IsBackgroundAnimated = AnimateCheck.IsChecked == true;
 
         PreviewChart.Data = new ChartCategoryData(["Q1", "Q2", "Q3", "Q4"],

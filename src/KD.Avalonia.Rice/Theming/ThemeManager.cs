@@ -261,15 +261,15 @@ public sealed class ThemeManager : INotifyPropertyChanged
         target["RiceTrackBrush"] = new SolidColorBrush(ColorMath.Blend(p.Background, p.Foreground, p.IsDark ? 0.08 : 0.06));
         target["RiceHoverBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x18 : (byte)0x10));
         target["RiceSelectedRowBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Accent, p.IsDark ? (byte)0x38 : (byte)0x24));
+        // Timeline rail: translucent text color, so it stays visible on gradient backgrounds too.
+        target["RiceTimelineRailBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x50 : (byte)0x48));
         target["RiceHoverStrongBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x28 : (byte)0x1C));
 
-        // Glass windows: translucent versions of the window, side menu and surface colors over the blurred desktop.
-        target["RiceGlassBackgroundBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Background, p.IsDark ? (byte)0xA0 : (byte)0xB8));
-        target["RiceGlassChromeBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.TitleBarBackground, p.IsDark ? (byte)0x80 : (byte)0x90));
-        target["RiceGlassSurfaceBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Surface, p.IsDark ? (byte)0xB0 : (byte)0xC8));
-        target["RiceGlassBorderBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x30 : (byte)0x26));
-
-        // Gradient windows: translucent blobs (by default pastels of the accent and its two neighboring hues) fading into the background.
+        // Gradient windows: translucent versions of the side menu and surface colors, so the blobs show through them.
+        target["RiceGradientChromeBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.TitleBarBackground, p.IsDark ? (byte)0x80 : (byte)0x90));
+        target["RiceGradientSurfaceBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Surface, p.IsDark ? (byte)0xB0 : (byte)0xC8));
+        target["RiceGradientBorderBrush"] = new SolidColorBrush(ColorMath.WithAlpha(p.Foreground, p.IsDark ? (byte)0x30 : (byte)0x26));
+        // Translucent blobs (by default pastels of the accent and a lighter and a darker shade of it) fading into the background.
         target["RiceGradient1Color"] = ColorMath.WithAlpha(p.Gradient1, p.IsDark ? (byte)0x70 : (byte)0x5C);
         target["RiceGradient2Color"] = ColorMath.WithAlpha(p.Gradient2, p.IsDark ? (byte)0x58 : (byte)0x48);
         target["RiceGradient3Color"] = ColorMath.WithAlpha(p.Gradient3, p.IsDark ? (byte)0x58 : (byte)0x48);

@@ -20,7 +20,7 @@
        (hidden on the last), so the days read as separate strands. -->
   <ControlTheme x:Key="{x:Type rice:RiceTimelineItem}" TargetType="rice:RiceTimelineItem">
     <Setter Property="Foreground" Value="{DynamicResource RiceForegroundBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource RiceBorderBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RiceTimelineRailBrush}" />
     <Setter Property="KindBrush" Value="{DynamicResource RiceForegroundMutedBrush}" />
     <Setter Property="Padding" Value="0,0,0,16" />
     <Setter Property="Template">

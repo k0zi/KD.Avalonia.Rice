@@ -43,7 +43,7 @@ can be set per window; the title bar icon is `AppInfo.Icon`, so set `AppInfo` to
 | `TitleBarContent` | `null` | Extra content in the title bar, between the title and the buttons. |
 | `AppInfo` | `RiceOptions.AppInfo` | Metadata shown by the about dialog. |
 | `CornerRadius` | `RiceOptions.WindowCornerRadius` (15) | Window corners; `0` = square. |
-| `Material` | `RiceOptions.WindowMaterial` (`Solid`) | `Gradient` puts soft accent colors behind the content, `Glass` lets the blurred desktop show through the window, see [Gradient and glass](#gradient-and-glass). |
+| `Material` | `RiceOptions.WindowMaterial` (`Gradient`) | `Gradient` puts soft accent colors behind the content, `Solid` keeps the plain theme background, see [Gradient background](#gradient-background). |
 | `IsBackgroundAnimated` | `RiceOptions.AnimateWindowBackground` (`false`) | Lets the colors of the `Gradient` material drift slowly. |
 | `ToastPosition` | `BottomRight` | Corner of the built-in host of the [toasts](rice-toast.md), below the title bar. |
 | `Commands` | empty | Entries of the [command palette](rice-command-palette.md); their `Gesture`s work in the whole window. |
@@ -95,43 +95,34 @@ clicks themselves.
 - Corners are square while maximized or full screen, and when the platform cannot draw transparent windows (e.g. X11
   without a compositor) – the window falls back automatically.
 
-## Gradient and glass
+## Gradient background
 
 The title bar has no band of its own: it blends into the window background, and only the side menu keeps the
-theme's chrome color (`RicePalette.TitleBarBackground`). Besides the default `Solid` look, `Material` has two more:
+theme's chrome color (`RicePalette.TitleBarBackground`). By default (`Material="Gradient"`) three large, soft pastel
+blobs in the accent and a lighter and a darker shade of it melt into the window background. It is drawn by the window
+itself, so it looks the same on every platform. With `IsBackgroundAnimated="True"` the blobs drift slowly (one cycle a
+minute).
 
-- **`Gradient`**: three large, soft pastel blobs in the hue of the accent and two close neighbors melt into the window
-  background.
-  It is drawn by the window itself, so it looks the same on every platform. With `IsBackgroundAnimated="True"` the
-  blobs drift slowly (one cycle a minute).
-- **`Glass`**: frosted glass, the frame is a translucent tint of the theme's background over the blurred desktop.
+The large surfaces of the Rice controls (side menu, cards, tab views, property grid, ribbon, scheduler, dock panes,
+diagrams) turn translucent, so the colors show through them. Inputs, buttons and popups stay solid, so they remain
+readable.
 
-With both, the large surfaces of the Rice controls (side menu, cards, tab views, property grid, ribbon, scheduler, dock
-panes, diagrams) turn translucent, so the colors show through them. Inputs, buttons and popups stay solid, so they
-remain readable.
-
-- All windows: `options.WindowMaterial = RiceWindowMaterial.Gradient` (or `Glass`), and
+- All windows: `options.WindowMaterial = RiceWindowMaterial.Solid` for the plain theme background, and
   `options.AnimateWindowBackground = true` for the drifting gradient.
-- One window: `Material="Gradient"` / `Material="Glass"` and `IsBackgroundAnimated` on the `RiceWindow` (both can be
-  switched at run time).
+- One window: `Material="Solid"` and `IsBackgroundAnimated` on the `RiceWindow` (both can be switched at run time).
 
-Glass asks for the best blur the platform has: Mica on Windows 11, Acrylic on Windows 10 and macOS, blur on KDE
-Plasma. Where nothing blurs (e.g. GNOME, X11 without a compositor) the window keeps the solid look – plain transparency
-without blur would leave the content unreadable; `Gradient` is the choice that works everywhere.
-
-Pseudo classes, set only while the material is actually in effect: `:gradient`, `:glass`, and `:translucent` for
-either of them. Your own styles can follow them:
+The `:gradient` pseudo class is set while the gradient is in effect. Your own styles can follow it:
 
 ```xml
-<Style Selector="rice|RiceWindow:translucent Border.my-panel">
-  <Setter Property="Background" Value="{DynamicResource RiceGlassSurfaceBrush}" />
+<Style Selector="rice|RiceWindow:gradient Border.my-panel">
+  <Setter Property="Background" Value="{DynamicResource RiceGradientSurfaceBrush}" />
 </Style>
 ```
 
-Brushes: `RiceGlassBackgroundBrush` (glass window), `RiceGlassChromeBrush` (side menu), `RiceGlassSurfaceBrush` (cards,
-panels), `RiceGlassBorderBrush` (window outline). Colors: `RiceGradient1Color`, `RiceGradient2Color`,
+Brushes: `RiceGradientChromeBrush` (side menu), `RiceGradientSurfaceBrush` (cards, panels), `RiceGradientBorderBrush`
+(window outline). Colors: `RiceGradient1Color`, `RiceGradient2Color`,
 `RiceGradient3Color` (the blobs, translucent). They come from `RicePalette.Gradient1`–`Gradient3`, by default pastels
-(saturation capped, drawn towards the background) of the accent and its hues turned ±20°; a theme can set its own (the [theme editor](../tools/KD.Avalonia.Rice.ThemeEditor/README.md)
+(saturation capped, drawn towards the background) of the accent and its shades 12% lighter and darker (same hue); a theme can set its own (the [theme editor](../tools/KD.Avalonia.Rice.ThemeEditor/README.md)
 has them among the derived colors).
 
 The gradient is a control of its own, `RiceGradientBackground`, so it can be used anywhere, e.g. behind a dialog's
@@ -144,11 +135,10 @@ content (`Color1`–`Color3` override the theme's colors):
 </Panel>
 ```
 
-## Custom blur (acrylic, mica)
+## Blurred background (acrylic, mica)
 
-`Glass` is the ready-made blur. For full control set `TransparencyLevelHint` on the window yourself: it is kept – the
-corner radius and `Material` no longer override it. The platform picks the first level of the list it supports, so give
-fallbacks; any non-opaque level keeps the rounded corners too:
+`TransparencyLevelHint` set on the window is kept – the corner radius no longer overrides it. The platform picks the
+first level of the list it supports, so give fallbacks; any non-opaque level keeps the rounded corners too:
 
 ```xml
 <rice:RiceWindow TransparencyLevelHint="Mica, AcrylicBlur, Blur, Transparent"
@@ -158,8 +148,7 @@ fallbacks; any non-opaque level keeps the rounded corners too:
 - The blur only shows through a translucent `Background` (and content without its own opaque background); with the
   default theme background the window looks the same as before. `RiceWindowTranslucentBackgroundBrush` is the theme
   background, translucent, and follows theme switches; a fixed color (e.g. `#B0202020`) works too but does not.
-- `ClearValue(TransparencyLevelHintProperty)` gives the hint back to the window (transparent for rounded corners,
-  blur for `Glass`).
+- `ClearValue(TransparencyLevelHintProperty)` gives the hint back to the window (transparent for rounded corners).
 - Support: Windows 10/11 (`AcrylicBlur`, `Mica` on 11), macOS (`AcrylicBlur`), Linux only `Transparent` with a
   compositor (`Blur` on KDE). GNOME has no blur protocol: there the window only becomes see-through, without blur.
   `ActualTransparencyLevel` tells which one was applied.

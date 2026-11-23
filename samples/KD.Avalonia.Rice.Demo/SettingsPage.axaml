@@ -27,12 +27,11 @@
           <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <TextBlock Text="Window background" />
             <TextBlock Foreground="{DynamicResource RiceForegroundMutedBrush}" TextWrapping="Wrap"
-                       Text="Gradient: soft accent colors behind the content. Glass: the desktop shows through blurred, where the platform supports it." />
+                       Text="Gradient: soft accent colors behind the content. Solid: the plain theme background." />
           </StackPanel>
           <rice:RiceSegmentedControl Grid.Column="2" Name="MaterialSwitch" VerticalAlignment="Center">
             <rice:RiceSegmentedItem Content="Solid" />
             <rice:RiceSegmentedItem Content="Gradient" />
-            <rice:RiceSegmentedItem Content="Glass" />
           </rice:RiceSegmentedControl>
           <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="Animate the gradient" />
           <ToggleSwitch Grid.Row="1" Grid.Column="2" Name="AnimateSwitch" OnContent="" OffContent=""

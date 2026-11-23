@@ -82,16 +82,17 @@ public class ThemeManagerTests
     {
         var accent = Color.Parse("#E95420");
         var palette = new RicePalette(accent, Colors.White, Colors.White, Colors.Black);
-        // Pastels in the accent's hue: close to it on the color wheel, but softer and lighter on a light background.
+        // Pastels of the accent's hue that differ only in shade: softer and lighter on a light background.
         var hue = accent.ToHsl();
         foreach (var gradient in new[] { palette.Gradient1, palette.Gradient2, palette.Gradient3 })
         {
             var hsl = gradient.ToHsl();
-            Assert.InRange(Math.Abs((hsl.H - hue.H + 540) % 360 - 180), 0, 21);
+            Assert.InRange(Math.Abs((hsl.H - hue.H + 540) % 360 - 180), 0, 3);
             Assert.True(hsl.S < hue.S);
             Assert.True(hsl.L > hue.L);
         }
-        Assert.NotEqual(palette.Gradient2, palette.Gradient3);
+        Assert.True(palette.Gradient2.ToHsl().L > palette.Gradient1.ToHsl().L);
+        Assert.True(palette.Gradient3.ToHsl().L < palette.Gradient1.ToHsl().L);
 
         var colors = new ResourceDictionary();
         ThemeManager.ApplyBrushes(colors, palette with { Gradient2 = Colors.Teal });

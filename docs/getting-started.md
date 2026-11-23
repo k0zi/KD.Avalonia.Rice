@@ -56,7 +56,7 @@
 | `SupportedThemes` | `BuiltInThemes.All` | Themes the app offers. With a single theme there is no theme choice and nothing is saved. |
 | `DefaultThemeId` | first supported theme | Theme used until the user picks one. |
 | `WindowCornerRadius` | `15` | Corner radius of every `RiceWindow`; `new CornerRadius(0)` gives square corners. |
-| `WindowMaterial` | `Solid` | Background of every `RiceWindow`; `RiceWindowMaterial.Gradient` gives [soft accent colors](rice-window.md#gradient-and-glass), `Glass` frosted glass where the platform can blur. |
+| `WindowMaterial` | `Gradient` | Background of every `RiceWindow`: [soft accent colors](rice-window.md#gradient-background) behind the content; `RiceWindowMaterial.Solid` gives the plain theme background. |
 | `AnimateWindowBackground` | `false` | Lets the colors of `Gradient` windows drift slowly. |
 
 `RiceAppInfo`:
@@ -97,7 +97,7 @@ options.SupportedThemes = [ocean, .. BuiltInThemes.All];
 
 `RicePalette` derived colors: `AccentForeground`, `SurfaceAlt`, `ForegroundMuted`, `Border`, `TitleBarBackground`,
 `TitleBarForeground`, `Danger`, `DangerForeground`, `Success`, `SuccessForeground`, `Warning`, `WarningForeground`,
-`Gradient1`, `Gradient2`, `Gradient3` (the blobs of [gradient windows](rice-window.md#gradient-and-glass)).
+`Gradient1`, `Gradient2`, `Gradient3` (the blobs of [gradient windows](rice-window.md#gradient-background)).
 
 ## Brushes for your own controls
 
@@ -110,6 +110,7 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceSurfaceBrush`, `RiceSurfaceAltBrush` | Panels, cards, alternate rows |
 | `RiceForegroundBrush`, `RiceForegroundMutedBrush` | Text, secondary text |
 | `RiceBorderBrush` | Separators and frames |
+| `RiceTimelineRailBrush` | Line of the [timeline](rice-timeline.md); translucent, so it shows on gradient windows too |
 | `RiceTitleBarBackgroundBrush`, `RiceTitleBarForegroundBrush`, `RiceTitleBarHoverBrush` | Side menu (chrome); the title bar itself blends into the window background |
 | `RiceDangerBrush`, `RiceDangerForegroundBrush` | Destructive actions, errors, and the text on them |
 | `RiceSuccessBrush`, `RiceSuccessForegroundBrush` | Success states and the text on them |
@@ -120,8 +121,8 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 | `RiceTrackBrush` | Recessed strips: tab strip, segmented control, property grid description |
 | `RiceHoverBrush`, `RiceSelectedRowBrush` | Row under the pointer, selected row (lists, property grid, command palette) |
 | `RiceHoverStrongBrush` | Pressed state of flat buttons on any background (title bar buttons) |
-| `RiceGlassBackgroundBrush`, `RiceGlassChromeBrush`, `RiceGlassSurfaceBrush`, `RiceGlassBorderBrush` | Translucent window, side menu, surface and outline colors of [glass and gradient windows](rice-window.md#gradient-and-glass) |
-| `RiceGradient1Color`, `RiceGradient2Color`, `RiceGradient3Color` | Colors (not brushes) of the blobs of [gradient windows](rice-window.md#gradient-and-glass) |
+| `RiceGradientChromeBrush`, `RiceGradientSurfaceBrush`, `RiceGradientBorderBrush` | Translucent side menu, surface and outline colors of [gradient windows](rice-window.md#gradient-background) |
+| `RiceGradient1Color`, `RiceGradient2Color`, `RiceGradient3Color` | Colors (not brushes) of the blobs of [gradient windows](rice-window.md#gradient-background) |
 | `RiceSkeletonBrush`, `RiceSkeletonHighlightBrush` | Loading placeholders and the band sweeping over them |
 | `RiceDiffAddedBrush`, `RiceDiffRemovedBrush`, `RiceDiffAddedWordBrush`, `RiceDiffRemovedWordBrush`, `RiceDiffAddedMarkBrush`, `RiceDiffRemovedMarkBrush`, `RiceDiffEmptyBrush` | Added / removed lines and words of the [diff view](rice-diff.md) |
 | `RiceSchedulerGridBrush`, `RiceSchedulerOffHoursBrush`, `RiceSchedulerTodayBrush`, `RiceSchedulerNowBrush` | Half hour lines, hours outside the working day, today, the current time of the [scheduler](rice-scheduler.md) |
@@ -133,7 +134,8 @@ The current theme is exposed as resources; use them with `DynamicResource` so th
 ```
 
 Standard Fluent controls (buttons, text boxes, …) are themed automatically. `Classes="accent"` on a `Button` gives the
-accent colored button.
+accent colored button. Corner radii: `RiceButtonCornerRadius` (8) for buttons, toggle, repeat, drop down and split
+buttons, Fluent's `ControlCornerRadius` (6) for the inputs; override them in the application's resources.
 
 ## Localization
 
